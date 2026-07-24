@@ -1,0 +1,1 @@
+ALTER TABLE "tenants" ADD COLUMN "subscription_plan" varchar(50) DEFAULT 'free' NOT NULL;

@@ -1,0 +1,331 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "AgriBridge-AI API Documentation",
+    "description": "Production-ready backend API documentation for AgriBridge-AI platform coordinating FPOs, Farmers, Crops, Pools, Marketplace Trade, Exports regulatory clearances, and AI coaching.",
+    "version": "1.0.0",
+    "contact": {
+      "name": "AgriBridge Dev Support",
+      "email": "support@agribridge.io"
+    }
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000/api/v1",
+      "description": "Local Development Server"
+    }
+  ],
+  "tags": [
+    { "name": "Authentication", "description": "Tenant registration, FPO authentication, OTP verify" },
+    { "name": "Farmer", "description": "Farmer registration, bank details, and KYC status" },
+    { "name": "Farm", "description": "Geo-fenced farm polygon coordinates and crop mapping" },
+    { "name": "Crop", "description": "Crop master listing and expected yield mapping" },
+    { "name": "Batch & Harvest", "description": "Harvest logs, batch tracking, and quality inspections" },
+    { "name": "Mandi Prices", "description": "Agmarknet daily pricing sync and caching" },
+    { "name": "FPO Operations", "description": "FPO Shares ledger, profit distribution math models" },
+    { "name": "Marketplace", "description": "Sales listings, offers, counters, wishlists, and PO triggers" },
+    { "name": "Export & Shipments", "description": "APEDA certification reports, custom invoice checks, Maersk cargo setups" },
+    { "name": "AI Assistant", "description": "AI Export coach, pricing advice, and farming assistant streaming endpoints" },
+    { "name": "Super Admin", "description": "Platform global analytics, FPO suspension, subscription plans adjustments" }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "description": "Provide bearer access token returned from login endpoints."
+      },
+      "TenantHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "X-Tenant-ID",
+        "description": "The target Tenant UUID context header for isolated operations."
+      }
+    },
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean", "example": false },
+          "message": { "type": "string", "example": "Invalid validation parameters supplied." },
+          "errors": {
+            "type": "array",
+            "items": { "type": "string" },
+            "example": ["Aadhaar number must be exactly 12 digits."]
+          }
+        }
+      },
+      "AuthRegisterTenant": {
+        "type": "object",
+        "required": ["tenantName", "email", "password", "firstName", "lastName"],
+        "properties": {
+          "tenantName": { "type": "string", "example": "Western Maharashtra FPO Co." },
+          "email": { "type": "string", "format": "email", "example": "fpo_admin@example.com" },
+          "password": { "type": "string", "format": "password", "example": "SecurePass@123" },
+          "firstName": { "type": "string", "example": "Rajesh" },
+          "lastName": { "type": "string", "example": "Patil" }
+        }
+      },
+      "AuthLogin": {
+        "type": "object",
+        "required": ["email", "password"],
+        "properties": {
+          "email": { "type": "string", "example": "fpo_admin@example.com" },
+          "password": { "type": "string", "example": "SecurePass@123" }
+        }
+      },
+      "FarmerRegister": {
+        "type": "object",
+        "required": ["tenantId", "email", "password", "firstName", "lastName", "aadhaarNumber", "registrationNumber"],
+        "properties": {
+          "tenantId": { "type": "string", "format": "uuid", "example": "a391eef0-8179-46c3-9e02-573b0621b3d6" },
+          "email": { "type": "string", "example": "ramesh@example.com" },
+          "password": { "type": "string", "example": "Ramesh@1234" },
+          "firstName": { "type": "string", "example": "Ramesh" },
+          "lastName": { "type": "string", "example": "Kumar" },
+          "aadhaarNumber": { "type": "string", "example": "443322110099" },
+          "registrationNumber": { "type": "string", "example": "REG-MH-2026-01" },
+          "bankName": { "type": "string", "example": "State Bank of India" },
+          "accountNumber": { "type": "string", "example": "1029384756" },
+          "ifscCode": { "type": "string", "example": "SBIN0001234" },
+          "farmName": { "type": "string", "example": "Ramesh Organic Farms" },
+          "totalAreaHectares": { "type": "number", "example": 4.5 }
+        }
+      },
+      "FarmCreate": {
+        "type": "object",
+        "required": ["farmerId", "tenantId", "name", "boundaryCoordinates"],
+        "properties": {
+          "farmerId": { "type": "string", "format": "uuid", "example": "560a927a-7bd8-4903-b09e-0553757fa96d" },
+          "tenantId": { "type": "string", "format": "uuid", "example": "a391eef0-8179-46c3-9e02-573b0621b3d6" },
+          "name": { "type": "string", "example": "Wheat Block A" },
+          "boundaryCoordinates": { "type": "string", "example": "{\"type\":\"Polygon\",\"coordinates\":[[[72.57,23.02],[72.58,23.02],[72.58,23.03],[72.57,23.03],[72.57,23.02]]]}" },
+          "soilType": { "type": "string", "example": "Black Clay" },
+          "waterSource": { "type": "string", "example": "Borewell" }
+        }
+      },
+      "MarketplaceListingCreate": {
+        "type": "object",
+        "required": ["tenantId", "title", "quantityKg", "pricePerKg"],
+        "properties": {
+          "tenantId": { "type": "string", "format": "uuid" },
+          "poolId": { "type": "string", "format": "uuid", "nullable": true },
+          "title": { "type": "string", "example": "Premium Wheat Lot Lokwan" },
+          "description": { "type": "string", "example": "High quality wheat. 12% moisture." },
+          "quantityKg": { "type": "number", "example": 10000 },
+          "pricePerKg": { "type": "number", "example": 25.5 }
+        }
+      },
+      "OfferCreate": {
+        "type": "object",
+        "required": ["listingId", "buyerId", "offerPricePerKg", "quantityKg"],
+        "properties": {
+          "listingId": { "type": "string", "format": "uuid" },
+          "buyerId": { "type": "string", "format": "uuid" },
+          "offerPricePerKg": { "type": "number", "example": 23.5 },
+          "quantityKg": { "type": "number", "example": 10000 }
+        }
+      },
+      "AIChatRequest": {
+        "type": "object",
+        "required": ["mode", "messages"],
+        "properties": {
+          "mode": { "type": "string", "enum": ["export_coach", "price_recommendation", "farmer_assistant", "document_generator"], "example": "export_coach" },
+          "messages": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "role": { "type": "string", "enum": ["system", "user", "assistant"], "example": "user" },
+                "content": { "type": "string", "example": "What documents are required to load cotton cargo to Dubai?" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/register/tenant": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Register a new Tenant FPO",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AuthRegisterTenant" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Tenant registered. OTP generated and sent to email.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string" },
+                            "email": { "type": "string" },
+                            "tenantId": { "type": "string" }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "Validation error", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } } }
+        }
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Login to retrieve access JWT token",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AuthLogin" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "accessToken": { "type": "string", "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+                        "user": {
+                          "type": "object",
+                          "properties": {
+                            "id": { "type": "string" },
+                            "email": { "type": "string" },
+                            "roles": { "type": "array", "items": { "type": "string" }, "example": ["FPO_ADMIN"] }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/farmer/register": {
+      "post": {
+        "tags": ["Farmer"],
+        "summary": "Register a new Farmer under Tenant context",
+        "security": [{ "BearerAuth": [] }, { "TenantHeader": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/FarmerRegister" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Farmer profile created successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "farmerId": { "type": "string", "format": "uuid" },
+                        "userId": { "type": "string", "format": "uuid" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/marketplace/listings": {
+      "post": {
+        "tags": ["Marketplace"],
+        "summary": "List a crop batch or pool in the marketplace",
+        "security": [{ "BearerAuth": [] }, { "TenantHeader": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MarketplaceListingCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Listing created." }
+        }
+      },
+      "get": {
+        "tags": ["Marketplace"],
+        "summary": "Query active crop listings with pagination and filters",
+        "parameters": [
+          { "name": "search", "in": "query", "schema": { "type": "string" }, "description": "Search keyword in listing titles" },
+          { "name": "minPrice", "in": "query", "schema": { "type": "number" } },
+          { "name": "maxPrice", "in": "query", "schema": { "type": "number" } },
+          { "name": "sortBy", "in": "query", "schema": { "type": "string", "enum": ["price", "quantity", "date"] } },
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 1 } },
+          { "name": "limit", "in": "query", "schema": { "type": "integer", "default": 10 } }
+        ],
+        "responses": {
+          "200": { "description": "Listings fetched successfully." }
+        }
+      }
+    },
+    "/ai/chat": {
+      "post": {
+        "tags": ["AI Assistant"],
+        "summary": "Stream assistant completions with custom headers options",
+        "security": [{ "BearerAuth": [] }],
+        "parameters": [
+          { "name": "x-ai-provider", "in": "header", "schema": { "type": "string", "default": "groq" }, "description": "Target LLM provider (groq, gemini, claude, openai, mistral)" },
+          { "name": "x-ai-api-key", "in": "header", "schema": { "type": "string" }, "description": "Optional custom API key for target provider" }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/AIChatRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "SSE text stream of model responses chunk frames."
+          }
+        }
+      }
+    }
+  }
+}
