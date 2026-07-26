@@ -2,7 +2,7 @@ import { PromptRequestDto, Message, SYSTEM_PROMPTS } from '../dto/ai.dto.js';
 import { Response } from 'express';
 
 export class AiService {
-  private defaultGroqKey = 'REDACTED';
+  // private defaultGroqKey = 'REDACTED';
 
   async streamChatCompletion(
     dto: PromptRequestDto,
