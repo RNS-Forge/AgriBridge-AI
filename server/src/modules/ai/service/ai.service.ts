@@ -2,16 +2,15 @@ import { PromptRequestDto, Message, SYSTEM_PROMPTS } from '../dto/ai.dto.js';
 import { Response } from 'express';
 
 export class AiService {
-  // private defaultGroqKey = 'REDACTED';
-
   async streamChatCompletion(
     dto: PromptRequestDto,
     customProvider: string | undefined,
     customApiKey: string | undefined,
     res: Response
   ): Promise<void> {
+
     const provider = (customProvider || 'groq').toLowerCase();
-    const apiKey = customApiKey || this.defaultGroqKey;
+    const apiKey = customApiKey || process.env.DEFAULT_GROQ_KEY;
 
     // Inject System Prompt
     const systemPromptText = SYSTEM_PROMPTS[dto.mode] || 'You are a helpful AI agricultural assistant.';
