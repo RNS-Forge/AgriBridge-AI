@@ -1,4 +1,118 @@
-// ---------------------------------------------------------------------------
-// ErrorState — error display with optional retry action.
-//
-// ACCESSIBILITY:\n//   - role=\"alert\" to announce errors to screen readers\n// ---------------------------------------------------------------------------\n\nimport { forwardRef, ReactNode } from 'react';\n\ninterface ErrorStateProps {\n  title: string;\n  message?: string;\n  details?: string;\n  onRetry?: () => void;\n  action?: ReactNode;\n  className?: string;\n}\n\nexport const ErrorState = forwardRef<HTMLDivElement, ErrorStateProps>(\n  (\n    {\n      title,\n      message,\n      details,\n      onRetry,\n      action,\n      className = '',\n    },\n    ref\n  ) => {\n    return (\n      <div\n        ref={ref}\n        role=\"alert\"\n        className={`\n          flex flex-col items-center justify-center\n          py-12 px-4 text-center\n          bg-red-950/20 border border-red-900/40\n          rounded-2xl\n          ${className}\n        `.replace(/\\s+/g, ' ')}\n      >\n        <div className=\"mb-4\">\n          <svg\n            className=\"h-12 w-12 text-red-400 mx-auto\"\n            fill=\"none\"\n            viewBox=\"0 0 24 24\"\n            stroke=\"currentColor\"\n            strokeWidth={1.5}\n          >\n            <path\n              strokeLinecap=\"round\"\n              strokeLinejoin=\"round\"\n              d=\"M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z\"\n            />\n          </svg>\n        </div>\n\n        <h3 className=\"text-lg font-semibold text-red-400 mb-2\">{title}</h3>\n\n        {message && (\n          <p className=\"text-sm text-slate-300 max-w-sm mb-4\">{message}</p>\n        )}\n\n        {details && (\n          <p className=\"text-xs text-slate-500 font-mono max-w-sm mb-6 bg-slate-950/50 p-3 rounded\">\n            {details}\n          </p>\n        )}\n\n        <div className=\"flex flex-col sm:flex-row gap-3 mt-4\">\n          {onRetry && (\n            <button\n              onClick={onRetry}\n              className=\"px-4 py-2 bg-red-600 hover:bg-red-500 text-white font-semibold rounded-lg transition-colors\"\n              type=\"button\"\n            >\n              Try Again\n            </button>\n          )}\n          {action}\n        </div>\n      </div>\n    );\n  }\n);\n\nErrorState.displayName = 'ErrorState';\n
+import { forwardRef, ReactNode } from "react";
+
+interface ErrorStateProps {
+  title: string;
+  message?: string;
+  details?: string;
+  onRetry?: () => void;
+  retryText?: string;
+  action?: ReactNode;
+  icon?: ReactNode;
+  className?: string;
+}
+
+export const ErrorState = forwardRef<HTMLDivElement, ErrorStateProps>(
+  (
+    {
+      title,
+      message,
+      details,
+      onRetry,
+      retryText = "Try Again",
+      action,
+      icon,
+      className = "",
+    },
+    ref
+  ) => {
+    return (
+      <div
+        ref={ref}
+        role="alert"
+        aria-live="assertive"
+        className={`
+          flex flex-col items-center justify-center
+          rounded-xl
+          border border-red-200
+          bg-red-50
+          p-6
+          text-center
+          ${className}
+        `.replace(/\s+/g, ' ')}
+      >
+        {/* Icon */}
+        <div className="mb-4">
+          {icon ?? (
+            <svg
+              className="h-12 w-12 text-red-600"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.8}
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle cx="12" cy="12" r="9" />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 8v4m0 4h.01"
+              />
+            </svg>
+          )}
+        </div>
+
+        {/* Title */}
+        <h2 className="text-base font-semibold text-red-700">
+          {title}
+        </h2>
+
+        {/* Message */}
+        {message && (
+          <p className="mt-2 max-w-md text-sm text-gray-500">
+            {message}
+          </p>
+        )}
+
+        {/* Details */}
+        {details && (
+          <pre className="mt-4 max-w-full overflow-auto rounded-lg bg-gray-100 p-3 text-left text-xs text-gray-600">
+            {details}
+          </pre>
+        )}
+
+        {/* Actions */}
+        {(onRetry || action) && (
+          <div className="mt-6 flex flex-wrap justify-center gap-3">
+            {onRetry && (
+              <button
+                type="button"
+                onClick={onRetry}
+                className={`
+                  rounded-lg
+                  bg-red-600
+                  px-4
+                  py-2
+                  text-sm
+                  font-medium
+                  text-white
+                  transition-colors
+                  hover:bg-red-700
+                  focus:outline-none
+                  focus:ring-2
+                  focus:ring-red-500
+                  focus:ring-offset-2
+                `.replace(/\s+/g, ' ')}
+              >
+                {retryText}
+              </button>
+            )}
+
+            {action}
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+ErrorState.displayName = "ErrorState";

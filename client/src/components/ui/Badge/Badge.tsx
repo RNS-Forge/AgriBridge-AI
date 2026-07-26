@@ -1,18 +1,3 @@
-// ---------------------------------------------------------------------------
-// Badge — small semantic label component.
-//
-// VARIANTS:
-//   - default:   Slate/neutral
-//   - primary:   Emerald/success
-//   - warning:   Amber/warning
-//   - danger:    Red/error
-//   - info:      Blue/info
-//
-// SIZES:
-//   - sm:  text-xs
-//   - md:  text-sm (default)
-// ---------------------------------------------------------------------------
-
 import { forwardRef, ReactNode } from 'react';
 
 type BadgeVariant = 'default' | 'primary' | 'warning' | 'danger' | 'info';
@@ -27,11 +12,11 @@ interface BadgeProps {
 }
 
 const variantStyles: Record<BadgeVariant, string> = {
-  default: 'bg-slate-800 text-slate-300 border border-slate-700',
-  primary: 'bg-emerald-950/50 text-emerald-400 border border-emerald-500/30',
-  warning: 'bg-amber-950/50 text-amber-400 border border-amber-500/30',
-  danger: 'bg-red-950/50 text-red-400 border border-red-500/30',
-  info: 'bg-blue-950/50 text-blue-400 border border-blue-500/30',
+  default: 'bg-gray-100 text-gray-700 border border-gray-200',
+  primary: 'bg-blue-50 text-blue-700 border border-blue-200',
+  warning: 'bg-amber-50 text-amber-700 border border-amber-200',
+  danger: 'bg-red-50 text-red-700 border border-red-200',
+  info: 'bg-gray-100 text-gray-700 border border-gray-200',
 };
 
 const sizeStyles: Record<BadgeSize, string> = {
@@ -55,7 +40,7 @@ export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
         ref={ref}
         className={`
           inline-flex items-center gap-1.5
-          rounded-full font-semibold
+          rounded-md font-semibold
           whitespace-nowrap
           ${variantStyles[variant]}
           ${sizeStyles[size]}

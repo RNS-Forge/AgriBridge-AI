@@ -1,1 +1,158 @@
-// ---------------------------------------------------------------------------\n// Pagination — page navigation controls.\n//\n// ACCESSIBILITY:\n//   - role=\"navigation\", aria-label=\"Pagination\"\n//   - aria-current=\"page\" on current page\n//   - aria-disabled on disabled buttons\n// ---------------------------------------------------------------------------\n\nimport { forwardRef } from 'react';\n\ninterface PaginationProps {\n  currentPage: number;\n  totalPages: number;\n  onPageChange: (page: number) => void;\n  maxButtons?: number;\n  className?: string;\n}\n\nexport const Pagination = forwardRef<HTMLDivElement, PaginationProps>(\n  (\n    {\n      currentPage,\n      totalPages,\n      onPageChange,\n      maxButtons = 5,\n      className = '',\n    },\n    ref\n  ) => {\n    const getPageNumbers = () => {\n      const pages: (number | string)[] = [];\n      const halfWindow = Math.floor(maxButtons / 2);\n\n      let start = Math.max(1, currentPage - halfWindow);\n      let end = Math.min(totalPages, currentPage + halfWindow);\n\n      if (currentPage - halfWindow < 1) {\n        end = Math.min(totalPages, end + (1 - (currentPage - halfWindow)));\n      }\n      if (currentPage + halfWindow > totalPages) {\n        start = Math.max(1, start - (currentPage + halfWindow - totalPages));\n      }\n\n      if (start > 1) {\n        pages.push(1);\n        if (start > 2) pages.push('...');\n      }\n\n      for (let i = start; i <= end; i++) {\n        pages.push(i);\n      }\n\n      if (end < totalPages) {\n        if (end < totalPages - 1) pages.push('...');\n        pages.push(totalPages);\n      }\n\n      return pages;\n    };\n\n    return (\n      <nav\n        ref={ref}\n        aria-label=\"Pagination\"\n        className={`\n          flex items-center justify-center gap-2\n          ${className}\n        `.replace(/\\s+/g, ' ')}\n      >\n        {/* Previous button */}\n        <button\n          onClick={() => onPageChange(Math.max(1, currentPage - 1))}\n          disabled={currentPage === 1}\n          aria-disabled={currentPage === 1}\n          aria-label=\"Previous page\"\n          className=\"px-3 py-2 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors\"\n        >\n          ← Prev\n        </button>\n\n        {/* Page numbers */}\n        <div className=\"flex gap-1\">\n          {getPageNumbers().map((page, idx) => (\n            <button\n              key={idx}\n              onClick={() => typeof page === 'number' && onPageChange(page)}\n              disabled={typeof page === 'string'}\n              aria-current={currentPage === page ? 'page' : undefined}\n              aria-label={typeof page === 'number' ? `Page ${page}` : 'Ellipsis'}\n              className={`\n                px-3 py-2 rounded-lg text-sm font-semibold\n                transition-colors\n                ${\n                  currentPage === page\n                    ? 'bg-emerald-600 text-white border border-emerald-500'\n                    : typeof page === 'string'\n                    ? 'text-slate-500 cursor-default'\n                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700 border border-slate-700'\n                }\n              `.replace(/\\s+/g, ' ')}\n            >\n              {page}\n            </button>\n          ))}\n        </div>\n\n        {/* Next button */}\n        <button\n          onClick={() => onPageChange(Math.min(totalPages, currentPage + 1))}\n          disabled={currentPage === totalPages}\n          aria-disabled={currentPage === totalPages}\n          aria-label=\"Next page\"\n          className=\"px-3 py-2 rounded-lg border border-slate-700 bg-slate-800 text-slate-300 hover:bg-slate-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors\"\n        >\n          Next →\n        </button>\n      </nav>\n    );\n  }\n);\n\nPagination.displayName = 'Pagination';\n
+import { forwardRef } from "react";
+
+interface PaginationProps {
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  maxButtons?: number;
+  showFirstLast?: boolean;
+  className?: string;
+}
+
+export const Pagination = forwardRef<HTMLDivElement, PaginationProps>(
+  (
+    {
+      currentPage,
+      totalPages,
+      onPageChange,
+      maxButtons = 5,
+      showFirstLast = true,
+      className = "",
+    },
+    ref
+  ) => {
+    if (totalPages <= 1) return null;
+
+    const getPages = () => {
+      const pages: (number | "...")[] = [];
+      const half = Math.floor(maxButtons / 2);
+
+      let start = Math.max(1, currentPage - half);
+      let end = Math.min(totalPages, start + maxButtons - 1);
+
+      if (end - start + 1 < maxButtons) {
+        start = Math.max(1, end - maxButtons + 1);
+      }
+
+      if (start > 1) {
+        pages.push(1);
+        if (start > 2) pages.push("...");
+      }
+
+      for (let i = start; i <= end; i++) {
+        pages.push(i);
+      }
+
+      if (end < totalPages) {
+        if (end < totalPages - 1) pages.push("...");
+        pages.push(totalPages);
+      }
+
+      return pages;
+    };
+
+    const pages = getPages();
+
+    const buttonClass = `
+      flex h-10 min-w-[40px] items-center justify-center
+      rounded-lg border
+      px-3 text-sm
+      transition-colors
+      focus:outline-none
+      focus:ring-2
+      focus:ring-blue-500
+      focus:ring-offset-2
+      disabled:opacity-50 disabled:cursor-not-allowed
+    `;
+
+    return (
+      <nav
+        ref={ref}
+        aria-label="Pagination"
+        className={`flex flex-wrap items-center justify-center gap-2 ${className}`}
+      >
+        {showFirstLast && (
+          <button
+            type="button"
+            disabled={currentPage === 1}
+            onClick={() => onPageChange(1)}
+            className={`
+              ${buttonClass}
+              border-gray-300 bg-white text-gray-700 hover:bg-gray-50
+            `}
+          >
+            «
+          </button>
+        )}
+
+        <button
+          type="button"
+          disabled={currentPage === 1}
+          onClick={() => onPageChange(currentPage - 1)}
+          className={`
+            ${buttonClass}
+            border-gray-300 bg-white text-gray-700 hover:bg-gray-50
+          `}
+        >
+          ←
+        </button>
+
+        {pages.map((page, index) =>
+          page === "..." ? (
+            <span
+              key={index}
+              className="flex h-10 min-w-[40px] items-center justify-center text-gray-500"
+            >
+              ...
+            </span>
+          ) : (
+            <button
+              key={page}
+              type="button"
+              aria-current={page === currentPage ? "page" : undefined}
+              onClick={() => onPageChange(page)}
+              className={`
+                ${buttonClass}
+                ${
+                  page === currentPage
+                    ? "border-blue-600 bg-blue-600 text-white"
+                    : "border-gray-300 bg-white text-gray-700 hover:bg-gray-50"
+                }
+              `}
+            >
+              {page}
+            </button>
+          )
+        )}
+
+        <button
+          type="button"
+          disabled={currentPage === totalPages}
+          onClick={() => onPageChange(currentPage + 1)}
+          className={`
+            ${buttonClass}
+            border-gray-300 bg-white text-gray-700 hover:bg-gray-50
+          `}
+        >
+          →
+        </button>
+
+        {showFirstLast && (
+          <button
+            type="button"
+            disabled={currentPage === totalPages}
+            onClick={() => onPageChange(totalPages)}
+            className={`
+              ${buttonClass}
+              border-gray-300 bg-white text-gray-700 hover:bg-gray-50
+            `}
+          >
+            »
+          </button>
+        )}
+      </nav>
+    );
+  }
+);
+
+Pagination.displayName = "Pagination";

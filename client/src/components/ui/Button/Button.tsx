@@ -1,25 +1,3 @@
-// ---------------------------------------------------------------------------
-// Button — primary interactive element with multiple variants.
-//
-// VARIANTS:
-//   - primary:    Gradient emerald → teal, white text (default)
-//   - secondary:  Slate background
-//   - outline:    Transparent with border
-//   - danger:     Red/destructive actions
-//   - ghost:      Minimal, no background
-//
-// SIZES:
-//   - sm:   py-2 px-3 text-xs
-//   - md:   py-3.5 px-4 text-sm (default)
-//   - lg:   py-4 px-6 text-base
-//
-// ACCESSIBILITY:
-//   - focus:ring for keyboard navigation
-//   - disabled state with opacity
-//   - aria-disabled attribute
-//   - loading spinner with aria-busy
-// ---------------------------------------------------------------------------
-
 import { forwardRef, ReactNode } from 'react';
 
 type ButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger' | 'ghost';
@@ -42,33 +20,36 @@ interface ButtonProps {
 
 const variantStyles: Record<ButtonVariant, string> = {
   primary: `
-    text-white
-    focus:ring-2 focus:ring-emerald-500/40 focus:ring-offset-2 focus:ring-offset-slate-950
+    bg-blue-600 text-white
+    hover:bg-blue-700
+    focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
   `,
   secondary: `
-    text-slate-200
-    focus:ring-2 focus:ring-slate-500/40 focus:ring-offset-2 focus:ring-offset-slate-950
+    bg-white text-gray-700 border border-gray-200
+    hover:bg-gray-50
+    focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
   `,
   outline: `
-    text-slate-300 border border-slate-700 bg-transparent
-    hover:bg-slate-800/50 hover:border-slate-600
-    focus:ring-2 focus:ring-slate-500/40 focus:ring-offset-2 focus:ring-offset-slate-950
+    bg-transparent text-gray-700 border border-gray-300
+    hover:bg-gray-50
+    focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
   `,
   danger: `
-    text-white
-    focus:ring-2 focus:ring-red-500/40 focus:ring-offset-2 focus:ring-offset-slate-950
+    bg-red-600 text-white
+    hover:bg-red-700
+    focus:ring-2 focus:ring-red-500 focus:ring-offset-2
   `,
   ghost: `
-    text-slate-400 bg-transparent
-    hover:bg-slate-800/60 hover:text-slate-200
-    focus:ring-2 focus:ring-slate-500/40
+    bg-transparent text-gray-700
+    hover:bg-gray-100
+    focus:ring-2 focus:ring-blue-500 focus:ring-offset-2
   `,
 };
 
 const sizeStyles: Record<ButtonSize, string> = {
   sm: 'py-2 px-3 text-xs rounded-lg gap-1.5',
-  md: 'py-3.5 px-4 text-sm rounded-xl gap-2',
-  lg: 'py-4 px-6 text-base rounded-xl gap-2.5',
+  md: 'py-2.5 px-4 text-sm rounded-lg gap-2',
+  lg: 'py-3 px-6 text-base rounded-lg gap-2.5',
 };
 
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
@@ -91,10 +72,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ) => {
     const baseStyles = `
       relative font-semibold overflow-hidden
-      transition-all duration-300
+      transition-colors duration-200
       focus:outline-none
       disabled:opacity-50 disabled:cursor-not-allowed
       inline-flex items-center justify-center
+      shadow-sm hover:shadow-md
     `;
 
     const isDisabled = disabled || loading;
@@ -117,27 +99,6 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           ${className}
         `.replace(/\s+/g, ' ')}
       >
-        {/* Background layers for variants with fills */}
-        {variant === 'primary' && (
-          <>
-            <span className="absolute inset-0 bg-gradient-to-r from-emerald-600 to-teal-600 transition-opacity duration-300 group-hover:opacity-90" />
-            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-emerald-500 to-emerald-400" />
-            <span className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-700 bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-          </>
-        )}
-        {variant === 'secondary' && (
-          <>
-            <span className="absolute inset-0 bg-slate-800 transition-opacity duration-300 group-hover:opacity-90" />
-            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-slate-700" />
-          </>
-        )}
-        {variant === 'danger' && (
-          <>
-            <span className="absolute inset-0 bg-gradient-to-r from-red-600 to-rose-600 transition-opacity duration-300 group-hover:opacity-90" />
-            <span className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 bg-gradient-to-r from-red-500 to-red-400" />
-          </>
-        )}
-
         {/* Content */}
         <span className="relative flex items-center justify-center gap-2">
           {loading ? (
@@ -161,11 +122,10 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = 'Button';
 
 // ── Spinner icon for loading state ────────────────────────────────────────────
-
 function LoaderIcon() {
   return (
     <svg
-      className="animate-spin h-4 w-4"
+      className="animate-spin h-4 w-4 text-gray-500"
       xmlns="http://www.w3.org/2000/svg"
       fill="none"
       viewBox="0 0 24 24"

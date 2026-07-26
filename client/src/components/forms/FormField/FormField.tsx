@@ -36,7 +36,7 @@ export function FormField({
       <label
         htmlFor={id}
         className={`block text-xs font-semibold tracking-wide mb-1.5 transition-colors duration-200 ${
-          focused ? 'text-emerald-400' : 'text-slate-400'
+          focused ? 'text-emerald-600' : 'text-slate-600'
         }`}
       >
         {label}
@@ -44,15 +44,15 @@ export function FormField({
       <div
         className={`relative flex items-center rounded-xl border transition-all duration-300 ${
           focused
-            ? 'border-emerald-500/60 bg-slate-950/90 shadow-[0_0_0_3px_rgba(16,185,129,0.1)]'
+            ? 'border-emerald-500/60 bg-white shadow-[0_0_0_3px_rgba(16,185,129,0.1)]'
             : isFilled
-            ? 'border-slate-700 bg-slate-950/60'
-            : 'border-slate-800 bg-slate-950/40'
+            ? 'border-slate-300 bg-white'
+            : 'border-slate-300 bg-white'
         }`}
       >
         <span
           className={`pl-3.5 transition-colors duration-200 ${
-            focused ? 'text-emerald-400' : 'text-slate-600'
+            focused ? 'text-emerald-600' : 'text-slate-500'
           }`}
         >
           {icon}
@@ -65,7 +65,7 @@ export function FormField({
           onChange={onChange}
           onFocus={() => setFocused(true)}
           onBlur={() => setFocused(false)}
-          className="w-full bg-transparent px-3 py-3 text-sm text-slate-100 placeholder-slate-600 focus:outline-none"
+          className="w-full bg-transparent px-3 py-3 text-sm text-slate-900 placeholder-slate-400 focus:outline-none"
           placeholder={placeholder}
           autoComplete={autoComplete}
         />

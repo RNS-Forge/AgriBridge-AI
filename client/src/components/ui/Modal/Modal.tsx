@@ -1,14 +1,3 @@
-// ---------------------------------------------------------------------------
-// Modal — centered overlay dialog with backdrop and focus trap.
-//
-// ACCESSIBILITY:
-//   - role="dialog", aria-modal="true"
-//   - aria-labelledby, aria-describedby
-//   - focus trap: first focusable element receives focus
-//   - Escape key closes modal
-//   - backdrop click closes modal (unless disabled)
-// ---------------------------------------------------------------------------
-
 import { forwardRef, ReactNode, useEffect, useRef } from 'react';
 
 interface ModalProps {
@@ -87,7 +76,7 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
 
     return (
       <div
-        className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4"
+        className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
         data-modal-backdrop
         role="presentation"
       >
@@ -99,30 +88,30 @@ export const Modal = forwardRef<HTMLDivElement, ModalProps>(
           aria-describedby={description ? 'modal-description' : undefined}
           className={`
             w-full ${sizeStyles[size]}
-            bg-slate-900 border border-slate-800 rounded-2xl
-            overflow-hidden shadow-2xl shadow-slate-950/50
+            bg-white border border-gray-200 rounded-xl
+            overflow-hidden shadow-lg
             max-h-[90vh] overflow-y-auto
             ${className}
           `.replace(/\s+/g, ' ')}
         >
           {/* Header */}
           {(title || description) && (
-            <div className="px-6 py-4 border-b border-slate-800 bg-slate-900/80 flex justify-between items-start">
+            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-start">
               <div>
                 {title && (
-                  <h2 id="modal-title" className="text-lg font-bold text-slate-100">
+                  <h2 id="modal-title" className="text-base font-semibold text-gray-900">
                     {title}
                   </h2>
                 )}
                 {description && (
-                  <p id="modal-description" className="text-sm text-slate-400 mt-1">
+                  <p id="modal-description" className="text-sm text-gray-500 mt-1">
                     {description}
                   </p>
                 )}
               </div>
               <button
                 onClick={onClose}
-                className="text-slate-400 hover:text-slate-100 transition-colors p-1 hover:bg-slate-800 rounded-lg"
+                className="text-gray-500 hover:text-gray-700 transition-colors p-1 hover:bg-gray-100 rounded-lg"
                 aria-label="Close modal"
               >
                 <svg

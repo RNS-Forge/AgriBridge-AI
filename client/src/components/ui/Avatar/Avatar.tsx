@@ -1,7 +1,115 @@
-// ---------------------------------------------------------------------------
-// Avatar — user profile image with initials fallback.
-//
-// SIZES:
-//   - xs:  h-6 w-6
-//   - sm:  h-8 w-8
-//   - md:  h-10 w-10 (default)\n//   - lg:  h-12 w-12\n//   - xl:  h-16 w-16\n//\n// ACCESSIBILITY:\n//   - alt text for image\n//   - aria-label for initials fallback\n// ---------------------------------------------------------------------------\n\nimport { forwardRef } from 'react';\n\ntype AvatarSize = 'xs' | 'sm' | 'md' | 'lg' | 'xl';\n\ninterface AvatarProps {\n  src?: string;\n  alt?: string;\n  initials?: string;\n  size?: AvatarSize;\n  className?: string;\n}\n\nconst sizeStyles: Record<AvatarSize, { container: string; text: string }> = {\n  xs: { container: 'h-6 w-6', text: 'text-xs' },\n  sm: { container: 'h-8 w-8', text: 'text-xs' },\n  md: { container: 'h-10 w-10', text: 'text-sm' },\n  lg: { container: 'h-12 w-12', text: 'text-base' },\n  xl: { container: 'h-16 w-16', text: 'text-lg' },\n};\n\nexport const Avatar = forwardRef<HTMLDivElement, AvatarProps>(\n  (\n    {\n      src,\n      alt,\n      initials,\n      size = 'md',\n      className = '',\n    },\n    ref\n  ) => {\n    const styles = sizeStyles[size];\n\n    return (\n      <div\n        ref={ref}\n        className={`\n          ${styles.container}\n          rounded-full\n          overflow-hidden\n          flex items-center justify-center\n          flex-shrink-0\n          bg-gradient-to-br from-emerald-500 to-teal-600\n          ${className}\n        `.replace(/\\s+/g, ' ')}\n      >\n        {src ? (\n          <img\n            src={src}\n            alt={alt || 'User avatar'}\n            className=\"h-full w-full object-cover\"\n          />\n        ) : initials ? (\n          <span\n            className={`font-bold text-white ${styles.text}`}\n            aria-label={`Avatar for ${alt || 'user'}`}\n          >\n            {initials.toUpperCase().slice(0, 2)}\n          </span>\n        ) : (\n          <svg\n            className=\"h-1/2 w-1/2 text-white\"\n            fill=\"currentColor\"\n            viewBox=\"0 0 24 24\"\n            aria-hidden=\"true\"\n          >\n            <path d=\"M12 12a3 3 0 100-6 3 3 0 000 6z\" />\n            <path d=\"M3 20.5A9.5 9.5 0 0121 20.5z\" />\n          </svg>\n        )}\n      </div>\n    );\n  }\n);\n\nAvatar.displayName = 'Avatar';\n
+import { forwardRef, useState } from "react";
+
+type AvatarSize = "xs" | "sm" | "md" | "lg" | "xl";
+
+interface AvatarProps {
+  src?: string;
+  alt?: string;
+  initials?: string;
+  size?: AvatarSize;
+  className?: string;
+  bordered?: boolean;
+}
+
+const sizeClasses: Record<
+  AvatarSize,
+  {
+    container: string;
+    text: string;
+  }
+> = {
+  xs: {
+    container: "h-6 w-6",
+    text: "text-[10px]",
+  },
+  sm: {
+    container: "h-8 w-8",
+    text: "text-xs",
+  },
+  md: {
+    container: "h-10 w-10",
+    text: "text-sm",
+  },
+  lg: {
+    container: "h-12 w-12",
+    text: "text-base",
+  },
+  xl: {
+    container: "h-16 w-16",
+    text: "text-lg",
+  },
+};
+
+export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
+  (
+    {
+      src,
+      alt = "User avatar",
+      initials,
+      size = "md",
+      bordered = false,
+      className = "",
+    },
+    ref
+  ) => {
+    const [imageError, setImageError] = useState(false);
+
+    const styles = sizeClasses[size];
+
+    const showImage = src && !imageError;
+    const showInitials = !showImage && initials;
+
+    return (
+      <div
+        ref={ref}
+        className={`
+          ${styles.container}
+          inline-flex
+          items-center
+          justify-center
+          overflow-hidden
+          rounded-full
+          bg-gray-200
+          shadow-sm
+          ${bordered ? "border-2 border-gray-300" : ""}
+          ${className}
+        `}
+      >
+        {showImage ? (
+          <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            className="h-full w-full object-cover"
+            onError={() => setImageError(true)}
+          />
+        ) : showInitials ? (
+          <span
+            className={`font-semibold uppercase ${styles.text} text-gray-700`}
+            aria-label={alt}
+          >
+            {initials.slice(0, 2)}
+          </span>
+        ) : (
+          <svg
+            className="h-1/2 w-1/2 text-gray-500"
+            fill="none"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+            aria-label="User avatar fallback icon"
+          >
+            <path
+              stroke="currentColor"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+        )}
+      </div>
+    );
+  }
+);
+
+Avatar.displayName = "Avatar";

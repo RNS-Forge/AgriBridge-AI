@@ -53,14 +53,12 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     const isFilled = value.length > 0;
 
     const borderColor = error
-      ? 'border-red-500/60 bg-red-950/20'
+      ? 'border-red-500/60 bg-white'
       : focused
-      ? 'border-emerald-500/60 bg-slate-950/90 shadow-[0_0_0_3px_rgba(16,185,129,0.1)]'
+      ? 'border-emerald-500/60 bg-white shadow-[0_0_0_3px_rgba(16,185,129,0.1)]'
       : isFilled
-      ? 'border-slate-700 bg-slate-950/60'
-      : 'border-slate-800 bg-slate-950/40';
-
-    const textColor = error ? 'text-red-400' : 'text-slate-400';
+      ? 'border-slate-300 bg-white'
+      : 'border-slate-300 bg-white';
 
     return (
       <div className={className}>
@@ -69,14 +67,14 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             htmlFor={id}
             className={`block text-xs font-semibold tracking-wide mb-1.5 transition-colors duration-200 ${
               error
-                ? 'text-red-400'
+                ? 'text-red-500'
                 : focused
-                ? 'text-emerald-400'
-                : 'text-slate-400'
+                ? 'text-emerald-600'
+                : 'text-slate-600'
             }`}
           >
             {label}
-            {required && <span className="text-red-400 ml-1">*</span>}
+            {required && <span className="text-red-500 ml-1">*</span>}
           </label>
         )}
 
@@ -87,10 +85,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <span
               className={`pl-3.5 transition-colors duration-200 ${
                 error
-                  ? 'text-red-400'
+                  ? 'text-red-500'
                   : focused
-                  ? 'text-emerald-400'
-                  : 'text-slate-600'
+                  ? 'text-emerald-600'
+                  : 'text-slate-500'
               }`}
             >
               {icon}
@@ -113,8 +111,8 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             className={`
               w-full bg-transparent
               ${icon ? 'px-3' : 'px-4'} py-3
-              text-sm text-slate-100
-              placeholder-slate-600
+              text-sm text-slate-900
+              placeholder-slate-400
               focus:outline-none
               disabled:opacity-50 disabled:cursor-not-allowed
             `.replace(/\s+/g, ' ')}
@@ -125,7 +123,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         </div>
 
         {error && (
-          <p id={`${id}-error`} className="text-xs text-red-400 mt-1.5">
+          <p id={`${id}-error`} className="text-xs text-red-500 mt-1.5">
             {error}
           </p>
         )}

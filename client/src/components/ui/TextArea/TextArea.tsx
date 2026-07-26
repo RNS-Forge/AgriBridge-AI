@@ -1,11 +1,3 @@
-// ---------------------------------------------------------------------------
-// TextArea — multi-line text input with char counter and resize control.
-//
-// ACCESSIBILITY:
-//   - aria-invalid, aria-describedby for error messages
-//   - aria-label for accessibility
-// ---------------------------------------------------------------------------
-
 import { forwardRef, ReactNode, useState } from 'react';
 
 interface TextAreaProps {
@@ -44,31 +36,31 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
     const [focused, setFocused] = useState(false);
 
     const borderColor = error
-      ? 'border-red-500/60 bg-red-950/20'
+      ? 'border-red-600 bg-red-50'
       : focused
-      ? 'border-emerald-500/60 bg-slate-950/90 shadow-[0_0_0_3px_rgba(16,185,129,0.1)]'
-      : 'border-slate-800 bg-slate-950/40';
+      ? 'border-blue-500 bg-white shadow-sm'
+      : 'border-gray-300 bg-white';
 
     return (
       <div className={className}>
         {label && (
           <label
             htmlFor={id}
-            className={`block text-xs font-semibold tracking-wide mb-1.5 transition-colors duration-200 ${
+            className={`block text-sm font-semibold mb-1.5 transition-colors duration-200 ${
               error
-                ? 'text-red-400'
+                ? 'text-red-600'
                 : focused
-                ? 'text-emerald-400'
-                : 'text-slate-400'
+                ? 'text-blue-600'
+                : 'text-gray-700'
             }`}
           >
             {label}
-            {required && <span className="text-red-400 ml-1">*</span>}
+            {required && <span className="text-red-600 ml-1">*</span>}
           </label>
         )}
 
         <div
-          className={`relative rounded-xl border transition-all duration-300 overflow-hidden ${borderColor}`}
+          className={`relative rounded-lg border transition-all duration-200 overflow-hidden ${borderColor}`}
         >
           <textarea
             ref={ref}
@@ -87,8 +79,8 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
             className={`
               w-full bg-transparent
               px-4 py-3
-              text-sm text-slate-100
-              placeholder-slate-600
+              text-sm text-gray-900
+              placeholder-gray-500
               focus:outline-none
               disabled:opacity-50 disabled:cursor-not-allowed
               resize-none
@@ -99,12 +91,12 @@ export const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>(
 
         <div className="flex justify-between items-start mt-1.5">
           {error && (
-            <p id={`${id}-error`} className="text-xs text-red-400">
+            <p id={`${id}-error`} className="text-xs text-red-600">
               {error}
             </p>
           )}
           {maxLength && (
-            <p className="text-xs text-slate-500 ml-auto">
+            <p className="text-xs text-gray-500 ml-auto">
               {value.length} / {maxLength}
             </p>
           )}

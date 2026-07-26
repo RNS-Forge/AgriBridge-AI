@@ -81,11 +81,7 @@ export default function Marketplace() {
 
   const fetchOffersForListing = async (listingId: string) => {
     try {
-      await fetch(`http://localhost:8000/api/v1/marketplace/listings/${listingId}`, {
-        headers: { 'Authorization': `Bearer ${token}` },
-      });
-      // Mocking or fetching offers trail
-      // In this client view we will query offers list or mock them
+      // Mocking or fetching offers
       setOffers(prev => ({
         ...prev,
         [listingId]: [
@@ -160,7 +156,7 @@ export default function Marketplace() {
         },
         body: JSON.stringify({
           listingId: selectedListing.id,
-          buyerId: '00000000-0000-0000-0000-000000000000', // Mock Buyer UUID
+          buyerId: '00000000-0000-0000-0000-000000000000',
           offerPricePerKg: Number(offerPrice),
           quantityKg: Number(offerQty),
         }),
@@ -219,30 +215,23 @@ export default function Marketplace() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="p-6 md:p-8 space-y-8">
       {/* Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-emerald-950/30 to-slate-900 p-8 rounded-3xl border border-slate-800">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-500/8 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-        
-        <div className="relative z-10 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="space-y-2">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-              Global Trade Catalog
-            </div>
-            <h1 className="text-3xl font-extrabold text-slate-100">
-              Agri <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">Marketplace</span>
+            <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+              Agri Marketplace
             </h1>
-            <p className="text-slate-400 text-sm max-w-xl">
-              Trade high quality crop pools with verified domestic and export buyers.
+            <p className="text-sm text-gray-500 max-w-xl">
+              Trade high-quality crop pools with verified domestic and export buyers.
               Review bids, negotiate prices, and manage purchase orders seamlessly.
             </p>
           </div>
           {isFpoAdmin && (
             <Button
               onClick={() => setShowAddModal(true)}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -254,35 +243,35 @@ export default function Marketplace() {
       </div>
 
       {/* Filters */}
-      <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-6">
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="md:col-span-2">
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Search Listing</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Search Listing</label>
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors"
+              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="Search by variety or description..."
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Min Price (INR)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Min Price (INR)</label>
             <input
               type="number"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors"
+              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="0"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Max Price (INR)</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Max Price (INR)</label>
             <input
               type="number"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors"
+              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="100"
             />
           </div>
@@ -290,70 +279,67 @@ export default function Marketplace() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-slate-400">
-          <div className="inline-block w-8 h-8 border-2 border-emerald-500/30 border-t-emerald-500 rounded-full animate-spin mb-4" />
+        <div className="text-center py-12 text-gray-500">
+          <div className="inline-block w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
           <p>Loading marketplace listings...</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {listings.map((listing) => (
-            <div key={listing.id} className="group relative overflow-hidden bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 flex flex-col justify-between hover:border-emerald-500/30 transition-all duration-300 hover:shadow-lg hover:shadow-emerald-950/20">
-              {/* Gradient overlay on hover */}
-              <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-teal-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              
-              <div className="relative z-10">
-                <div className="flex justify-between items-start mb-3">
-                  <h3 className="text-lg font-bold text-slate-100 group-hover:text-emerald-300 transition-colors">{listing.title}</h3>
-                  <span className="text-xs bg-emerald-950/50 text-emerald-400 border border-emerald-500/30 px-3 py-1 rounded-full font-mono">
-                    {listing.pricePerKg} INR/kg
-                  </span>
+            <div
+              key={listing.id}
+              className="bg-white rounded-xl border border-gray-200 p-6 space-y-4 hover:shadow-sm transition-all duration-200"
+            >
+              <div className="flex justify-between items-start mb-3">
+                <h3 className="text-base font-semibold text-gray-900">{listing.title}</h3>
+                <span className="text-xs bg-emerald-600/10 text-emerald-600 border border-emerald-600/20 px-3 py-1 rounded-md font-mono">
+                  {listing.pricePerKg} INR/kg
+                </span>
+              </div>
+              <p className="text-sm text-gray-500 mb-4 line-clamp-2">{listing.description}</p>
+              <div className="grid grid-cols-2 gap-4 text-xs mb-6">
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <span className="block font-semibold text-gray-600 mb-1">Quantity</span>
+                  <span className="text-gray-900 font-medium">{listing.quantityKg} kg</span>
                 </div>
-                <p className="text-sm text-slate-400 mb-4 line-clamp-2">{listing.description}</p>
-                <div className="grid grid-cols-2 gap-4 text-xs mb-6">
-                  <div className="bg-slate-950/50 rounded-lg p-3">
-                    <span className="block font-semibold text-slate-400 mb-1">Quantity</span>
-                    <span className="text-slate-200 font-medium">{listing.quantityKg} kg</span>
-                  </div>
-                  <div className="bg-slate-950/50 rounded-lg p-3">
-                    <span className="block font-semibold text-slate-400 mb-1">FPO Owner</span>
-                    <span className="text-slate-200 font-medium">{listing.fpoName || 'AgriBridge FPO'}</span>
-                  </div>
+                <div className="bg-gray-50 rounded-lg p-3">
+                  <span className="block font-semibold text-gray-600 mb-1">FPO Owner</span>
+                  <span className="text-gray-900 font-medium">{listing.fpoName || 'AgriBridge FPO'}</span>
                 </div>
               </div>
 
               <div className="space-y-4">
-                {/* Offer list for FPO Admin */}
                 {isFpoAdmin ? (
                   <div>
                     <button
                       onClick={() => fetchOffersForListing(listing.id)}
-                      className="text-xs text-emerald-400 hover:underline mb-2 block"
+                      className="text-xs text-blue-600 hover:underline mb-2 block"
                     >
                       View Active Buyer Offers
                     </button>
                     {offers[listing.id]?.map((off) => (
-                      <div key={off.id} className="bg-slate-950 p-3 rounded-lg border border-slate-800 text-xs space-y-2">
+                      <div key={off.id} className="bg-gray-50 p-3 rounded-lg border border-gray-200 text-xs space-y-2">
                         <div className="flex justify-between font-semibold">
                           <span>{off.buyerName}</span>
-                          <span className="text-emerald-400">{off.offerPricePerKg} INR/kg</span>
+                          <span className="text-emerald-600">{off.offerPricePerKg} INR/kg</span>
                         </div>
-                        <div className="flex justify-between text-slate-500">
+                        <div className="flex justify-between text-gray-500">
                           <span>Qty: {off.quantityKg} kg</span>
                           <span>Status: {off.status}</span>
                         </div>
                         <div className="flex space-x-2 pt-1">
-                          <button
+                          <Button
                             onClick={() => handleAcceptOffer(off.id)}
-                            className="px-3 py-1 bg-emerald-700 hover:bg-emerald-600 text-white rounded font-semibold"
+                            className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors duration-200"
                           >
                             Accept
-                          </button>
-                          <button
+                          </Button>
+                          <Button
                             onClick={() => setActiveCounterOfferId(off.id)}
-                            className="px-3 py-1 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded font-semibold border border-slate-700"
+                            className="px-3 py-1 bg-white border border-gray-200 text-gray-700 text-xs font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200"
                           >
                             Counter
-                          </button>
+                          </Button>
                         </div>
                         {activeCounterOfferId === off.id && (
                           <div className="flex items-center space-x-2 pt-2">
@@ -362,26 +348,26 @@ export default function Marketplace() {
                               value={counterPrice}
                               onChange={(e) => setCounterPrice(e.target.value)}
                               placeholder="Counter Price"
-                              className="bg-slate-900 border border-slate-800 rounded px-2 py-1 text-slate-100 w-24"
+                              className="bg-white border border-gray-300 rounded-lg px-2 py-1 text-gray-900 text-xs w-24 focus:border-blue-500 focus:ring-blue-500"
                             />
-                            <button
+                            <Button
                               onClick={() => handleCounterOffer(off.id)}
-                              className="px-2.5 py-1 bg-emerald-600 text-white rounded font-semibold"
+                              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors duration-200"
                             >
                               Submit
-                            </button>
+                            </Button>
                           </div>
                         )}
                       </div>
                     ))}
                   </div>
                 ) : (
-                  <button
+                  <Button
                     onClick={() => setSelectedListing(listing)}
-                    className="w-full py-2 bg-slate-800 hover:bg-emerald-950 hover:text-emerald-400 hover:border-emerald-800/30 text-sm font-semibold rounded-lg border border-slate-700 transition-colors"
+                    className="w-full py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200"
                   >
                     Submit Purchase Offer
-                  </button>
+                  </Button>
                 )}
               </div>
             </div>
@@ -391,20 +377,16 @@ export default function Marketplace() {
 
       {/* Create Listing Modal */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-950/20">
-            <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/80">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-emerald-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-slate-100">Create Marketplace Listing</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Create Marketplace Listing</h3>
               </div>
-              <button 
-                onClick={() => setShowAddModal(false)} 
-                className="text-slate-400 hover:text-slate-100 transition-colors p-1 hover:bg-slate-800 rounded-lg"
+              <button
+                onClick={() => setShowAddModal(false)}
+                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-lg"
+                aria-label="Close modal"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -413,52 +395,55 @@ export default function Marketplace() {
             </div>
             <form onSubmit={handleCreateListing} className="p-6 space-y-4">
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Listing Title</label>
-                <input 
-                  type="text" 
-                  required 
-                  value={newTitle} 
-                  onChange={e => setNewTitle(e.target.value)} 
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors" 
-                  placeholder="e.g. Premium Cotton Grade A" 
+                <label className="block text-sm font-medium text-gray-700 mb-2">Listing Title</label>
+                <input
+                  type="text"
+                  required
+                  value={newTitle}
+                  onChange={e => setNewTitle(e.target.value)}
+                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  placeholder="e.g. Premium Cotton Grade A"
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Description</label>
-                <textarea 
-                  value={newDesc} 
-                  onChange={e => setNewDesc(e.target.value)} 
-                  className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors resize-none" 
-                  placeholder="Details about grade, moisture, harvest date..." 
+                <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
+                <textarea
+                  value={newDesc}
+                  onChange={e => setNewDesc(e.target.value)}
+                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 resize-none"
+                  placeholder="Details about grade, moisture, harvest date..."
                   rows={3}
                 />
               </div>
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Quantity (kg)</label>
-                  <input 
-                    type="number" 
-                    required 
-                    value={newQty} 
-                    onChange={e => setNewQty(e.target.value)} 
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors" 
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Quantity (kg)</label>
+                  <input
+                    type="number"
+                    required
+                    value={newQty}
+                    onChange={e => setNewQty(e.target.value)}
+                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="10000"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Price Per kg (INR)</label>
-                  <input 
-                    type="number" 
-                    step="0.01" 
-                    required 
-                    value={newPrice} 
-                    onChange={e => setNewPrice(e.target.value)} 
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors" 
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Price Per kg (INR)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    required
+                    value={newPrice}
+                    onChange={e => setNewPrice(e.target.value)}
+                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="25.00"
                   />
                 </div>
               </div>
-              <Button type="submit">
+              <Button
+                type="submit"
+                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+              >
                 Publish Listing
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -471,20 +456,16 @@ export default function Marketplace() {
 
       {/* Offer Modal */}
       {selectedListing && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-950/80 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-slate-900 border border-slate-800 rounded-2xl overflow-hidden shadow-2xl shadow-emerald-950/20">
-            <div className="px-6 py-4 border-b border-slate-800 flex justify-between items-center bg-slate-900/80">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
+          <div className="w-full max-w-md bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+            <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center gap-3">
-                <div className="w-8 h-8 rounded-lg bg-blue-600/20 border border-blue-500/30 flex items-center justify-center">
-                  <svg className="w-4 h-4 text-blue-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 3h1.386c.51 0 .955.343 1.087.835l.383 1.437M7.5 14.25a3 3 0 00-3 3h15.75m-12.75-3h11.218c1.121-2.3 2.1-4.684 2.924-7.138a60.114 60.114 0 00-16.536-1.84M7.5 14.25L5.106 5.272M6 20.25a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm3.75-3a.75.75 0 11-1.5 0 .75.75 0 011.5 0zm4.5 0a.75.75 0 11-1.5 0 .75.75 0 011.5 0z" />
-                  </svg>
-                </div>
-                <h3 className="text-lg font-bold text-slate-100">Submit Purchase Offer</h3>
+                <h3 className="text-lg font-semibold text-gray-900">Submit Purchase Offer</h3>
               </div>
-              <button 
-                onClick={() => setSelectedListing(null)} 
-                className="text-slate-400 hover:text-slate-100 transition-colors p-1 hover:bg-slate-800 rounded-lg"
+              <button
+                onClick={() => setSelectedListing(null)}
+                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-lg"
+                aria-label="Close modal"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -492,36 +473,39 @@ export default function Marketplace() {
               </button>
             </div>
             <div className="p-6 space-y-4">
-              <div className="bg-slate-950/50 rounded-lg p-4 border border-slate-800">
-                <p className="text-xs text-slate-500 mb-1">Making offer on:</p>
-                <p className="text-sm font-semibold text-slate-200">{selectedListing.title}</p>
-                <p className="text-xs text-emerald-400 mt-1">Current Price: {selectedListing.pricePerKg} INR/kg</p>
+              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+                <p className="text-xs text-gray-500 mb-1">Making offer on:</p>
+                <p className="text-sm font-semibold text-gray-900">{selectedListing.title}</p>
+                <p className="text-xs text-emerald-600 mt-1">Current Price: {selectedListing.pricePerKg} INR/kg</p>
               </div>
               <form onSubmit={handleSubmitOffer} className="space-y-4">
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Your Offer Price Per kg (INR)</label>
-                  <input 
-                    type="number" 
-                    step="0.01" 
-                    required 
-                    value={offerPrice} 
-                    onChange={e => setOfferPrice(e.target.value)} 
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors" 
-                    placeholder="e.g. 24.50" 
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Your Offer Price Per kg (INR)</label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    required
+                    value={offerPrice}
+                    onChange={e => setOfferPrice(e.target.value)}
+                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="e.g. 24.50"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Requested Quantity (kg)</label>
-                  <input 
-                    type="number" 
-                    required 
-                    value={offerQty} 
-                    onChange={e => setOfferQty(e.target.value)} 
-                    className="w-full bg-slate-950 border border-slate-800 focus:border-emerald-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors" 
-                    placeholder="e.g. 10000" 
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Requested Quantity (kg)</label>
+                  <input
+                    type="number"
+                    required
+                    value={offerQty}
+                    onChange={e => setOfferQty(e.target.value)}
+                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    placeholder="e.g. 10000"
                   />
                 </div>
-                <Button type="submit">
+                <Button
+                  type="submit"
+                  className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+                >
                   Submit Offer
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />

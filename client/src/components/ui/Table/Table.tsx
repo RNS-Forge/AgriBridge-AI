@@ -1,2 +1,141 @@
-// ---------------------------------------------------------------------------
-// Table — data table with striped rows and hover effects.\n//\n// ACCESSIBILITY:\n//   - <thead> and <tbody> structure\n//   - table role (implicit)\n//   - scope=\"col\" on header cells\n// ---------------------------------------------------------------------------\n\nimport { forwardRef, ReactNode } from 'react';\n\ninterface TableProps {\n  children: ReactNode;\n  striped?: boolean;\n  hoverable?: boolean;\n  className?: string;\n}\n\nexport const Table = forwardRef<HTMLTableElement, TableProps>(\n  (\n    {\n      children,\n      striped = true,\n      hoverable = true,\n      className = '',\n    },\n    ref\n  ) => {\n    return (\n      <div className=\"overflow-x-auto rounded-2xl border border-slate-800\">\n        <table\n          ref={ref}\n          className={`\n            w-full text-left border-collapse\n            ${className}\n          `.replace(/\\s+/g, ' ')}\n        >\n          {children}\n        </table>\n      </div>\n    );\n  }\n);\n\nTable.displayName = 'Table';\n\n// ── Subcomponents ─────────────────────────────────────────────────────────────\n\nexport function TableHead({ children }: { children: ReactNode }) {\n  return (\n    <thead>\n      <tr className=\"border-b border-slate-800 bg-slate-900/80 text-xs font-semibold text-slate-400 uppercase tracking-wider\">\n        {children}\n      </tr>\n    </thead>\n  );\n}\n\nexport function TableBody({ children }: { children: ReactNode }) {\n  return <tbody className=\"divide-y divide-slate-800\">{children}</tbody>;\n}\n\ninterface TableRowProps {\n  children: ReactNode;\n  striped?: boolean;\n  hoverable?: boolean;\n  isSelected?: boolean;\n}\n\nexport function TableRow({\n  children,\n  striped = true,\n  hoverable = true,\n  isSelected = false,\n}: TableRowProps) {\n  return (\n    <tr\n      className={`\n        text-sm text-slate-300\n        ${hoverable ? 'hover:bg-slate-800/30 transition-colors' : ''}\n        ${isSelected ? 'bg-emerald-950/20' : striped ? 'odd:bg-slate-900/20' : ''}\n      `.replace(/\\s+/g, ' ')}\n    >\n      {children}\n    </tr>\n  );\n}\n\nexport function TableHeader({ children }: { children: ReactNode }) {\n  return (\n    <th\n      scope=\"col\"\n      className=\"px-6 py-4 font-semibold text-left\"\n    >\n      {children}\n    </th>\n  );\n}\n\nexport function TableCell({\n  children,\n  className = '',\n}: {\n  children: ReactNode;\n  className?: string;\n}) {\n  return <td className={`px-6 py-4 ${className}`.replace(/\\s+/g, ' ')}>{children}</td>;\n}\n
+import { forwardRef, HTMLAttributes, ThHTMLAttributes, TdHTMLAttributes } from "react";
+
+interface TableProps extends HTMLAttributes<HTMLTableElement> {
+  striped?: boolean;
+  hoverable?: boolean;
+  stickyHeader?: boolean;
+}
+
+export const Table = forwardRef<HTMLTableElement, TableProps>(
+  (
+    {
+      className = "",
+      children,
+      ...props
+    },
+    ref
+  ) => (
+    <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+      <table
+        ref={ref}
+        className={`w-full border-collapse text-sm ${className}`}
+        {...props}
+      >
+        {children}
+      </table>
+    </div>
+  )
+);
+
+Table.displayName = "Table";
+
+/* -------------------------------------------------------------------------- */
+
+export const TableHead = forwardRef<
+  HTMLTableSectionElement,
+  HTMLAttributes<HTMLTableSectionElement>
+>(({ className = "", ...props }, ref) => (
+  <thead
+    ref={ref}
+    className={`
+      bg-gray-50
+      border-b border-gray-200
+      ${className}
+    `}
+    {...props}
+  />
+));
+
+TableHead.displayName = "TableHead";
+
+/* -------------------------------------------------------------------------- */
+
+export const TableBody = forwardRef<
+  HTMLTableSectionElement,
+  HTMLAttributes<HTMLTableSectionElement>
+>(({ className = "", ...props }, ref) => (
+  <tbody
+    ref={ref}
+    className={`divide-y divide-gray-200 ${className}`}
+    {...props}
+  />
+));
+
+TableBody.displayName = "TableBody";
+
+/* -------------------------------------------------------------------------- */
+
+interface TableRowProps extends HTMLAttributes<HTMLTableRowElement> {
+  selected?: boolean;
+}
+
+export const TableRow = forwardRef<HTMLTableRowElement, TableRowProps>(
+  (
+    {
+      selected = false,
+      className = "",
+      ...props
+    },
+    ref
+  ) => (
+    <tr
+      ref={ref}
+      className={`
+        transition-colors duration-200
+        even:bg-white
+        hover:bg-gray-50
+        ${selected ? "bg-emerald-100" : ""}
+        ${className}
+      `}
+      {...props}
+    />
+  )
+);
+
+TableRow.displayName = "TableRow";
+
+/* -------------------------------------------------------------------------- */
+
+export const TableHeader = forwardRef<
+  HTMLTableCellElement,
+  ThHTMLAttributes<HTMLTableCellElement>
+>(({ className = "", ...props }, ref) => (
+  <th
+    ref={ref}
+    scope="col"
+    className={`
+      px-6
+      py-3
+      text-left
+      text-xs
+      font-semibold
+      uppercase
+      tracking-wide
+      text-gray-600
+      ${className}
+    `}
+    {...props}
+  />
+));
+
+TableHeader.displayName = "TableHeader";
+
+/* -------------------------------------------------------------------------- */
+
+export const TableCell = forwardRef<
+  HTMLTableCellElement,
+  TdHTMLAttributes<HTMLTableCellElement>
+>(({ className = "", ...props }, ref) => (
+  <td
+    ref={ref}
+    className={`
+      px-6
+      py-4
+      text-gray-700
+      ${className}
+    `}
+    {...props}
+  />
+));
+
+TableCell.displayName = "TableCell";

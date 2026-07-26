@@ -1,19 +1,6 @@
-// ---------------------------------------------------------------------------
-// Card — container component for grouping content.
-//
-// VARIANTS:
-//   - default:   Slate-900/60 with blur, border-slate-800
-//   - elevated:  Adds shadow and hover effects
-//   - outlined:  Transparent bg, stronger border
-//   - gradient:  Colored gradient overlay (emerald/teal)
-//
-// ACCESSIBILITY:
-//   - role="region" with aria-labelledby when title provided
-// ---------------------------------------------------------------------------
-
 import { ReactNode, forwardRef, useId } from 'react';
 
-type CardVariant = 'default' | 'elevated' | 'outlined' | 'gradient';
+type CardVariant = 'default' | 'elevated' | 'outlined';
 
 interface CardProps {
   children: ReactNode;
@@ -28,38 +15,30 @@ interface CardProps {
 
 const variantStyles: Record<CardVariant, string> = {
   default: `
-    bg-slate-900/60 backdrop-blur-sm
-    border border-slate-800
-    rounded-2xl
+    bg-white
+    border border-gray-200
+    rounded-xl
   `,
   elevated: `
-    bg-slate-900/80 backdrop-blur-md
-    border border-slate-800
-    rounded-2xl
-    shadow-lg shadow-slate-950/30
-    hover:border-slate-700 hover:shadow-xl hover:shadow-slate-950/40
-    transition-all duration-300
+    bg-white
+    border border-gray-200
+    rounded-xl
+    shadow-sm
+    hover:shadow-md
+    transition-all duration-200
   `,
   outlined: `
-    bg-transparent
-    border-2 border-slate-700
-    rounded-2xl
-    hover:border-slate-600
-    transition-colors duration-200
-  `,
-  gradient: `
-    relative overflow-hidden
-    bg-gradient-to-br from-slate-900 via-emerald-950/30 to-slate-900
-    border border-slate-800
-    rounded-2xl
+    bg-white
+    border-2 border-gray-300
+    rounded-xl
   `,
 };
 
 const paddingStyles: Record<'none' | 'sm' | 'md' | 'lg', string> = {
   none: '',
   sm: 'p-4',
-  md: 'p-6',
-  lg: 'p-8',
+  md: 'p-5',
+  lg: 'p-6',
 };
 
 export const Card = forwardRef<HTMLDivElement, CardProps>(
@@ -78,10 +57,6 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
   ) => {
     const titleId = useId();
     const isInteractive = !!onClick;
-
-    const interactiveStyles = isInteractive
-      ? 'cursor-pointer hover:scale-[1.01] active:scale-[0.99]'
-      : '';
 
     return (
       <Component
@@ -103,34 +78,25 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
         className={`
           ${variantStyles[variant]}
           ${paddingStyles[padding]}
-          ${interactiveStyles}
           ${className}
         `.replace(/\s+/g, ' ')}
       >
-        {/* Decorative orbs for gradient variant */}
-        {variant === 'gradient' && (
-          <>
-            <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2 pointer-events-none" />
-            <div className="absolute bottom-0 left-0 w-48 h-48 bg-teal-500/8 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2 pointer-events-none" />
-          </>
-        )}
-
         {/* Header */}
         {(title || description) && (
-          <div className="relative z-10 mb-4">
+          <div className="mb-4">
             {title && (
-              <h3 id={titleId} className="text-lg font-bold text-slate-100">
+              <h3 id={titleId} className="text-base font-semibold text-gray-900">
                 {title}
               </h3>
             )}
             {description && (
-              <p className="text-sm text-slate-400 mt-1">{description}</p>
+              <p className="text-sm text-gray-500 mt-1">{description}</p>
             )}
           </div>
         )}
 
         {/* Content */}
-        <div className="relative z-10">{children}</div>
+        <div>{children}</div>
       </Component>
     );
   }
@@ -139,17 +105,16 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
 Card.displayName = 'Card';
 
 // ── Card subcomponents ───────────────────────────────────────────────────────
-
 export function CardHeader({ children }: { children: ReactNode }) {
   return <div className="mb-4">{children}</div>;
 }
 
 export function CardTitle({ children }: { children: ReactNode }) {
-  return <h3 className="text-lg font-bold text-slate-100">{children}</h3>;
+  return <h3 className="text-base font-semibold text-gray-900">{children}</h3>;
 }
 
 export function CardDescription({ children }: { children: ReactNode }) {
-  return <p className="text-sm text-slate-400 mt-1">{children}</p>;
+  return <p className="text-sm text-gray-500 mt-1">{children}</p>;
 }
 
 export function CardContent({ children }: { children: ReactNode }) {
@@ -157,5 +122,7 @@ export function CardContent({ children }: { children: ReactNode }) {
 }
 
 export function CardFooter({ children }: { children: ReactNode }) {
-  return <div className="mt-4 pt-4 border-t border-slate-800">{children}</div>;
+  return (
+    <div className="mt-4 pt-4 border-t border-gray-200">{children}</div>
+  );
 }

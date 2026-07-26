@@ -55,22 +55,14 @@ export default function Mandi() {
   }, [search, stateName]);
 
   return (
-    <div className="space-y-8">
+    <div className="p-6 md:p-8 space-y-8">
       {/* Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-amber-950/30 to-slate-900 p-8 rounded-3xl border border-slate-800">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-orange-500/8 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-        
-        <div className="relative z-10 space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/20 text-amber-400 text-xs font-medium">
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />
-            Live Price Feed
-          </div>
-          <h1 className="text-3xl font-extrabold text-slate-100">
-            Mandi <span className="text-transparent bg-clip-text bg-gradient-to-r from-amber-400 to-orange-300">Price Index</span>
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+            Mandi Price Index
           </h1>
-          <p className="text-slate-400 text-sm max-w-xl">
+          <p className="text-sm text-gray-500 max-w-xl">
             Live Agmarknet prices feed with Redis caching fallback. Track commodity prices
             across markets for informed trading decisions.
           </p>
@@ -78,31 +70,32 @@ export default function Mandi() {
       </div>
 
       {/* Filters */}
-      <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-6">
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Commodity</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">Commodity</label>
             <input
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 focus:border-amber-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors"
+              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="e.g. Cotton, Wheat"
             />
           </div>
           <div>
-            <label className="block text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">State</label>
+            <label className="block text-sm font-medium text-gray-700 mb-2">State</label>
             <input
               type="text"
               value={stateName}
               onChange={(e) => setStateName(e.target.value)}
-              className="w-full bg-slate-950 border border-slate-800 focus:border-amber-500/60 rounded-lg px-4 py-2.5 text-slate-100 placeholder-slate-600 focus:outline-none transition-colors"
+              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="e.g. Maharashtra, Gujarat"
             />
           </div>
           <div className="flex items-end">
             <Button
               onClick={fetchMandiPrices}
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.183m0-4.992v4.99" />
@@ -114,28 +107,28 @@ export default function Mandi() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-slate-400">
-          <div className="inline-block w-8 h-8 border-2 border-amber-500/30 border-t-amber-500 rounded-full animate-spin mb-4" />
+        <div className="text-center py-12 text-gray-500">
+          <div className="inline-block w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
           <p>Loading daily prices index...</p>
         </div>
       ) : (
-        <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl overflow-hidden">
+        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="border-b border-slate-800 bg-slate-900/80 text-xs font-semibold text-slate-400 uppercase tracking-wider">
+              <tr className="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 <th className="px-6 py-4">Market</th>
                 <th className="px-6 py-4">Commodity / Variety</th>
                 <th className="px-6 py-4">Arrival Volume</th>
                 <th className="px-6 py-4">Min Price</th>
                 <th className="px-6 py-4">Max Price</th>
-                <th className="px-6 py-4 font-bold text-amber-400">Modal Price</th>
+                <th className="px-6 py-4 font-bold text-amber-600">Modal Price</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-slate-800 text-sm text-slate-300">
+            <tbody className="divide-y divide-gray-200 text-sm text-gray-600">
               {prices.length === 0 ? (
                 <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-slate-500">
-                    <svg className="w-12 h-12 mx-auto mb-4 text-slate-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                    <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227 4.773L5.636 16.591M5.636 7.409l1.591-1.591" />
                     </svg>
                     <p>No mandi pricing records found matching current filter context.</p>
@@ -143,21 +136,21 @@ export default function Mandi() {
                 </tr>
               ) : (
                 prices.map((price) => (
-                  <tr key={price.id} className="hover:bg-slate-800/30 transition-colors">
+                  <tr key={price.id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
-                      <p className="font-semibold text-slate-100">{price.market?.marketName}</p>
-                      <p className="text-xs text-slate-500">
+                      <p className="font-semibold text-gray-900">{price.market?.marketName}</p>
+                      <p className="text-xs text-gray-500">
                         {price.market?.district}, {price.market?.state}
                       </p>
                     </td>
                     <td className="px-6 py-4">
-                      <p className="font-semibold">{price.commodityName}</p>
-                      <p className="text-xs text-slate-500">{price.variety || 'N/A'}</p>
+                      <p className="font-semibold text-gray-900">{price.commodityName}</p>
+                      <p className="text-xs text-gray-500">{price.variety || 'N/A'}</p>
                     </td>
                     <td className="px-6 py-4">{price.arrivalVolumeTonnes ? `${price.arrivalVolumeTonnes} Tonnes` : 'N/A'}</td>
                     <td className="px-6 py-4">{price.minPrice} INR/q</td>
                     <td className="px-6 py-4">{price.maxPrice} INR/q</td>
-                    <td className="px-6 py-4 font-bold text-amber-400">{price.modalPrice} INR/q</td>
+                    <td className="px-6 py-4 font-bold text-amber-600">{price.modalPrice} INR/q</td>
                   </tr>
                 ))
               )}

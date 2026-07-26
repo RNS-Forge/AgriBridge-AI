@@ -123,22 +123,14 @@ export default function SuperAdmin() {
   };
 
   return (
-    <div className="space-y-8">
+    <div className="p-6 md:p-8 space-y-8">
       {/* Header */}
-      <div className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-rose-950/30 to-slate-900 p-8 rounded-3xl border border-slate-800">
-        {/* Decorative elements */}
-        <div className="absolute top-0 right-0 w-64 h-64 bg-rose-600/10 rounded-full blur-3xl -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-48 h-48 bg-pink-500/8 rounded-full blur-3xl translate-y-1/2 -translate-x-1/2" />
-        
-        <div className="relative z-10 space-y-2">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-rose-500/10 border border-rose-500/20 text-rose-400 text-xs font-medium">
-            <span className="w-1.5 h-1.5 rounded-full bg-rose-400 animate-pulse" />
-            Platform Administration
-          </div>
-          <h1 className="text-3xl font-extrabold text-slate-100">
-            Super <span className="text-transparent bg-clip-text bg-gradient-to-r from-rose-400 to-pink-300">Control Center</span>
+      <div className="bg-white rounded-xl border border-gray-200 p-6">
+        <div className="space-y-2">
+          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+            Super Control Center
           </h1>
-          <p className="text-slate-400 text-sm max-w-xl">
+          <p className="text-sm text-gray-500 max-w-xl">
             Global system dashboard stats, subscription tiers adjustments, and audit streams.
             Manage platform-wide configuration and monitor system health.
           </p>
@@ -146,96 +138,102 @@ export default function SuperAdmin() {
       </div>
 
       {loading ? (
-        <div className="text-center py-12 text-slate-400">
-          <div className="inline-block w-8 h-8 border-2 border-rose-500/30 border-t-rose-500 rounded-full animate-spin mb-4" />
+        <div className="text-center py-12 text-gray-500">
+          <div className="inline-block w-8 h-8 border-2 border-blue-500 border-t-transparent rounded-full animate-spin mb-4" />
           <p>Loading admin data...</p>
         </div>
       ) : (
         <div className="space-y-8">
-          {/* Metrics grids */}
+          {/* Metrics Grid */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-5 hover:border-rose-500/30 transition-all duration-300">
-              <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Total Tenants</span>
-              <span className="text-3xl font-extrabold text-slate-100">{metrics?.totalTenants || 0}</span>
+            <div className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-sm transition-all duration-200">
+              <span className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Total Tenants</span>
+              <span className="text-3xl font-bold text-gray-900">{metrics?.totalTenants || 0}</span>
             </div>
-            <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-5 hover:border-rose-500/30 transition-all duration-300">
-              <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Platform Users</span>
-              <span className="text-3xl font-extrabold text-slate-100">{metrics?.totalUsers || 0}</span>
+            <div className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-sm transition-all duration-200">
+              <span className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Platform Users</span>
+              <span className="text-3xl font-bold text-gray-900">{metrics?.totalUsers || 0}</span>
             </div>
-            <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-5 hover:border-rose-500/30 transition-all duration-300">
-              <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Harvests Logged</span>
-              <span className="text-3xl font-extrabold text-slate-100">{metrics?.totalHarvestsKg || 0} kg</span>
+            <div className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-sm transition-all duration-200">
+              <span className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Harvests Logged</span>
+              <span className="text-3xl font-bold text-gray-900">{metrics?.totalHarvestsKg || 0} kg</span>
             </div>
-            <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-5 hover:border-rose-500/30 transition-all duration-300">
-              <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Commercial POs</span>
-              <span className="text-3xl font-extrabold text-slate-100">{metrics?.totalOrdersCount || 0}</span>
+            <div className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-sm transition-all duration-200">
+              <span className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2">Commercial POs</span>
+              <span className="text-3xl font-bold text-gray-900">{metrics?.totalOrdersCount || 0}</span>
             </div>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Tenants list panel */}
-            <div className="lg:col-span-2 bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 space-y-4">
-              <h3 className="font-bold text-slate-200">Tenant Workspace Management</h3>
+            {/* Tenants List Panel */}
+            <div className="lg:col-span-2 bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+              <h3 className="font-semibold text-gray-900">Tenant Workspace Management</h3>
               <div className="space-y-4 overflow-y-auto max-h-[400px]">
                 {tenants.map((ten) => (
-                  <div key={ten.id} className="bg-slate-950 p-4 rounded-xl border border-slate-850 flex justify-between items-center text-xs hover:border-rose-500/30 transition-colors">
+                  <div
+                    key={ten.id}
+                    className="bg-gray-50 p-4 rounded-lg border border-gray-200 flex justify-between items-center text-sm hover:border-blue-500/30 transition-colors"
+                  >
                     <div>
-                      <p className="font-bold text-slate-200 text-sm">{ten.name}</p>
-                      <p className="text-slate-500 font-mono">ID: {ten.id.slice(0, 8)} | Plan: {ten.subscriptionPlan}</p>
+                      <p className="font-semibold text-gray-900">{ten.name}</p>
+                      <p className="text-gray-500 font-mono text-xs">ID: {ten.id.slice(0, 8)} | Plan: {ten.subscriptionPlan}</p>
                     </div>
                     <div className="flex space-x-2">
                       <select
                         value={ten.subscriptionPlan}
                         onChange={(e) => handleUpdateTenant(ten.id, undefined, e.target.value)}
-                        className="bg-slate-900 border border-slate-850 focus:border-rose-500/60 rounded px-2 py-1.5 text-slate-300 focus:outline-none transition-colors"
+                        className="bg-white border border-gray-300 focus:border-blue-500 rounded px-2 py-1.5 text-gray-700 focus:outline-none transition-colors text-sm"
                       >
                         <option value="free">Free</option>
                         <option value="premium">Premium</option>
                         <option value="enterprise">Enterprise</option>
                       </select>
-                      <button
+                      <Button
                         onClick={() => handleUpdateTenant(ten.id, ten.status === 'active' ? 'suspended' : 'active')}
-                        className={`px-3 py-1.5 font-semibold rounded-lg transition-colors ${
+                        className={`px-3 py-1.5 text-sm font-semibold rounded-lg transition-colors ${
                           ten.status === 'active'
-                            ? 'bg-red-950/20 text-red-400 border border-red-900/50 hover:bg-red-900/30'
-                            : 'bg-emerald-950/50 text-emerald-400 border border-emerald-900/50 hover:bg-emerald-900/30'
+                            ? 'bg-red-600/10 text-red-600 border border-red-600/20 hover:bg-red-600/20'
+                            : 'bg-emerald-600/10 text-emerald-600 border border-emerald-600/20 hover:bg-emerald-600/20'
                         }`}
                       >
                         {ten.status === 'active' ? 'Suspend' : 'Activate'}
-                      </button>
+                      </Button>
                     </div>
                   </div>
                 ))}
               </div>
             </div>
 
-            {/* Platform settings panel */}
-            <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 space-y-4">
-              <h3 className="font-bold text-slate-200">Global Configuration</h3>
+            {/* Platform Settings Panel */}
+            <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+              <h3 className="font-semibold text-gray-900">Global Configuration</h3>
               <form onSubmit={handleCreateSetting} className="space-y-3">
                 <div>
-                  <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Key Name</label>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Key Name</label>
                   <input
                     type="text"
                     required
                     value={newKey}
                     onChange={(e) => setNewKey(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-850 focus:border-rose-500/60 rounded px-3 py-2 text-xs text-slate-100 placeholder-slate-600 focus:outline-none transition-colors"
+                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="ALLOW_EXPORTS_GLOBAL"
                   />
                 </div>
                 <div>
-                  <label className="block text-[10px] font-semibold text-slate-500 uppercase tracking-wider mb-1">Setting Value</label>
+                  <label className="block text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Setting Value</label>
                   <input
                     type="text"
                     required
                     value={newVal}
                     onChange={(e) => setNewVal(e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-850 focus:border-rose-500/60 rounded px-3 py-2 text-xs text-slate-100 placeholder-slate-600 focus:outline-none transition-colors"
+                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-sm text-gray-900 placeholder-gray-500 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="true"
                   />
                 </div>
-                <Button type="submit">
+                <Button
+                  type="submit"
+                  className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+                >
                   Save Setting
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -243,28 +241,31 @@ export default function SuperAdmin() {
                 </Button>
               </form>
 
-              <div className="border-t border-slate-800/80 pt-4 space-y-2 max-h-[160px] overflow-y-auto text-[11px] text-slate-400">
+              <div className="border-t border-gray-200 pt-4 space-y-2 max-h-[160px] overflow-y-auto text-xs text-gray-500">
                 {metrics?.activeSettings.map((s) => (
-                  <div key={s.settingKey} className="flex justify-between font-mono bg-slate-950 p-2 rounded">
-                    <span className="text-slate-500">{s.settingKey}:</span>
-                    <span className="text-emerald-400 font-bold">{s.settingValue}</span>
+                  <div key={s.settingKey} className="flex justify-between font-mono bg-gray-50 p-2 rounded">
+                    <span className="text-gray-600">{s.settingKey}:</span>
+                    <span className="text-emerald-600 font-bold">{s.settingValue}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Audit Logs stream */}
-          <div className="bg-slate-900/60 backdrop-blur-sm border border-slate-800 rounded-2xl p-6 space-y-4">
-            <h3 className="font-bold text-slate-200">Security Audit Logs Trail</h3>
+          {/* Audit Logs Panel */}
+          <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
+            <h3 className="font-semibold text-gray-900">Security Audit Logs Trail</h3>
             <div className="space-y-3 max-h-[300px] overflow-y-auto">
               {logs.map((log) => (
-                <div key={log.id} className="bg-slate-950 p-3 rounded-xl border border-slate-850/80 text-[11px] font-mono flex justify-between items-center text-slate-400 hover:border-rose-500/30 transition-colors">
+                <div
+                  key={log.id}
+                  className="bg-gray-50 p-3 rounded-lg border border-gray-200 text-xs font-mono flex justify-between items-center text-gray-600 hover:border-blue-500/30 transition-colors"
+                >
                   <div>
-                    <span className="text-rose-400 font-bold mr-3">[{log.action}]</span>
+                    <span className="text-rose-600 font-bold mr-3">[{log.action}]</span>
                     <span>Entity: {log.entityName} ({log.entityId.slice(0, 8)})</span>
                   </div>
-                  <div className="text-slate-600">
+                  <div className="text-gray-500">
                     {new Date(log.createdAt).toLocaleString()}
                   </div>
                 </div>

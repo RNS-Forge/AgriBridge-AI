@@ -1,5 +1,75 @@
-// ---------------------------------------------------------------------------
-// Loader — loading spinner with optional text.
-//
-// SIZES:
-//   - sm:  h-4 w-4\n//   - md:  h-8 w-8 (default)\n//   - lg:  h-12 w-12\n//\n// ACCESSIBILITY:\n//   - role=\"status\" with aria-live=\"polite\"\n//   - aria-label for context\n// ---------------------------------------------------------------------------\n\nimport { forwardRef } from 'react';\n\ntype LoaderSize = 'sm' | 'md' | 'lg';\n\ninterface LoaderProps {\n  size?: LoaderSize;\n  text?: string;\n  fullHeight?: boolean;\n  className?: string;\n  'aria-label'?: string;\n}\n\nconst sizeStyles: Record<LoaderSize, string> = {\n  sm: 'h-4 w-4',\n  md: 'h-8 w-8',\n  lg: 'h-12 w-12',\n};\n\nexport const Loader = forwardRef<HTMLDivElement, LoaderProps>(\n  (\n    {\n      size = 'md',\n      text,\n      fullHeight = false,\n      className = '',\n      'aria-label': ariaLabel,\n    },\n    ref\n  ) => {\n    return (\n      <div\n        ref={ref}\n        role=\"status\"\n        aria-live=\"polite\"\n        aria-label={ariaLabel || 'Loading...'}\n        className={`\n          flex flex-col items-center justify-center gap-4\n          ${fullHeight ? 'min-h-screen' : 'py-12'}\n          ${className}\n        `.replace(/\\s+/g, ' ')}\n      >\n        <svg\n          className={`animate-spin text-emerald-500 ${sizeStyles[size]}`}\n          xmlns=\"http://www.w3.org/2000/svg\"\n          fill=\"none\"\n          viewBox=\"0 0 24 24\"\n        >\n          <circle\n            className=\"opacity-25\"\n            cx=\"12\"\n            cy=\"12\"\n            r=\"10\"\n            stroke=\"currentColor\"\n            strokeWidth=\"4\"\n          />\n          <path\n            className=\"opacity-75\"\n            fill=\"currentColor\"\n            d=\"M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z\"\n          />\n        </svg>\n        {text && <p className=\"text-sm text-slate-400\">{text}</p>}\n      </div>\n    );\n  }\n);\n\nLoader.displayName = 'Loader';\n
+import { forwardRef } from "react";
+
+type LoaderSize = "sm" | "md" | "lg";
+
+interface LoaderProps {
+  size?: LoaderSize;
+  text?: string;
+  fullHeight?: boolean;
+  className?: string;
+  colorClass?: string;
+  "aria-label"?: string;
+}
+
+const sizeClasses: Record<LoaderSize, string> = {
+  sm: "h-4 w-4",
+  md: "h-8 w-8",
+  lg: "h-12 w-12",
+};
+
+export const Loader = forwardRef<HTMLDivElement, LoaderProps>(
+  (
+    {
+      size = "md",
+      text,
+      fullHeight = false,
+      className = "",
+      colorClass = "text-blue-600",
+      "aria-label": ariaLabel = "Loading",
+    },
+    ref
+  ) => {
+    return (
+      <div
+        ref={ref}
+        role="status"
+        aria-live="polite"
+        aria-label={ariaLabel}
+        className={`
+          flex flex-col items-center justify-center gap-3
+          ${fullHeight ? "min-h-screen" : "py-8"}
+          ${className}
+        `.replace(/\s+/g, ' ')}
+      >
+        <svg
+          className={`animate-spin ${sizeClasses[size]} ${colorClass}`}
+          viewBox="0 0 24 24"
+          fill="none"
+        >
+          <circle
+            cx="12"
+            cy="12"
+            r="10"
+            stroke="currentColor"
+            strokeWidth="4"
+            className="opacity-20"
+          />
+
+          <path
+            fill="currentColor"
+            className="opacity-90"
+            d="M12 2a10 10 0 0 1 10 10h-4a6 6 0 0 0-6-6V2z"
+          />
+        </svg>
+
+        {text && (
+          <span className="text-sm text-gray-500">
+            {text}
+          </span>
+        )}
+      </div>
+    );
+  }
+);
+
+Loader.displayName = "Loader";

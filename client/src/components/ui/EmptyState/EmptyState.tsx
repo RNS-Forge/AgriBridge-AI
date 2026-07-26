@@ -1,4 +1,78 @@
-// ---------------------------------------------------------------------------
-// EmptyState — placeholder when no data is available.
-//
-// ACCESSIBILITY:\n//   - role=\"status\" to announce to screen readers\n// ---------------------------------------------------------------------------\n\nimport { forwardRef, ReactNode } from 'react';\n\ninterface EmptyStateProps {\n  icon?: ReactNode;\n  title: string;\n  description?: string;\n  action?: ReactNode;\n  className?: string;\n}\n\nexport const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(\n  (\n    {\n      icon,\n      title,\n      description,\n      action,\n      className = '',\n    },\n    ref\n  ) => {\n    return (\n      <div\n        ref={ref}\n        role=\"status\"\n        className={`\n          flex flex-col items-center justify-center\n          py-12 px-4 text-center\n          ${className}\n        `.replace(/\\s+/g, ' ')}\n      >\n        {icon && (\n          <div className=\"mb-4 text-slate-600\">\n            {typeof icon === 'string' ? (\n              <span className=\"text-5xl\">{icon}</span>\n            ) : (\n              <div className=\"text-6xl\">{icon}</div>\n            )}\n          </div>\n        )}\n\n        <h3 className=\"text-lg font-semibold text-slate-200 mb-2\">\n          {title}\n        </h3>\n\n        {description && (\n          <p className=\"text-sm text-slate-400 max-w-sm mb-6\">\n            {description}\n          </p>\n        )}\n\n        {action && <div className=\"mt-4\">{action}</div>}\n      </div>\n    );\n  }\n);\n\nEmptyState.displayName = 'EmptyState';\n
+import { forwardRef, ReactNode } from "react";
+
+interface EmptyStateProps {
+  title: string;
+  description?: string;
+  icon?: ReactNode;
+  action?: ReactNode;
+  className?: string;
+}
+
+export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
+  (
+    {
+      title,
+      description,
+      icon,
+      action,
+      className = "",
+    },
+    ref
+  ) => {
+    return (
+      <div
+        ref={ref}
+        role="status"
+        aria-live="polite"
+        className={`
+          flex flex-col items-center justify-center
+          rounded-xl
+          p-6
+          text-center
+          ${className}
+        `.replace(/\s+/g, ' ')}
+      >
+        {/* Icon */}
+        <div className="mb-4 text-gray-400">
+          {icon ?? (
+            <svg
+              className="h-12 w-12"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.6}
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M4 7h16M4 12h10M4 17h16"
+              />
+            </svg>
+          )}
+        </div>
+
+        {/* Title */}
+        <h2 className="text-base font-semibold text-gray-900">
+          {title}
+        </h2>
+
+        {/* Description */}
+        {description && (
+          <p className="mt-2 max-w-md text-sm text-gray-500">
+            {description}
+          </p>
+        )}
+
+        {/* Action */}
+        {action && (
+          <div className="mt-4 flex justify-center">
+            {action}
+          </div>
+        )}
+      </div>
+    );
+  }
+);
+
+EmptyState.displayName = "EmptyState";
