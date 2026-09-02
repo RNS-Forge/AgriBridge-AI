@@ -18,3 +18,4 @@ export { ErrorBanner } from './ErrorBanner/ErrorBanner.js';
 export { Toast } from './Toast/Toast.js';
 export { SocialButton } from './SocialButton/SocialButton.js';
 export { MailIcon, LockIcon, UserIcon } from './icons/index.js';
+export { Sidebar } from './Sidebar/Sidebar.js';

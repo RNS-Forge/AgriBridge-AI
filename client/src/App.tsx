@@ -9,6 +9,8 @@ import { DashboardLayout } from './layouts/DashboardLayout.js';
 import Login from './features/auth/Login.js';
 import Register from './features/auth/Register.js';
 import VerifyOtp from './features/auth/VerifyOtp.js';
+import ForgotPassword from './features/auth/ForgotPassword.js';
+import ResetPassword from './features/auth/ResetPassword.js';
 
 // Main pages
 import Dashboard from './features/dashboard/Dashboard.js';
@@ -51,6 +53,8 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/verify-otp" element={<VerifyOtp />} />
+            <Route path="/forgot-password" element={<ForgotPassword />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
 
             {/* Protected Routes */}
             <Route

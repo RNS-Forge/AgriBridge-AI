@@ -38,7 +38,27 @@ export default function VerifyOtp() {
   };
 
   return (
+    <>
+      {/* Custom CSS for hiding scrollbar */}
+      <style>{`
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+`}</style>
+
     <div className="h-screen flex overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50">
+      {/* ───── Static Background Image ───── */}
+      <div className="absolute inset-0 z-0">
+        <div
+          className="w-full h-full bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: "url('/logo/bg-login.png')" }}
+        />
+      </div>
+
       {/* Left Panel: Branding */}
       <div className="hidden lg:flex lg:w-[480px] xl:w-[540px] relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-700">
         {/* Decorative grid */}
@@ -119,11 +139,11 @@ export default function VerifyOtp() {
       </div>
 
       {/* Right Panel: Form */}
-      <div className="flex-1 flex items-center justify-center bg-white/60 backdrop-blur-xl px-6 py-10 relative overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent hover:scrollbar-thumb-slate-400">
+      <div className="flex-1 flex items-center justify-center bg-white/60 backdrop-blur-xl px-6 py-10 relative">
         {/* Subtle bg gradient */}
         <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-emerald-50/50 pointer-events-none" />
 
-        <div className="relative z-10 w-full max-w-md my-auto">
+        <div className="relative z-10 w-full max-w-md my-auto max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-2 mb-8">
             <div className="w-9 h-9 rounded-lg bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center">
@@ -200,5 +220,6 @@ export default function VerifyOtp() {
         </div>
       </div>
     </div>
+    </>
   );
 }

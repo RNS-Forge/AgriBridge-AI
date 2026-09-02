@@ -44,43 +44,14 @@ export default function Login() {
     }
   };
 
-  // Note: Using direct Unsplash URLs matching your exact search queries because 
-  // Getty/iStock block direct hotlinking (returns 403 Forbidden in browsers).
-  const bgImages = [
-    'https://imgs.search.brave.com/vDEVJyM_z-BG4DQo6Dhp3LhTHRsdrGyqLdA-kfHjfpg/rs:fit:500:0:1:0/g:ce/aHR0cHM6Ly9tZWRp/YS5pc3RvY2twaG90/by5jb20vaWQvMTI0/Njc3Nzg0L3Bob3Rv/L3RyYWN0b3Itc2ls/aG91ZXR0ZS5qcGc_/cz02MTJ4NjEyJnc9/MCZrPTIwJmM9RGhH/alFLQk1JR0J2OFpY/NDhCa1VhZDJIVzhL/OENCTEhOaFlrNWZZ/T1ljbz0', // Tamil Nadu Paddy
-    'https://images.unsplash.com/photo-1500937386664-56d1dfef3854?q=80&w=2070&auto=format&fit=crop', // Indian Farmer
-    'https://images.unsplash.com/photo-1625246333195-78d9c38ad449?q=80&w=2070&auto=format&fit=crop', // Agriculture farming
-  ];
-
   return (
     <>
-      {/* Custom CSS for Cinematic Crossfade + Ken Burns Loop */}
+      {/* Custom CSS for hiding scrollbar */}
       <style>{`
-  @keyframes cinematicCrossfade {
-    0% { opacity: 0; transform: scale(1.0) translate(0%, 0%); }
-    5% { opacity: 1; }
-    25% { opacity: 1; transform: scale(1.15) translate(-2%, -1%); }
-    30% { opacity: 0; transform: scale(1.15) translate(-2%, -1%); }
-    100% { opacity: 0; transform: scale(1.0) translate(0%, 0%); }
-  }
-  .bg-image-slide {
-    position: absolute;
-    inset: -20px;
-    background-size: cover;
-    background-position: center;
-    opacity: 0;
-    animation: cinematicCrossfade 24s infinite;
-  }
-  .bg-image-slide:nth-child(1) { animation-delay: 0s; }
-  .bg-image-slide:nth-child(2) { animation-delay: 6s; }
-  .bg-image-slide:nth-child(3) { animation-delay: 12s; }
-  .bg-image-slide:nth-child(4) { animation-delay: 18s; }
-
-  /* Hide scrollbar */
-  .scrollbar-transparent::-webkit-scrollbar {
+  .scrollbar-hide::-webkit-scrollbar {
     display: none;
   }
-  .scrollbar-transparent {
+  .scrollbar-hide {
     -ms-overflow-style: none;
     scrollbar-width: none;
   }
@@ -90,15 +61,12 @@ export default function Login() {
         {/* Toast */}
         {toast && <Toast message={toast.message} onClose={() => setToast(null)} />}
 
-        {/* ───── 90% Transparent Background Image Loop ───── */}
+        {/* ───── Static Background Image ───── */}
         <div className="absolute inset-0 z-0">
-          {bgImages.map((img, index) => (
-            <div 
-              key={index}
-              className="bg-image-slide"
-              style={{ backgroundImage: `url('${img}')` }}
-            />
-          ))}
+          <div
+            className="w-full h-full bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: "url('/logo/bg-login.png')" }}
+          />
         </div>
 
         {/* Subtle gradient overlay for depth */}
@@ -106,7 +74,7 @@ export default function Login() {
 
         {/* ───── Floating Form Card ───── */}
         <div className="relative z-20 w-full max-w-[440px] ml-auto h-screen flex items-center px-4 py-10">
-          <div className="w-full bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl shadow-2xl p-8 space-y-6 my-auto max-h-[calc(100vh-80px)] overflow-y-auto 0 scrollbar-transparent ">
+          <div className="w-full bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl shadow-2xl p-8 space-y-6 my-auto max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
             
             {/* Platform Name (No Logo) */}
             <div className="pb-2">

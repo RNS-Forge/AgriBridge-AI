@@ -1,8 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
-import { FormField } from '../../components/forms/FormField/index.js';
-import { Button } from '../../components/ui/Button/index.js';
-import { ErrorBanner } from '../../components/ui/ErrorBanner/index.js';
+import { Input, Button, ErrorBanner, LockIcon } from '../../components/ui/index.js';
 
 export default function ResetPassword() {
   const [password, setPassword] = useState('');
@@ -51,166 +49,95 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="h-screen flex overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50">
-      {/* Left Panel: Branding */}
-      <div className="hidden lg:flex lg:w-[480px] xl:w-[540px] relative overflow-hidden bg-gradient-to-br from-emerald-600 via-emerald-700 to-teal-700">
-        {/* Decorative grid */}
-        <div
-          className="absolute inset-0 opacity-[0.08]"
-          style={{
-            backgroundImage:
-              'linear-gradient(rgba(255,255,255,0.15) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.15) 1px, transparent 1px)',
-            backgroundSize: '48px 48px',
-          }}
-        />
+    <>
+      {/* Custom CSS for hiding scrollbar */}
+      <style>{`
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+`}</style>
 
-        {/* Floating orbs */}
-        <div className="absolute -top-32 -left-32 w-96 h-96 bg-white/20 rounded-full blur-3xl animate-pulse" />
-        <div className="absolute bottom-[-80px] right-[-60px] w-80 h-80 bg-white/15 rounded-full blur-3xl animate-pulse [animation-delay:2s]" />
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-white/10 rounded-full blur-3xl" />
+      <div className="h-screen relative flex overflow-hidden bg-gradient-to-br from-slate-50 via-white to-emerald-50">
+        {/* ───── Static Background Image ───── */}
+        <div className="absolute inset-0 z-0">
+          <div
+            className="w-full h-full bg-cover bg-center bg-no-repeat"
+            style={{ backgroundImage: "url('/logo/bg-login.png')" }}
+          />
+        </div>
 
-        {/* Content */}
-        <div className="relative z-10 flex flex-col justify-between p-10 xl:p-12 w-full">
-          {/* Logo */}
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 007.92 12.446A9 9 0 1112 2.992z" />
-              </svg>
-            </div>
-            <span className="text-lg font-bold text-white tracking-tight">AgriBridge<span className="text-emerald-200">AI</span></span>
-          </div>
+        {/* Subtle gradient overlay for depth */}
+        <div className="absolute inset-0 z-10 bg-gradient-to-l from-white/80 via-transparent to-transparent pointer-events-none" />
 
-          {/* Center messaging */}
-          <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/25 text-white text-xs font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-              Password Reset
+        {/* ───── Floating Form Card ───── */}
+        <div className="relative z-20 w-full max-w-[440px] ml-auto h-screen flex items-center px-4 py-10">
+          <div className="w-full bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl shadow-2xl p-8 space-y-6 my-auto max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
+            
+            {/* Platform Name */}
+            <div className="pb-2">
+              <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
+                AgriBridge<span className="text-emerald-600">AI</span>
+              </h2>
             </div>
 
-            <h2 className="text-3xl xl:text-4xl font-extrabold text-white leading-tight">
-              Create a new
-              <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white to-emerald-100">
-                secure password
-              </span>
-            </h2>
+            {/* Header */}
+            <div>
+              <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
+                Reset your password
+              </h1>
+              <p className="text-sm text-slate-600 mt-1">
+                Create a new password for <span className="text-emerald-600 font-medium">{email}</span>
+              </p>
+            </div>
 
-            <p className="text-sm text-white/80 leading-relaxed max-w-sm">
-              Enter your new password below. Make sure it's strong and unique to protect
-              your FPO workspace and sensitive agricultural data.
+            {/* Error */}
+            {error && <ErrorBanner message={error} />}
+
+            {/* Form */}
+            <form onSubmit={handleSubmit} className="space-y-4">
+              <Input
+                id="password"
+                label="New Password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Minimum 8 characters"
+                autoComplete="new-password"
+                icon={<LockIcon />}
+              />
+
+              <Input
+                id="confirmPassword"
+                label="Confirm Password"
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                placeholder="Re-enter your password"
+                autoComplete="new-password"
+                icon={<LockIcon />}
+              />
+
+              <Button type="submit" loading={loading} fullWidth className="mt-1">
+                {loading ? 'Resetting...' : 'Reset Password'}
+              </Button>
+            </form>
+
+            {/* Back link */}
+            <p className="text-center text-sm text-slate-600 pt-1">
+              <Link
+                to="/login"
+                className="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
+              >
+                ← Back to sign in
+              </Link>
             </p>
-
-            {/* Feature pills */}
-            <div className="flex flex-wrap gap-2 pt-2">
-              {['Strong Security', 'Data Protection', 'Account Safety', 'Secure Access'].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1.5 rounded-lg bg-white/15 border border-white/25 text-xs text-white font-medium"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          {/* Bottom info */}
-          <div className="rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 p-5">
-            <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center">
-                <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              <div>
-                <p className="text-sm font-semibold text-white">Password requirements</p>
-                <p className="text-xs text-white/70">Minimum 8 characters with mixed case</p>
-              </div>
-            </div>
           </div>
         </div>
       </div>
-
-      {/* Right Panel: Form */}
-      <div className="flex-1 flex items-center justify-center bg-white/60 backdrop-blur-xl px-6 py-10 relative">
-        {/* Subtle bg gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-white/60 via-transparent to-emerald-50/50 pointer-events-none" />
-
-        <div className="relative z-10 w-full max-w-md my-auto max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-thin scrollbar-thumb-slate-300 scrollbar-track-transparent hover:scrollbar-thumb-slate-400">
-          {/* Mobile logo */}
-          <div className="lg:hidden flex items-center justify-center gap-2 mb-8">
-            <div className="w-9 h-9 rounded-lg bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center">
-              <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 007.92 12.446A9 9 0 1112 2.992z" />
-              </svg>
-            </div>
-            <span className="text-base font-bold text-slate-800">AgriBridge<span className="text-emerald-600">AI</span></span>
-          </div>
-
-          {/* Header */}
-          <div className="mb-8">
-            <h1 className="text-2xl font-extrabold text-slate-800 tracking-tight">
-              Reset your password
-            </h1>
-            <p className="text-sm text-slate-600 mt-1.5">
-              Create a new password for <span className="text-emerald-600 font-medium">{email}</span>
-            </p>
-          </div>
-
-          {/* Error banner */}
-          {error && <ErrorBanner message={error} />}
-
-          {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <FormField
-              id="password"
-              label="New Password"
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="Minimum 8 characters"
-              autoComplete="new-password"
-              icon={
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                </svg>
-              }
-            />
-
-            <FormField
-              id="confirmPassword"
-              label="Confirm Password"
-              type="password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              placeholder="Re-enter your password"
-              autoComplete="new-password"
-              icon={
-                <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />
-                </svg>
-              }
-            />
-
-            <Button type="submit" loading={loading}>
-              {loading ? 'Resetting...' : 'Reset Password'}
-              <svg className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-              </svg>
-            </Button>
-          </form>
-
-          {/* Back link */}
-          <p className="mt-6 text-center text-sm text-slate-500">
-            <Link
-              to="/login"
-              className="text-emerald-600 hover:text-emerald-700 transition-colors duration-200"
-            >
-              ← Back to sign in
-            </Link>
-          </p>
-        </div>
-      </div>
-    </div>
+    </>
   );
 }
