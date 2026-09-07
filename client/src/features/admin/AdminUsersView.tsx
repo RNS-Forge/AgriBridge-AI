@@ -132,7 +132,7 @@ export default function AdminUsersView() {
             </span>
           </div>
           <p className="text-xs text-slate-500">
-            Admin can create all roles directly (including Admin Maker). Requests submitted by Admin Maker or public signup require Admin approval.
+            Admin can create all roles directly (including Admin Maker). Requests submitted by Admin Maker require Admin approval. Public self-registration is closed under enterprise governance.
           </p>
         </div>
 

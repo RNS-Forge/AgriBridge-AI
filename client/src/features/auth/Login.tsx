@@ -148,10 +148,13 @@ export default function Login() {
               </Button>
             </form>
 
-            {/* Platform Role Workflow Info Notice */}
-            <div className="text-[11px] text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-200 leading-relaxed">
-              <span className="font-semibold text-slate-700">Access Governance: </span>
-              Closed enterprise registration. New accounts require Admin authorization or an Admin Maker invitation.
+            {/* Closed Enterprise Access Notice */}
+            <div className="text-[11px] text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-200 leading-relaxed flex items-start gap-2">
+              <span className="text-slate-400 font-bold text-xs mt-0.5">🛡️</span>
+              <div>
+                <span className="font-semibold text-slate-700">Closed Enterprise Access: </span>
+                Self-registration is disabled. All user accounts are provisioned exclusively through authorized Admin Maker requests or Administrator governance.
+              </div>
             </div>
 
             {/* Divider */}
@@ -190,17 +193,6 @@ export default function Login() {
                 }
               />
             </div>
-
-            {/* Footer */}
-            <p className="text-center text-xs text-slate-600 pt-0.5">
-              Need access?{' '}
-              <Link
-                to="/register"
-                className="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
-              >
-                Request Workspace Account
-              </Link>
-            </p>
           </div>
         </div>
       </div>

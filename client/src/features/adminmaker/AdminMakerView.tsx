@@ -1,9 +1,23 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Input } from '../../components/ui/index.js';
 
 export default function AdminMakerView() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Tab state derived from route or user selection
+  const isCreateRoute = location.pathname.includes('create-request');
+  const [activeTab, setActiveTab] = useState<'CREATE' | 'REQUESTS'>(
+    isCreateRoute ? 'CREATE' : 'REQUESTS'
+  );
+
+  useEffect(() => {
+    setActiveTab(location.pathname.includes('create-request') ? 'CREATE' : 'REQUESTS');
+  }, [location.pathname]);
+
   const [requests, setRequests] = useState<any[]>([]);
-  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   // Form state
   const [email, setEmail] = useState('');
@@ -14,6 +28,7 @@ export default function AdminMakerView() {
   const [notes, setNotes] = useState('');
   const [error, setError] = useState('');
   const [successMsg, setSuccessMsg] = useState('');
+  const [lastCreated, setLastCreated] = useState<any | null>(null);
 
   const loadRequests = () => {
     fetch('http://localhost:8000/api/v1/auth/user-requests')
@@ -28,14 +43,25 @@ export default function AdminMakerView() {
     loadRequests();
   }, []);
 
+  const handleTabChange = (tab: 'CREATE' | 'REQUESTS') => {
+    setActiveTab(tab);
+    if (tab === 'CREATE') {
+      navigate('/admin-maker/create-request');
+    } else {
+      navigate('/admin-maker/requests');
+    }
+  };
+
   const handleCreateRequest = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
     setSuccessMsg('');
+    setLoading(true);
 
-    // Rule: Admin Maker cannot request or create Admin!
+    // Security Rule: Admin Maker cannot request or create Admin!
     if (requestedRole === 'ADMIN') {
       setError('Admin Maker cannot create or request the ADMIN role. Only existing Admins can manage Admins.');
+      setLoading(false);
       return;
     }
 
@@ -61,8 +87,8 @@ export default function AdminMakerView() {
         throw new Error(data.message || 'Failed to submit user creation request');
       }
 
+      setLastCreated(data.data);
       setSuccessMsg(`User creation request for ${email} (${requestedRole}) successfully submitted! Status is PENDING_APPROVAL.`);
-      setShowCreateModal(false);
       setEmail('');
       setFirstName('');
       setLastName('');
@@ -71,8 +97,12 @@ export default function AdminMakerView() {
       loadRequests();
     } catch (err: any) {
       setError(err.message || 'Error creating request');
+    } finally {
+      setLoading(false);
     }
   };
+
+  const pendingCount = requests.filter((r) => r.status === 'PENDING_APPROVAL').length;
 
   return (
     <div className="space-y-6">
@@ -81,141 +111,298 @@ export default function AdminMakerView() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-              Admin Maker Console (Role & User Creation)
+              Admin Maker Console
             </h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-indigo-100 text-indigo-800 border border-indigo-200">
-              Maker Role (Under Admin)
+            <span className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase bg-indigo-100 text-indigo-800 border border-indigo-200">
+              Maker Role (Under Admin Governance)
             </span>
           </div>
           <p className="text-xs text-slate-500">
-            Admin Maker can initiate user creation for all platform roles except Admin. All creations are logged in PENDING_APPROVAL status for Super Admin approval.
+            Provision user accounts and initiate role creation requests for platform participants. All requests are routed to Super Admin for validation and activation.
           </p>
         </div>
 
-        <Button onClick={() => setShowCreateModal(true)} className="text-xs bg-indigo-700 hover:bg-indigo-800">
-          + Request New User Role
-        </Button>
+        {/* Quick Tab Controls */}
+        <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
+          <button
+            onClick={() => handleTabChange('CREATE')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+              activeTab === 'CREATE'
+                ? 'bg-indigo-700 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            + Create Role Request
+          </button>
+          <button
+            onClick={() => handleTabChange('REQUESTS')}
+            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+              activeTab === 'REQUESTS'
+                ? 'bg-indigo-700 text-white shadow-xs'
+                : 'text-slate-600 hover:text-slate-900'
+            }`}
+          >
+            <span>My Requests</span>
+            <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+              activeTab === 'REQUESTS' ? 'bg-indigo-800 text-white' : 'bg-slate-200 text-slate-700'
+            }`}>
+              {requests.length}
+            </span>
+          </button>
+        </div>
       </div>
 
-      {/* Success Notification */}
-      {successMsg && (
-        <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-xl text-xs text-emerald-800 flex items-center justify-between">
-          <span>✓ {successMsg}</span>
-          <button onClick={() => setSuccessMsg('')} className="text-emerald-600 font-bold">✕</button>
-        </div>
-      )}
-
       {/* Role Policy Reminder Banner */}
-      <div className="p-4 rounded-2xl bg-indigo-50/60 border border-indigo-200 text-xs text-indigo-950 space-y-1">
-        <span className="font-bold block uppercase tracking-wider text-indigo-900">
-          🛡️ Maker-Checker Governance Rules:
+      <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 text-xs text-indigo-950 space-y-1">
+        <span className="font-bold block uppercase tracking-wider text-indigo-900 flex items-center gap-1.5">
+          <span>🛡️</span> Maker-Checker Governance Protocol:
         </span>
-        <ul className="list-disc list-inside space-y-1 text-indigo-900/80">
-          <li><strong>Admin Maker</strong> can create: Farmer, Farm Manager, Worker, Buyer, Mandi Agent, or another Admin Maker.</li>
-          <li><strong>Strict Restriction:</strong> Admin Maker can <strong>never</strong> create or request an <code>ADMIN</code> role.</li>
-          <li><strong>Approval Required:</strong> All accounts requested by Admin Maker must be reviewed and activated by an <strong>Admin</strong>. Default password will be <code>AgriBridgeAI@2026</code>.</li>
+        <ul className="list-disc list-inside space-y-1 text-indigo-900/85">
+          <li><strong>Permitted Roles:</strong> Farmer, Farm Manager, Worker, Buyer, Mandi Agent, or another Admin Maker.</li>
+          <li><strong>Role Boundary:</strong> Admin Maker can <strong>never</strong> create or request an <code>ADMIN</code> role.</li>
+          <li><strong>Dual Authorization:</strong> Accounts submitted here enter <code>PENDING_APPROVAL</code> status until activated by an Admin. Default password is pre-configured as <code>AgriBridgeAI@2026</code>.</li>
         </ul>
       </div>
 
-      {/* Requests History */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-          <h3 className="text-sm font-bold text-slate-800">
-            Submitted Role Requests ({requests.length})
-          </h3>
-          <span className="text-xs text-slate-500">Live Status Tracker</span>
-        </div>
+      {/* VIEW 1: Direct Creation Form (Shown when on /admin-maker/create-request) */}
+      {activeTab === 'CREATE' && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+          <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
+            <div>
+              <h2 className="text-base font-bold text-slate-800">
+                Initiate New Account / Role Request
+              </h2>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Fill in applicant details to propose an enterprise account.
+              </p>
+            </div>
+            <span className="text-xs font-medium text-slate-400">
+              Admin Maker Form
+            </span>
+          </div>
 
-        <div className="divide-y divide-slate-100">
-          {requests.map((r) => (
-            <div key={r.id} className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50 transition">
-              <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <h4 className="text-sm font-bold text-slate-800">{r.firstName} {r.lastName}</h4>
-                  <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-100 text-slate-700">
-                    {r.requestedRole}
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500">
-                  Email: <strong className="text-slate-700">{r.email}</strong> • Submitted: {new Date(r.createdAt).toLocaleDateString()}
-                </p>
-                {r.notes && (
-                  <p className="text-[11px] text-slate-500 italic">Notes: "{r.notes}"</p>
-                )}
-              </div>
-
-              <div className="text-right">
-                <span
-                  className={`px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider ${
-                    r.status === 'PENDING_APPROVAL'
-                      ? 'bg-amber-100 text-amber-800 border border-amber-200'
-                      : r.status === 'APPROVED'
-                      ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                      : 'bg-red-100 text-red-800 border border-red-200'
-                  }`}
-                >
-                  {r.status}
+          {/* Success Banner */}
+          {successMsg && (
+            <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-xs text-emerald-900 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="font-bold flex items-center gap-1.5 text-emerald-800">
+                  <span>✓</span> Request Created Successfully!
                 </span>
-                <p className="text-[10px] text-slate-400 mt-1">
-                  {r.status === 'PENDING_APPROVAL' ? 'Awaiting Admin Approval' : 'Processed by Admin'}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Create Request Modal */}
-      {showCreateModal && (
-        <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
-            <div className="flex justify-between items-center border-b pb-3">
-              <h3 className="text-base font-bold text-slate-800">Request Role Creation</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
-            </div>
-
-            {error && (
-              <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-xs text-red-700">
-                {error}
-              </div>
-            )}
-
-            <form onSubmit={handleCreateRequest} className="space-y-3">
-              <div>
-                <label className="block text-xs font-semibold text-slate-700 mb-1">Select Role to Request</label>
-                <select
-                  value={requestedRole}
-                  onChange={(e) => setRequestedRole(e.target.value)}
-                  className="w-full text-xs px-3 py-2 border rounded-lg bg-white"
+                <button
+                  onClick={() => setSuccessMsg('')}
+                  className="text-emerald-700 hover:text-emerald-900 font-bold"
                 >
-                  <option value="FARMER">FARMER (Cultivate, Cost Basis & Sell)</option>
-                  <option value="FARM_MANAGER">FARM_MANAGER (Operations & Inventory)</option>
-                  <option value="WORKER">WORKER (Field Tasks)</option>
-                  <option value="BUYER">BUYER (Produce Procurement)</option>
-                  <option value="MANDI_AGENT">MANDI_AGENT (APMC Yard & Auctions)</option>
-                  <option value="ADMIN_MAKER">ADMIN_MAKER (Operational Maker under Admin)</option>
-                </select>
-                <p className="text-[10px] text-slate-400 mt-0.5 italic">
-                  *Admin role is not available to Admin Maker per governance policy.
-                </p>
+                  ✕
+                </button>
               </div>
-
-              <div className="grid grid-cols-2 gap-2">
-                <Input label="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} required id="first" />
-                <Input label="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} required id="last" />
+              <p>{successMsg}</p>
+              {lastCreated && (
+                <div className="bg-white/80 p-2.5 rounded-lg border border-emerald-200 text-[11px] font-mono text-emerald-950 flex flex-wrap gap-4">
+                  <span>Request ID: <strong>{lastCreated.id}</strong></span>
+                  <span>Role: <strong>{lastCreated.requestedRole}</strong></span>
+                  <span>Status: <strong className="text-amber-700">{lastCreated.status}</strong></span>
+                </div>
+              )}
+              <div className="pt-1 flex gap-3">
+                <button
+                  onClick={() => handleTabChange('REQUESTS')}
+                  className="text-xs font-bold text-emerald-800 hover:underline"
+                >
+                  View in Requests Tracker →
+                </button>
+                <button
+                  onClick={() => {
+                    setSuccessMsg('');
+                    setLastCreated(null);
+                  }}
+                  className="text-xs font-semibold text-slate-600 hover:text-slate-800"
+                >
+                  Submit Another
+                </button>
               </div>
+            </div>
+          )}
 
-              <Input label="Email Address" type="email" value={email} onChange={(e) => setEmail(e.target.value)} required placeholder="user@agribridge.com" id="reqEmail" />
-              <Input label="Phone" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 98765 00000" id="reqPhone" />
-              <Input label="Reason / Notes for Admin" value={notes} onChange={(e) => setNotes(e.target.value)} placeholder="e.g. FPO farm manager onboarding for Plot D" id="reqNotes" />
+          {/* Error Banner */}
+          {error && (
+            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between">
+              <span>⚠️ {error}</span>
+              <button onClick={() => setError('')} className="text-rose-600 font-bold">✕</button>
+            </div>
+          )}
 
-              <div className="pt-2 flex justify-end gap-2">
-                <Button variant="outline" type="button" onClick={() => setShowCreateModal(false)}>Cancel</Button>
-                <Button type="submit" className="bg-indigo-700 hover:bg-indigo-800">
-                  Submit Request for Admin Approval
+          <form onSubmit={handleCreateRequest} className="space-y-4 max-w-2xl">
+            {/* Role Selection */}
+            <div>
+              <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
+                Select Platform Role to Request *
+              </label>
+              <select
+                value={requestedRole}
+                onChange={(e) => setRequestedRole(e.target.value)}
+                className="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl bg-white text-slate-800 font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+              >
+                <option value="FARMER">FARMER — Cultivation, Cost Basis & Sell Produce</option>
+                <option value="FARM_MANAGER">FARM_MANAGER — Farm Operations & Consumables Stock</option>
+                <option value="WORKER">WORKER — Field Tasks & Operational Execution</option>
+                <option value="BUYER">BUYER — Marketplace Produce Procurement & Orders</option>
+                <option value="MANDI_AGENT">MANDI_AGENT — APMC Mandi Arrivals & Live Auctions</option>
+                <option value="ADMIN_MAKER">ADMIN_MAKER — Secondary Maker under Admin Governance</option>
+              </select>
+              <p className="text-[11px] text-slate-400 mt-1 italic">
+                *Admin role cannot be created or requested by Admin Maker per platform security policy.
+              </p>
+            </div>
+
+            {/* Name Fields */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Input
+                label="First Name *"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+                placeholder="e.g. Ramesh"
+                id="first"
+              />
+              <Input
+                label="Last Name *"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+                placeholder="e.g. Patel"
+                id="last"
+              />
+            </div>
+
+            {/* Email & Phone */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Input
+                label="Email Address *"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                placeholder="applicant@agribridge.com"
+                id="reqEmail"
+              />
+              <Input
+                label="Phone Number"
+                type="tel"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                placeholder="+91 98765 43210"
+                id="reqPhone"
+              />
+            </div>
+
+            {/* Notes / Organization info */}
+            <div>
+              <Input
+                label="Organization / Farm Name / Operational Notes"
+                value={notes}
+                onChange={(e) => setNotes(e.target.value)}
+                placeholder="e.g. FPO member onboarding for Nashik Onion Cluster (Plot 4B)"
+                id="reqNotes"
+              />
+            </div>
+
+            {/* Submit button */}
+            <div className="pt-2 flex items-center gap-3">
+              <Button
+                type="submit"
+                loading={loading}
+                className="!bg-indigo-700 hover:!bg-indigo-800 !text-white px-6 py-2.5 text-xs font-bold rounded-xl shadow-sm"
+              >
+                {loading ? 'Submitting Request...' : 'Submit Request for Admin Approval'}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleTabChange('REQUESTS')}
+                className="text-xs"
+              >
+                View Requests Tracker ({pendingCount} pending)
+              </Button>
+            </div>
+          </form>
+        </div>
+      )}
+
+      {/* VIEW 2: Requests History / Tracker */}
+      {activeTab === 'REQUESTS' && (
+        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+          <div className="px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <div>
+              <h3 className="text-sm font-bold text-slate-800">
+                Submitted Role Requests ({requests.length})
+              </h3>
+              <p className="text-xs text-slate-500">
+                Real-time tracking of requests submitted for Admin review.
+              </p>
+            </div>
+            <Button
+              onClick={() => handleTabChange('CREATE')}
+              className="text-xs !bg-indigo-700 hover:!bg-indigo-800 !text-white self-start sm:self-auto"
+            >
+              + Create New Request
+            </Button>
+          </div>
+
+          <div className="divide-y divide-slate-100">
+            {requests.length === 0 ? (
+              <div className="p-8 text-center space-y-3">
+                <p className="text-sm text-slate-500">No role requests found.</p>
+                <Button
+                  onClick={() => handleTabChange('CREATE')}
+                  className="text-xs !bg-indigo-700 hover:!bg-indigo-800 !text-white"
+                >
+                  Create Your First Request
                 </Button>
               </div>
-            </form>
+            ) : (
+              requests.map((r) => (
+                <div
+                  key={r.id}
+                  className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/80 transition"
+                >
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2">
+                      <h4 className="text-sm font-bold text-slate-800">
+                        {r.firstName} {r.lastName}
+                      </h4>
+                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-100 text-slate-700 border border-slate-200">
+                        Role: {r.requestedRole}
+                      </span>
+                    </div>
+                    <p className="text-xs text-slate-500">
+                      Email: <strong className="text-slate-700">{r.email}</strong> • Submitted: {new Date(r.createdAt).toLocaleDateString()}
+                    </p>
+                    {r.notes && (
+                      <p className="text-[11px] text-slate-600 italic">
+                        Notes: "{r.notes}"
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="text-right sm:min-w-[180px]">
+                    <span
+                      className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider inline-block ${
+                        r.status === 'PENDING_APPROVAL'
+                          ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                          : r.status === 'APPROVED'
+                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                          : 'bg-rose-100 text-rose-800 border border-rose-200'
+                      }`}
+                    >
+                      {r.status}
+                    </span>
+                    <p className="text-[10px] text-slate-400 mt-1">
+                      {r.status === 'PENDING_APPROVAL' ? 'Awaiting Admin Approval' : 'Processed by Admin'}
+                    </p>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
       )}

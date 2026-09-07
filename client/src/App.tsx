@@ -8,7 +8,6 @@ import { DashboardLayout } from './layouts/DashboardLayout.js';
 // Auth feature pages
 import Login from './features/auth/Login.js';
 import DemoLogin from './features/auth/DemoLogin.js';
-import Register from './features/auth/Register.js';
 import VerifyOtp from './features/auth/VerifyOtp.js';
 import ForgotPassword from './features/auth/ForgotPassword.js';
 import ResetPassword from './features/auth/ResetPassword.js';
@@ -64,7 +63,7 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/demo/login" element={<DemoLogin />} />
             <Route path="/demo" element={<Navigate to="/demo/login" replace />} />
-            <Route path="/register" element={<Register />} />
+            <Route path="/register" element={<Navigate to="/login" replace />} />
             <Route path="/verify-otp" element={<VerifyOtp />} />
             <Route path="/forgot-password" element={<ForgotPassword />} />
             <Route path="/reset-password" element={<ResetPassword />} />
