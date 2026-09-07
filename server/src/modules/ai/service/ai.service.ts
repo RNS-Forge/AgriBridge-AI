@@ -10,7 +10,7 @@ export class AiService {
   ): Promise<void> {
 
     const provider = (customProvider || 'groq').toLowerCase();
-    const apiKey = customApiKey || process.env.DEFAULT_GROQ_KEY;
+    const apiKey = customApiKey || process.env.DEFAULT_GROQ_KEY || process.env.defaultGroqKey || process.env.GROQ_API_KEY;
 
     // Inject System Prompt
     const systemPromptText = SYSTEM_PROMPTS[dto.mode] || 'You are a helpful AI agricultural assistant.';

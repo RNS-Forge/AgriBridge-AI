@@ -17,7 +17,7 @@ import { forwardRef, ReactNode, useState } from 'react';
 interface InputProps {
   id: string;
   label?: string;
-  type?: 'text' | 'email' | 'password' | 'number' | 'search';
+  type?: string;
   value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
@@ -28,6 +28,7 @@ interface InputProps {
   required?: boolean;
   autoComplete?: string;
   className?: string;
+  step?: string | number;
 }
 
 export const Input = forwardRef<HTMLInputElement, InputProps>(
@@ -46,6 +47,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       required = false,
       autoComplete,
       className = '',
+      step,
     },
     ref
   ) => {
@@ -106,6 +108,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             disabled={disabled}
             required={required}
             autoComplete={autoComplete}
+            step={step}
             aria-invalid={!!error}
             aria-describedby={error ? `${id}-error` : undefined}
             className={`

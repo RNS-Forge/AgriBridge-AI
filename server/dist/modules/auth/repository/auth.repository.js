@@ -1,5 +1,5 @@
 import { db } from '../../../database/index.js';
-import { users, tenants, roles, userRoles } from '../../../db/schema.js';
+import { users, tenants, roles, userRoles, permissions, rolePermissions } from '../../../db/schema.js';
 import { eq } from 'drizzle-orm';
 export class AuthRepository {
     async findUserByEmail(email) {
@@ -44,5 +44,14 @@ export class AuthRepository {
             .innerJoin(roles, eq(userRoles.roleId, roles.id))
             .where(eq(userRoles.userId, userId));
         return result.map((r) => r.roleName);
+    }
+    async getUserPermissions(userId) {
+        const result = await db
+            .select({ permissionName: permissions.name })
+            .from(userRoles)
+            .innerJoin(rolePermissions, eq(userRoles.roleId, rolePermissions.roleId))
+            .innerJoin(permissions, eq(rolePermissions.permissionId, permissions.id))
+            .where(eq(userRoles.userId, userId));
+        return Array.from(new Set(result.map((r) => r.permissionName)));
     }
 }

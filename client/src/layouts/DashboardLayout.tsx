@@ -2,8 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../hooks';
 import { logout } from '../store';
-import type { NavItem } from '../types';
-import { truncateId } from '../utils';
 import { Sidebar } from '../components/ui';
 
 interface DashboardLayoutProps {
@@ -17,57 +15,192 @@ interface ComponentNavItem {
   icon: string;
 }
 
-const BASE_NAV_ITEMS: ComponentNavItem[] = [
-  { label: 'Platform Hub',     path: '/dashboard',  roles: ['FPO_ADMIN', 'SuperAdmin', 'Farmer', 'Buyer'], icon: 'HomeIcon' },
-  { label: 'Farmers & Farms',  path: '/farmers',    roles: ['FPO_ADMIN', 'SuperAdmin'], icon: 'FarmersIcon' },
-  { label: 'Mandi Pricing',    path: '/mandi',      roles: ['FPO_ADMIN', 'SuperAdmin', 'Farmer'], icon: 'PricingIcon' },
-  { label: 'Marketplace',      path: '/marketplace', roles: ['FPO_ADMIN', 'SuperAdmin', 'Buyer'], icon: 'MarketplaceIcon' },
-  { label: 'Export Clearances', path: '/exports',    roles: ['FPO_ADMIN', 'SuperAdmin'], icon: 'ExportIcon' },
-  { label: 'AI Assistant',     path: '/ai',         roles: ['FPO_ADMIN', 'SuperAdmin', 'Farmer', 'Buyer'], icon: 'AIIcon' },
+const ALL_NAV_ITEMS: ComponentNavItem[] = [
+  // Platform Overview for all roles
+  {
+    label: 'Dashboard Hub',
+    path: '/dashboard',
+    roles: ['ADMIN', 'ADMIN_MAKER', 'FARMER', 'FARM_MANAGER', 'WORKER', 'BUYER', 'MANDI_AGENT', 'SuperAdmin', 'FPO_ADMIN'],
+    icon: 'HomeIcon',
+  },
+
+  // ── FARMER & FARM MANAGER ──
+  {
+    label: 'Farms & Plots',
+    path: '/farms',
+    roles: ['FARMER', 'FARM_MANAGER', 'ADMIN', 'SuperAdmin'],
+    icon: 'FarmIcon',
+  },
+  {
+    label: 'Crop Lifecycle',
+    path: '/crops',
+    roles: ['FARMER', 'FARM_MANAGER', 'ADMIN', 'SuperAdmin'],
+    icon: 'CropIcon',
+  },
+  {
+    label: 'Field Tasks',
+    path: '/tasks',
+    roles: ['FARMER', 'FARM_MANAGER', 'WORKER', 'ADMIN', 'SuperAdmin'],
+    icon: 'TasksIcon',
+  },
+  {
+    label: 'Cost Basis & Expenses',
+    path: '/expenses',
+    roles: ['FARMER', 'FARM_MANAGER', 'ADMIN', 'SuperAdmin'],
+    icon: 'ExpenseIcon',
+  },
+  {
+    label: 'Consumables & Stock',
+    path: '/inventory',
+    roles: ['FARM_MANAGER', 'FARMER', 'ADMIN', 'SuperAdmin'],
+    icon: 'InventoryIcon',
+  },
+  {
+    label: 'Produce Marketplace',
+    path: '/marketplace',
+    roles: ['FARMER', 'BUYER', 'ADMIN', 'SuperAdmin'],
+    icon: 'MarketplaceIcon',
+  },
+  {
+    label: 'Mandi Slot Booking',
+    path: '/mandi',
+    roles: ['FARMER', 'MANDI_AGENT', 'ADMIN', 'SuperAdmin'],
+    icon: 'MandiIcon',
+  },
+  {
+    label: 'Orders & Logistics',
+    path: '/orders',
+    roles: ['FARMER', 'BUYER', 'ADMIN', 'SuperAdmin'],
+    icon: 'OrdersIcon',
+  },
+  {
+    label: 'Profit Reports',
+    path: '/profit-reports',
+    roles: ['FARMER', 'ADMIN', 'SuperAdmin'],
+    icon: 'ProfitIcon',
+  },
+
+  // ── ADMIN_MAKER SPECIFIC ──
+  {
+    label: 'Request Role / User',
+    path: '/admin-maker/create-request',
+    roles: ['ADMIN_MAKER'],
+    icon: 'UserPlusIcon',
+  },
+  {
+    label: 'My Role Requests',
+    path: '/admin-maker/requests',
+    roles: ['ADMIN_MAKER'],
+    icon: 'QueueIcon',
+  },
+
+  // ── ADMIN SPECIFIC ──
+  {
+    label: 'Users & Approvals',
+    path: '/admin/users',
+    roles: ['ADMIN', 'SuperAdmin'],
+    icon: 'UsersIcon',
+  },
+  {
+    label: 'Produce Moderation',
+    path: '/admin/moderation',
+    roles: ['ADMIN', 'SuperAdmin'],
+    icon: 'ShieldIcon',
+  },
+  {
+    label: 'Disputes Center',
+    path: '/admin/disputes',
+    roles: ['ADMIN', 'SuperAdmin'],
+    icon: 'DisputeIcon',
+  },
+  {
+    label: 'Audit Logs',
+    path: '/admin/audit-logs',
+    roles: ['ADMIN', 'SuperAdmin'],
+    icon: 'AuditIcon',
+  },
 ];
 
-const SUPERADMIN_NAV_ITEM: ComponentNavItem = {
-  label: 'Super Control',
-  path: '/superadmin',
-  roles: ['SuperAdmin'],
-  icon: 'AdminIcon',
-};
-
-// Icons for nav items
+// Icons map
 const Icons = {
   HomeIcon: (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
       <path strokeLinecap="round" strokeLinejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
     </svg>
   ),
-  FarmersIcon: (
+  FarmIcon: (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6A2.25 2.25 0 016 3.75h2.25A2.25 2.25 0 0110.5 6v2.25a2.25 2.25 0 01-2.25 2.25H6a2.25 2.25 0 01-2.25-2.25V6zM3.75 15.75A2.25 2.25 0 016 13.5h2.25a2.25 2.25 0 012.25 2.25V18a2.25 2.25 0 01-2.25 2.25H6A2.25 2.25 0 013.75 18v-2.25zM13.5 6a2.25 2.25 0 012.25-2.25H18A2.25 2.25 0 0120.25 6v2.25A2.25 2.25 0 0118 10.5h-2.25a2.25 2.25 0 01-2.25-2.25V6zM13.5 15.75a2.25 2.25 0 012.25-2.25H18a2.25 2.25 0 012.25 2.25V18A2.25 2.25 0 0118 20.25h-2.25A2.25 2.25 0 0113.5 18v-2.25z" />
     </svg>
   ),
-  PricingIcon: (
+  CropIcon: (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" />
+    </svg>
+  ),
+  TasksIcon: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  ),
+  ExpenseIcon: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v12m-3-2.818l.879.659c1.171.879 3.07.879 4.242 0 1.172-.879 1.172-2.303 0-3.182C13.536 12.219 12.768 12 12 12c-.725 0-1.45-.22-2.003-.659-1.106-.879-1.106-2.303 0-3.182s2.9-.879 4.006 0l.415.33M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
+  ),
+  InventoryIcon: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" />
     </svg>
   ),
   MarketplaceIcon: (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 10.5V6a3.75 3.75 0 10-7.5 0v4.5m11.356-1.993l1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 01-1.12-1.243l1.264-12A1.125 1.125 0 015.513 7.5h12.974c.576 0 1.059.435 1.119 1.007zM8.625 10.5a.375.375 0 11-.75 0 .375.375 0 01.75 0zm7.5 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" />
     </svg>
   ),
-  ExportIcon: (
+  MandiIcon: (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z" />
     </svg>
   ),
-  AIIcon: (
+  OrdersIcon: (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
     </svg>
   ),
-  AdminIcon: (
+  ProfitIcon: (
     <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 18L9 11.25l4.306 4.307a11.95 11.95 0 015.814-5.519l2.74-1.22m0 0l-5.94-2.28m5.94 2.28l-2.28 5.941" />
+    </svg>
+  ),
+  UsersIcon: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+    </svg>
+  ),
+  UserPlusIcon: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 7.5v3m0 0v3m0-3h3m-3 0h-3m-2.25-4.125a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zM4 19.235v-.11a6.375 6.375 0 0112.75 0v.109A12.318 12.318 0 0110.374 21c-2.331 0-4.512-.645-6.374-1.765z" />
+    </svg>
+  ),
+  QueueIcon: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 12h16.5m-16.5 3.75h16.5M3.75 19.5h16.5M5.625 4.5h12.75a1.875 1.875 0 010 3.75H5.625a1.875 1.875 0 010-3.75z" />
+    </svg>
+  ),
+  ShieldIcon: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+    </svg>
+  ),
+  DisputeIcon: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+    </svg>
+  ),
+  AuditIcon: (
+    <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
     </svg>
   ),
 };
@@ -79,56 +212,74 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
 
-  const isSuperAdmin = user?.roles.includes('SuperAdmin') ?? false;
+  // User's active roles
+  const userRoles = user?.roles || ['FARMER'];
 
-  const navItems: ComponentNavItem[] = isSuperAdmin
-    ? [...BASE_NAV_ITEMS, SUPERADMIN_NAV_ITEM]
-    : BASE_NAV_ITEMS;
-
-  const visibleNav = navItems.filter((item) =>
-    item.roles.some((r) => user?.roles.includes(r))
+  // Filter visible nav items matching user's roles
+  const visibleNav = ALL_NAV_ITEMS.filter((item) =>
+    item.roles.some((r) => userRoles.includes(r))
   );
 
   const currentPageLabel =
-    navItems.find((item) => item.path === location.pathname)?.label ??
-    'Dashboard';
+    ALL_NAV_ITEMS.find((item) => item.path === location.pathname)?.label ??
+    'Platform Workspace';
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
   };
 
-  const toggleSidebar = () => {
-    setSidebarOpen(!sidebarOpen);
-  };
+  const primaryRole = userRoles[0] || 'User';
 
   return (
-    <div className="flex min-h-screen bg-gray-50 text-gray-900 font-sans">
-      {/* Sidebar Component */}
+    <div className="flex min-h-screen bg-slate-50 text-gray-900 font-sans">
+      {/* Sidebar */}
       <Sidebar
         user={user}
         sidebarOpen={sidebarOpen}
-        onToggle={toggleSidebar}
+        onToggle={() => setSidebarOpen(!sidebarOpen)}
         onLogout={handleLogout}
         visibleNav={visibleNav}
         icons={Icons}
       />
 
-      {/* Main area */}
+      {/* Main Area */}
       <div className={`flex-1 flex flex-col min-h-screen ${sidebarOpen ? 'ml-48' : 'ml-14'} transition-all duration-300 ease-in-out`}>
         {/* Top bar */}
-        <header className="h-16 bg-white border-b border-emerald-200 flex items-center justify-between px-8">
-          <h2 className="text-lg font-bold text-gray-900">{currentPageLabel}</h2>
-          <div className="flex items-center space-x-4">
-            <div className="text-xs text-gray-500 bg-emerald-50 px-3 py-1.5 rounded-lg border border-emerald-200 font-mono">
-              FPO Space ID:{" "}
-              {user?.tenantId ? truncateId(user.tenantId) : 'Global'}
+        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm">
+          <div className="flex items-center gap-3">
+            <h2 className="text-base font-bold text-slate-800">{currentPageLabel}</h2>
+            <span className="hidden md:inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Phase 1
+            </span>
+          </div>
+
+          <div className="flex items-center space-x-3">
+            {/* Role Badge */}
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 rounded-lg border border-slate-200 text-xs">
+              <span className="text-slate-500">Active Role:</span>
+              <span className="font-bold text-emerald-800 uppercase tracking-wide">
+                {primaryRole.replace('_', ' ')}
+              </span>
+            </div>
+
+            {/* User Profile avatar */}
+            <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
+              <div className="w-8 h-8 rounded-full bg-emerald-700 text-white font-bold text-xs flex items-center justify-center shadow-sm">
+                {user?.firstName?.[0] || 'U'}
+              </div>
+              <div className="hidden sm:block text-left text-xs">
+                <p className="font-semibold text-slate-800 leading-tight">
+                  {user?.firstName} {user?.lastName}
+                </p>
+                <p className="text-[10px] text-slate-500 truncate max-w-[140px]">{user?.email}</p>
+              </div>
             </div>
           </div>
         </header>
 
-        {/* Scrollable Page content */}
-        <main className="flex-1 overflow-y-auto p-8 bg-gray-50">
+        {/* Scrollable Page Content */}
+        <main className="flex-1 overflow-y-auto p-6 md:p-8 bg-slate-50/70">
           {children}
         </main>
       </div>

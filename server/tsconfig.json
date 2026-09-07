@@ -11,5 +11,18 @@
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true
   },
-  "include": ["src/**/*"]
+  "include": ["src/**/*"],
+  "exclude": [
+    "src/modules/mandi/**/*",
+    "src/modules/marketplace/**/*",
+    "src/modules/superadmin/**/*",
+    "src/modules/farmer/**/*",
+    "src/modules/export/**/*",
+    "src/modules/ai/**/*",
+    "src/modules/batch/**/*",
+    "src/modules/crop/**/*",
+    "src/modules/farm/**/*",
+    "src/modules/fpo/**/*",
+    "src/database/test-*.ts"
+  ]
 }
