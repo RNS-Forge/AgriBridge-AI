@@ -1,171 +1,504 @@
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../../store/index.js';
 import { Link } from 'react-router-dom';
+import { RootState } from '../../store/index.js';
 
 export default function Dashboard() {
   const { user } = useSelector((state: RootState) => state.auth);
+  const primaryRole = user?.roles?.[0] || 'FARMER';
 
-  const quickActions = [
-    {
-      title: 'Onboard Members',
-      description: 'Register FPO member farmers, record geographical farm coordinates, and verify KYC statuses.',
-      link: '/farmers',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-        </svg>
-      ),
-    },
-    {
-      title: 'Global Trade Catalog',
-      description: 'List pooled crop yields in the marketplace, review buyer bids, and run price negotiations.',
-      link: '/marketplace',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5m.75-9l3-3 2.148 2.148A12.061 12.061 0 0116.5 7.605" />
-        </svg>
-      ),
-    },
-    {
-      title: 'AI Agricultural Coaching',
-      description: 'Consult the AI Export Coach, configure pricing recommendations, or diagnose crop diseases.',
-      link: '/ai',
-      icon: (
-        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456L18 9.75z" />
-        </svg>
-      ),
-    },
-  ];
+  const [weatherData, setWeatherData] = useState<any>(null);
+  const [adminSummary, setAdminSummary] = useState<any>(null);
+  const [cropCostSummary, setCropCostSummary] = useState<any>(null);
+  const [activeTasks, setActiveTasks] = useState<any[]>([]);
 
-  const stats = [
-    { 
-      label: 'Total Farmers', 
-      value: '1,247', 
-      change: '+12%',
-      icon: (
-        <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
-        </svg>
-      ) 
-    },
-    { 
-      label: 'Active Farms', 
-      value: '856', 
-      change: '+8%',
-      icon: (
-        <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M12 21a9.004 9.004 0 008.716-6.747M12 21a9.004 9.004 0 01-8.716-6.747M12 21c2.485 0 4.5-4.03 4.5-9S14.485 3 12 3m0 18c-2.485 0-4.5-4.03-4.5-9S9.515 3 12 3m0 0a8.997 8.997 0 017.843 4.582M12 3a8.997 8.997 0 00-7.843 4.582m15.686 0A11.953 11.953 0 0112 10.5c-2.998 0-5.74-1.1-7.843-2.918m15.686 0A8.959 8.959 0 0121 12c0 .778-.099 1.533-.284 2.253m0 0A17.919 17.919 0 0112 16.5c-3.162 0-6.133-.815-8.716-2.247m0 0A9.015 9.015 0 013 12c0-1.605.42-3.113 1.157-4.418" />
-        </svg>
-      ) 
-    },
-    { 
-      label: 'Market Listings', 
-      value: '234', 
-      change: '+23%',
-      icon: (
-        <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v11.25A2.25 2.25 0 006 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0118 16.5h-2.25m-7.5 0h7.5m-7.5 0l-1 3m8.5-3l1 3m0 0l.5 1.5m-.5-1.5h-9.5m0 0l-.5 1.5M9 11.25v1.5M12 9v3.75m3-6v6" />
-        </svg>
-      ) 
-    },
-    { 
-      label: 'Export Orders', 
-      value: '45', 
-      change: '+15%',
-      icon: (
-        <svg className="w-5 h-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-          <path strokeLinecap="round" strokeLinejoin="round" d="M8.25 18.75a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h6m-9 0H3.375a1.125 1.125 0 01-1.125-1.125V14.25m17.25 4.5a1.5 1.5 0 01-3 0m3 0a1.5 1.5 0 00-3 0m3 0h1.125c.621 0 1.129-.504 1.09-1.124a17.902 17.902 0 00-3.213-9.193 2.056 2.056 0 00-1.58-.86H14.25M16.5 18.75h-2.25m0-11.177v-.958c0-.568-.422-1.048-.987-1.106a48.554 48.554 0 00-10.026 0 1.106 1.106 0 00-.987 1.106v7.635m12-6.677v6.677m0 4.5v-4.5m0 0h-12" />
-        </svg>
-      ) 
-    },
-  ];
+  useEffect(() => {
+    // Fetch weather
+    fetch('http://localhost:8000/api/v1/weather/farms/farm-01')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setWeatherData(d.data);
+      })
+      .catch(() => {});
+
+    // Fetch crop cost summary
+    fetch('http://localhost:8000/api/v1/crop-cycles/cc-01/cost-summary')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setCropCostSummary(d.data);
+      })
+      .catch(() => {});
+
+    // Fetch tasks
+    fetch('http://localhost:8000/api/v1/tasks')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d.success) setActiveTasks(d.data);
+      })
+      .catch(() => {});
+
+    // Fetch admin summary if Admin or Admin Maker
+    if (primaryRole === 'ADMIN' || primaryRole === 'ADMIN_MAKER' || primaryRole === 'SuperAdmin') {
+      fetch('http://localhost:8000/api/v1/admin/dashboard-summary')
+        .then((r) => r.json())
+        .then((d) => {
+          if (d.success) setAdminSummary(d.data);
+        })
+        .catch(() => {});
+    }
+  }, [primaryRole]);
 
   return (
-    <div className="min-h-screen bg-gray-50/80 p-6 md:p-8">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-8">
+    <div className="space-y-6">
+      {/* ── Welcome Banner ── */}
+      <div className="bg-gradient-to-r from-emerald-800 via-emerald-700 to-teal-800 rounded-2xl p-6 text-white shadow-md flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900 tracking-tight">
-            Welcome back, {user?.firstName || 'User'}
+          <div className="flex items-center gap-2 mb-1">
+            <span className="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase tracking-wider bg-emerald-500/30 text-emerald-100 border border-emerald-400/30">
+              {primaryRole.replace('_', ' ')} WORKSPACE
+            </span>
+            <span className="text-xs text-emerald-200">Phase 1 Live</span>
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight">
+            Welcome back, {user?.firstName || 'Farmer'}!
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
-            Here's what's happening with your FPO workspace today.
+          <p className="text-sm text-emerald-100/90 mt-1 max-w-xl">
+            {primaryRole === 'ADMIN' && 'System Administration: review user requests, moderate listings, and resolve disputes.'}
+            {primaryRole === 'ADMIN_MAKER' && 'Operational Maker: request creation of all roles under Admin approval.'}
+            {primaryRole === 'FARMER' && 'Cultivate → Sell Slice: record real expenses, see your true cost-basis, and sell via Direct Marketplace or Mandi Slots.'}
+            {primaryRole === 'FARM_MANAGER' && 'Field Management: manage crop cycle stages, task assignments, and inventory stock consumption.'}
+            {primaryRole === 'WORKER' && 'Field Operations: view assigned daily tasks, mark progress, and upload photo completion proof.'}
+            {primaryRole === 'BUYER' && 'Direct Produce Procurement: browse verified harvests, submit offers, and track farmgate orders.'}
+            {primaryRole === 'MANDI_AGENT' && 'APMC Yard Operations: manage arrival slots, confirm bookings, and record auction sale payouts.'}
           </p>
         </div>
-        
-        <div className="mt-4 md:mt-0 flex items-center gap-4 text-sm">
-          <div className="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-gray-600 font-mono text-xs">
-            <div className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            {user?.tenantId?.slice(0, 8) || 'GLOBAL'}
-          </div>
-          <div className="text-gray-400">
-            {new Date().toLocaleDateString('en-US', { 
-              weekday: 'short', 
-              year: 'numeric', 
-              month: 'short', 
-              day: 'numeric' 
-            })}
-          </div>
+
+        {/* Quick Shortcut Buttons based on Role */}
+        <div className="flex flex-wrap gap-2.5">
+          {primaryRole === 'FARMER' && (
+            <>
+              <Link
+                to="/marketplace"
+                className="px-4 py-2 rounded-xl bg-white text-emerald-800 font-semibold text-xs shadow hover:bg-emerald-50 transition flex items-center gap-1.5"
+              >
+                <span>📦</span> List Produce
+              </Link>
+              <Link
+                to="/mandi"
+                className="px-4 py-2 rounded-xl bg-emerald-600 text-white font-semibold text-xs shadow hover:bg-emerald-500 transition flex items-center gap-1.5"
+              >
+                <span>🏛️</span> Book Mandi Slot
+              </Link>
+            </>
+          )}
+
+          {primaryRole === 'ADMIN' && (
+            <Link
+              to="/admin/users"
+              className="px-4 py-2 rounded-xl bg-white text-emerald-800 font-semibold text-xs shadow hover:bg-emerald-50 transition flex items-center gap-1.5"
+            >
+              <span>👥</span> User Approval Queue ({adminSummary?.pendingRequestsCount || 0})
+            </Link>
+          )}
+
+          {primaryRole === 'ADMIN_MAKER' && (
+            <Link
+              to="/admin-maker/create-request"
+              className="px-4 py-2 rounded-xl bg-white text-emerald-800 font-semibold text-xs shadow hover:bg-emerald-50 transition flex items-center gap-1.5"
+            >
+              <span>➕</span> Request New Role
+            </Link>
+          )}
+
+          {primaryRole === 'WORKER' && (
+            <Link
+              to="/tasks"
+              className="px-4 py-2 rounded-xl bg-white text-emerald-800 font-semibold text-xs shadow hover:bg-emerald-50 transition flex items-center gap-1.5"
+            >
+              <span>📋</span> View My Tasks ({activeTasks.length})
+            </Link>
+          )}
+
+          {primaryRole === 'BUYER' && (
+            <Link
+              to="/marketplace"
+              className="px-4 py-2 rounded-xl bg-white text-emerald-800 font-semibold text-xs shadow hover:bg-emerald-50 transition flex items-center gap-1.5"
+            >
+              <span>🛒</span> Browse Marketplace
+            </Link>
+          )}
+
+          {primaryRole === 'MANDI_AGENT' && (
+            <Link
+              to="/mandi"
+              className="px-4 py-2 rounded-xl bg-white text-emerald-800 font-semibold text-xs shadow hover:bg-emerald-50 transition flex items-center gap-1.5"
+            >
+              <span>🏛️</span> Manage Arrival Slots
+            </Link>
+          )}
         </div>
       </div>
 
-      {/* Stats Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
-        {stats.map((stat, index) => (
-          <div 
-            key={index} 
-            className="bg-white rounded-xl border border-gray-200 p-5 hover:shadow-sm transition-shadow duration-200"
-          >
-            <div className="flex items-center justify-between mb-4">
-              <div className="w-10 h-10 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center">
-                {stat.icon}
+      {/* ── Weather Alert Banner (Prompt 8 & 15) ── */}
+      {weatherData?.alerts && weatherData.alerts.length > 0 && (
+        <div className="bg-amber-50 border-l-4 border-amber-500 p-4 rounded-xl shadow-sm flex items-start gap-3">
+          <span className="text-2xl">⚠️</span>
+          <div className="flex-1">
+            <div className="flex items-center justify-between">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-amber-900">
+                Actionable Weather Alert • {weatherData.alerts[0].title}
+              </h4>
+              <span className="text-[10px] text-amber-700 font-medium">{weatherData.alerts[0].date}</span>
+            </div>
+            <p className="text-xs text-amber-800 mt-1 leading-relaxed">
+              {weatherData.alerts[0].actionableMessage}
+            </p>
+          </div>
+        </div>
+      )}
+
+      {/* ── Metric KPIs (Tailored by Role) ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        {primaryRole === 'FARMER' && (
+          <>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Cultivation Cost</span>
+              <p className="text-2xl font-bold text-slate-800 mt-1">
+                ₹{cropCostSummary?.totalExpense?.toLocaleString() || '4,12,000'}
+              </p>
+              <span className="text-xs text-emerald-600 font-medium">Real recorded expenses</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm bg-emerald-50/40">
+              <span className="text-[11px] font-bold text-emerald-700 uppercase tracking-wider">Real Cost Basis</span>
+              <p className="text-2xl font-bold text-emerald-800 mt-1">
+                ₹{cropCostSummary?.costPerKg || '32.96'} <span className="text-sm font-normal text-slate-500">/ kg</span>
+              </p>
+              <span className="text-xs text-emerald-600 font-medium">Auto-calculated differentiator</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mandi Modal Benchmark</span>
+              <p className="text-2xl font-bold text-slate-800 mt-1">₹68.50 <span className="text-sm font-normal text-slate-500">/ kg</span></p>
+              <span className="text-xs text-blue-600 font-medium">+107% vs cost basis</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Net Sale Profit</span>
+              <p className="text-2xl font-bold text-emerald-700 mt-1">+₹70,580</p>
+              <span className="text-xs text-emerald-600 font-medium">51.7% profit margin</span>
+            </div>
+          </>
+        )}
+
+        {(primaryRole === 'ADMIN' || primaryRole === 'ADMIN_MAKER') && (
+          <>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Pending User Requests</span>
+              <p className="text-2xl font-bold text-amber-600 mt-1">{adminSummary?.pendingRequestsCount ?? 2}</p>
+              <span className="text-xs text-slate-500 font-medium">Awaiting Admin Approval</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Total Platform Users</span>
+              <p className="text-2xl font-bold text-slate-800 mt-1">{adminSummary?.totalUsers ?? 7}</p>
+              <span className="text-xs text-slate-500 font-medium">Across 7 Phase 1 roles</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Active Produce Listings</span>
+              <p className="text-2xl font-bold text-emerald-700 mt-1">{adminSummary?.activeListingsCount ?? 1}</p>
+              <span className="text-xs text-slate-500 font-medium">Direct marketplace sale</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Open Disputes</span>
+              <p className="text-2xl font-bold text-slate-800 mt-1">{adminSummary?.openDisputesCount ?? 1}</p>
+              <span className="text-xs text-amber-600 font-medium">Trust & Safety tickets</span>
+            </div>
+          </>
+        )}
+
+        {primaryRole === 'WORKER' && (
+          <>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">My Assigned Tasks</span>
+              <p className="text-2xl font-bold text-slate-800 mt-1">2</p>
+              <span className="text-xs text-emerald-600 font-medium">Field operations</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">In Progress</span>
+              <p className="text-2xl font-bold text-amber-600 mt-1">1</p>
+              <span className="text-xs text-slate-500 font-medium">Plot B Potash Spray</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Completed with Evidence</span>
+              <p className="text-2xl font-bold text-emerald-700 mt-1">1</p>
+              <span className="text-xs text-slate-500 font-medium">Photo evidence uploaded</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Daily Wage Earned</span>
+              <p className="text-2xl font-bold text-slate-800 mt-1">₹1,350</p>
+              <span className="text-xs text-emerald-600 font-medium">Tracked against crop cycle</span>
+            </div>
+          </>
+        )}
+
+        {primaryRole === 'BUYER' && (
+          <>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Marketplace Listings</span>
+              <p className="text-2xl font-bold text-slate-800 mt-1">1 Verified</p>
+              <span className="text-xs text-emerald-600 font-medium">Pomegranate 8,500 kg</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Active Offers</span>
+              <p className="text-2xl font-bold text-amber-600 mt-1">1 Pending</p>
+              <span className="text-xs text-slate-500 font-medium">₹64.00/kg bid submitted</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Orders in Transit / Delivered</span>
+              <p className="text-2xl font-bold text-blue-600 mt-1">1 Active</p>
+              <span className="text-xs text-slate-500 font-medium">4,000 kg Pomegranate</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mandi Wholesale Benchmark</span>
+              <p className="text-2xl font-bold text-slate-800 mt-1">₹68.50/kg</p>
+              <span className="text-xs text-slate-500 font-medium">Nashik APMC</span>
+            </div>
+          </>
+        )}
+
+        {primaryRole === 'MANDI_AGENT' && (
+          <>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Today's Arrival Slots</span>
+              <p className="text-2xl font-bold text-slate-800 mt-1">2 Open</p>
+              <span className="text-xs text-slate-500 font-medium">Nashik APMC Yard</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Bookings Confirmed</span>
+              <p className="text-2xl font-bold text-emerald-700 mt-1">1 Confirmed</p>
+              <span className="text-xs text-slate-500 font-medium">2,000 kg arrival booked</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Auction Sales Logged</span>
+              <p className="text-2xl font-bold text-slate-800 mt-1">₹1,40,000</p>
+              <span className="text-xs text-emerald-600 font-medium">Gross auction throughput</span>
+            </div>
+            <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+              <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Mandi Commission</span>
+              <p className="text-2xl font-bold text-emerald-800 mt-1">₹3,500</p>
+              <span className="text-xs text-slate-500 font-medium">2.5% yard commission</span>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* ── Two-Column Feature Content ── */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left Column: Core Workflow Cards (2/3 width) */}
+        <div className="lg:col-span-2 space-y-6">
+          {/* Active Crop Cycle & Real Cost Basis Card */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <h3 className="text-base font-bold text-slate-800">
+                  Active Crop Cycle: Organic Pomegranate (Bhagwa)
+                </h3>
+                <p className="text-xs text-slate-500">Plot A • Surya Green Valley Farm • 10 Acres</p>
               </div>
-              <span className="text-xs font-medium text-emerald-700 bg-emerald-50 px-2 py-1 rounded-md">
-                {stat.change}
+              <span className="px-3 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-800 border border-emerald-200">
+                HARVESTED
               </span>
             </div>
-            <p className="text-2xl font-semibold text-gray-900 tracking-tight">{stat.value}</p>
-            <p className="text-sm text-gray-500 mt-1">{stat.label}</p>
-          </div>
-        ))}
-      </div>
 
-      {/* Quick Actions Section */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h2 className="text-base font-semibold text-gray-900">Quick Actions</h2>
-          <span className="text-xs text-gray-400 font-medium uppercase tracking-wider">Workspace Tools</span>
-        </div>
-        
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {quickActions.map((action, index) => (
-            <Link
-              key={index}
-              to={action.link}
-              className="group bg-white rounded-xl border border-gray-200 p-6 hover:border-gray-300 hover:shadow-md transition-all duration-200 flex flex-col justify-between"
-            >
-              <div>
-                <div className="w-11 h-11 rounded-lg bg-gray-50 border border-gray-100 flex items-center justify-center text-gray-600 mb-5 group-hover:bg-white group-hover:border-gray-200 group-hover:shadow-sm transition-all duration-200">
-                  {action.icon}
+            {/* Stepper Progress */}
+            <div className="py-2">
+              <div className="flex items-center justify-between text-[11px] text-slate-500 font-medium mb-1.5">
+                <span className="text-emerald-700 font-bold">Sowing (Feb)</span>
+                <span>Vegetative</span>
+                <span>Flowering</span>
+                <span>Development</span>
+                <span className="text-emerald-700 font-bold">Harvested (Aug 28)</span>
+              </div>
+              <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">
+                <div className="bg-emerald-600 h-full w-full rounded-full" />
+              </div>
+            </div>
+
+            {/* Cost Basis Calculation Showcase (The Core Differentiator!) */}
+            <div className="bg-slate-50 p-4 rounded-xl border border-slate-200/80 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-bold text-slate-700 uppercase tracking-wider">
+                  Cost Basis Engine (Arithmetic on Real Recorded Expenses)
+                </span>
+                <Link to="/expenses" className="text-xs font-semibold text-emerald-600 hover:text-emerald-700">
+                  View Breakdown →
+                </Link>
+              </div>
+
+              <div className="grid grid-cols-3 gap-3 text-center pt-1">
+                <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                  <span className="text-[10px] text-slate-400 uppercase font-semibold">Total Expenses</span>
+                  <p className="text-base font-bold text-slate-800">₹4,12,000</p>
                 </div>
-                
-                <h3 className="text-base font-semibold text-gray-900 mb-2 group-hover:text-blue-600 transition-colors duration-200">
-                  {action.title}
-                </h3>
-                <p className="text-sm text-gray-500 leading-relaxed">
-                  {action.description}
-                </p>
+                <div className="bg-white p-2.5 rounded-lg border border-slate-200">
+                  <span className="text-[10px] text-slate-400 uppercase font-semibold">Harvested Quantity</span>
+                  <p className="text-base font-bold text-slate-800">12,500 kg</p>
+                </div>
+                <div className="bg-white p-2.5 rounded-lg border border-emerald-300 bg-emerald-50/30">
+                  <span className="text-[10px] text-emerald-700 uppercase font-semibold">Real Cost / Kg</span>
+                  <p className="text-base font-bold text-emerald-800">₹32.96</p>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2 mt-6 text-sm font-medium text-gray-400 group-hover:text-blue-600 transition-colors duration-200">
-                <span>Get started</span>
-                <svg className="w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
-                </svg>
+              <p className="text-[11px] text-slate-500 italic text-center">
+                Formula: ₹4,12,000 (Summed Verified Expenses) ÷ 12,500 kg (Actual Harvest) = <strong className="text-emerald-700">₹32.96 / kg</strong>
+              </p>
+            </div>
+
+            {/* Two Selling Paths Comparison (Prompt 10 & 11) */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+              <div className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/30 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-emerald-800">Path 1: Direct Marketplace Sale</span>
+                    <span className="text-xs">📦</span>
+                  </div>
+                  <p className="text-xs text-slate-600 mt-1">
+                    Sell direct to verified buyers. Compare offers against your real cost (<strong className="text-emerald-700">₹32.96/kg</strong>) and mandi price (<strong className="text-slate-700">₹68.50/kg</strong>).
+                  </p>
+                </div>
+                <Link
+                  to="/marketplace"
+                  className="mt-3 text-xs font-semibold text-white bg-emerald-700 px-3 py-1.5 rounded-lg text-center hover:bg-emerald-800 transition"
+                >
+                  Manage Listings & Offers
+                </Link>
               </div>
-            </Link>
-          ))}
+
+              <div className="p-4 rounded-xl border border-blue-200 bg-blue-50/30 flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-bold text-blue-900">Path 2: Mandi Slot Booking</span>
+                    <span className="text-xs">🏛️</span>
+                  </div>
+                  <p className="text-xs text-slate-600 mt-1">
+                    Book arrival slot at Nashik APMC Yard. Mandi agent records arrival, grade, auction price, and net payout.
+                  </p>
+                </div>
+                <Link
+                  to="/mandi"
+                  className="mt-3 text-xs font-semibold text-white bg-blue-700 px-3 py-1.5 rounded-lg text-center hover:bg-blue-800 transition"
+                >
+                  Book Mandi Arrival Slot
+                </Link>
+              </div>
+            </div>
+          </div>
+
+          {/* Today's Tasks Summary (Prompt 5 & 15) */}
+          <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-base font-bold text-slate-800">Operational Tasks & Work Management</h3>
+              <Link to="/tasks" className="text-xs font-semibold text-emerald-600 hover:text-emerald-700">
+                View All Tasks ({activeTasks.length}) →
+              </Link>
+            </div>
+
+            <div className="space-y-2.5">
+              {activeTasks.slice(0, 3).map((task) => (
+                <div
+                  key={task.id}
+                  className="p-3 rounded-xl border border-slate-200/80 bg-slate-50/50 flex items-center justify-between gap-3"
+                >
+                  <div className="space-y-0.5">
+                    <p className="text-xs font-bold text-slate-800">{task.title}</p>
+                    <p className="text-[11px] text-slate-500">
+                      Assigned to: <span className="font-semibold text-slate-700">{task.assigneeName || 'Worker'}</span> • Due: {new Date(task.dueDate).toLocaleDateString()}
+                    </p>
+                  </div>
+                  <span
+                    className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase tracking-wider ${
+                      task.status === 'COMPLETED'
+                        ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                        : task.status === 'IN_PROGRESS'
+                        ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                        : 'bg-slate-200 text-slate-700'
+                    }`}
+                  >
+                    {task.status}
+                  </span>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* Right Column: Reference Data & Weather (1/3 width) */}
+        <div className="space-y-6">
+          {/* Mandi Price Reference Benchmark (Prompt 9) */}
+          <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+            <div className="flex items-center justify-between">
+              <h3 className="text-sm font-bold text-slate-800">Mandi Price Benchmarks</h3>
+              <span className="text-[10px] text-slate-400">As of Today</span>
+            </div>
+
+            <div className="space-y-2.5">
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-slate-800">Pomegranate (Bhagwa)</span>
+                  <span className="text-xs font-bold text-emerald-700">₹68.50 / kg</span>
+                </div>
+                <div className="text-[10px] text-slate-500 mt-0.5 flex justify-between">
+                  <span>Nashik APMC Yard</span>
+                  <span>Min: ₹55 • Max: ₹78</span>
+                </div>
+              </div>
+
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-slate-800">Thompson Grapes</span>
+                  <span className="text-xs font-bold text-emerald-700">₹82.00 / kg</span>
+                </div>
+                <div className="text-[10px] text-slate-500 mt-0.5 flex justify-between">
+                  <span>Pimpalgaon Baswant APMC</span>
+                  <span>Min: ₹65 • Max: ₹94</span>
+                </div>
+              </div>
+
+              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-slate-800">Soyabean (Yellow)</span>
+                  <span className="text-xs font-bold text-emerald-700">₹46.80 / kg</span>
+                </div>
+                <div className="text-[10px] text-slate-500 mt-0.5 flex justify-between">
+                  <span>Latur APMC Yard</span>
+                  <span>Min: ₹42 • Max: ₹49.5</span>
+                </div>
+              </div>
+            </div>
+
+            <p className="text-[10px] text-slate-400 italic">
+              *Reference modal prices from Agmarknet wholesale trading. Not live speculative rates.
+            </p>
+          </div>
+
+          {/* Quick Platform Security & Role Policy */}
+          <div className="bg-slate-900 text-white p-5 rounded-2xl shadow-sm space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="text-emerald-400">🛡️</span>
+              <h4 className="text-xs font-bold uppercase tracking-wider text-emerald-400">
+                RBAC & Data Privacy
+              </h4>
+            </div>
+            <ul className="text-xs text-slate-300 space-y-2 list-disc list-inside leading-relaxed">
+              <li>
+                <strong>Private Cost Basis:</strong> A farmer's cultivation <code className="text-emerald-300">cost_per_kg</code> is never exposed to buyers.
+              </li>
+              <li>
+                <strong>Admin Maker Security:</strong> Admin Maker can create any role except Admin, queued for Super Admin approval.
+              </li>
+              <li>
+                <strong>Closed Signup:</strong> No open registration. User requests require Admin verification.
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>

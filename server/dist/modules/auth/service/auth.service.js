@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 import { Redis } from 'ioredis';
 import { AuthRepository } from '../repository/auth.repository.js';
 import { config } from '../../../config/index.js';
+import { emailService } from '../../../services/email.service.js';
 // Initialize Redis client using the configured URL
 class RedisFallback {
     redis = null;
@@ -134,8 +135,8 @@ export class AuthService {
         // 4. Generate OTP for email verification (stored in Redis for 10 minutes)
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         await redis.set(`otp:verify:${dto.email}`, otp, 'EX', 600);
-        // Log the OTP (in production, this would send an email)
-        console.log(`[Email Verification OTP for ${dto.email}]: ${otp}`);
+        // Send OTP via email
+        await emailService.sendOtpEmail(dto.email, otp, 'verification');
         const tokens = this.generateTokens({
             userId: user.id,
             tenantId: tenant.id,
@@ -253,7 +254,8 @@ export class AuthService {
         }
         const otp = Math.floor(100000 + Math.random() * 900000).toString();
         await redis.set(`otp:reset:${email}`, otp, 'EX', 600); // 10 minutes
-        console.log(`[Forgot Password OTP for ${email}]: ${otp}`);
+        // Send OTP via email
+        await emailService.sendOtpEmail(email, otp, 'password_reset');
     }
     async resetPassword(dto) {
         const storedOtp = await redis.get(`otp:reset:${dto.email}`);

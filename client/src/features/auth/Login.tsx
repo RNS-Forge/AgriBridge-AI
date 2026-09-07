@@ -4,15 +4,41 @@ import { useNavigate, Link } from 'react-router-dom';
 import { setCredentials } from '../../store/authSlice.js';
 import { Input, Button, ErrorBanner, SocialButton, Toast, MailIcon, LockIcon } from '../../components/ui/index.js';
 
+interface RoleDemoOption {
+  role: string;
+  name: string;
+  email: string;
+  badgeColor: string;
+  desc: string;
+}
+
+const DEMO_ROLES: RoleDemoOption[] = [
+  { role: 'ADMIN', name: 'Admin', email: 'admin@agribridge.com', badgeColor: 'bg-purple-100 text-purple-800 border-purple-300', desc: 'Full platform authority & approvals' },
+  { role: 'ADMIN_MAKER', name: 'Admin Maker', email: 'adminmaker@agribridge.com', badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-300', desc: 'Creates roles under Admin approval' },
+  { role: 'FARMER', name: 'Farmer', email: 'farmer@agribridge.com', badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300', desc: 'Cultivation, cost-basis & sell' },
+  { role: 'FARM_MANAGER', name: 'Farm Manager', email: 'farmmanager@agribridge.com', badgeColor: 'bg-teal-100 text-teal-800 border-teal-300', desc: 'Tasks, stages & inventory logging' },
+  { role: 'WORKER', name: 'Worker', email: 'worker@agribridge.com', badgeColor: 'bg-blue-100 text-blue-800 border-blue-300', desc: 'Field tasks & photo evidence' },
+  { role: 'BUYER', name: 'Buyer', email: 'buyer@agribridge.com', badgeColor: 'bg-amber-100 text-amber-800 border-amber-300', desc: 'Browse marketplace & make offers' },
+  { role: 'MANDI_AGENT', name: 'Mandi Agent', email: 'mandiagent@agribridge.com', badgeColor: 'bg-orange-100 text-orange-800 border-orange-300', desc: 'Yard arrival slots & auction sales' },
+];
+
 export default function Login() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@agribridge.com');
+  const [password, setPassword] = useState('AgriBridgeAI@2026');
+  const [selectedRole, setSelectedRole] = useState('ADMIN');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ message: string } | null>(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const handleSelectRole = (r: RoleDemoOption) => {
+    setSelectedRole(r.role);
+    setEmail(r.email);
+    setPassword('AgriBridgeAI@2026');
+    setError('');
+  };
 
   const handleSocialClick = (provider: string) => {
     setToast({ message: `Sign in with ${provider} will be available soon.` });
@@ -31,7 +57,7 @@ export default function Login() {
       });
       const data = await res.json();
 
-      if (!res.ok) {
+      if (!res.ok || !data.success) {
         throw new Error(data.message || 'Authentication failed');
       }
 
@@ -70,26 +96,61 @@ export default function Login() {
         </div>
 
         {/* Subtle gradient overlay for depth */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-l from-white/80 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-l from-white/85 via-white/40 to-transparent pointer-events-none" />
 
         {/* ───── Floating Form Card ───── */}
-        <div className="relative z-20 w-full max-w-[440px] ml-auto h-screen flex items-center px-4 py-10">
-          <div className="w-full bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl shadow-2xl p-8 space-y-6 my-auto max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
+        <div className="relative z-20 w-full max-w-[480px] ml-auto h-screen flex items-center px-4 py-8">
+          <div className="w-full bg-white/75 backdrop-blur-xl border border-white/60 rounded-2xl shadow-2xl p-7 space-y-5 my-auto max-h-[calc(100vh-40px)] overflow-y-auto scrollbar-hide">
             
-            {/* Platform Name (No Logo) */}
-            <div className="pb-2">
-              <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
-                AgriBridge<span className="text-emerald-600">AI</span>
-              </h2>
+            {/* Platform Brand */}
+            <div className="flex items-center justify-between pb-1 border-b border-slate-200/60">
+              <div>
+                <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
+                  AgriBridge<span className="text-emerald-600">AI</span>
+                </h2>
+                <p className="text-[11px] text-slate-500 font-medium">Cultivate → Sell Platform</p>
+              </div>
+              <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                Phase 1 Live
+              </span>
             </div>
 
             {/* Header */}
             <div>
-              <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
-                Welcome back
+              <h1 className="text-xl font-bold text-slate-800 tracking-tight">
+                Sign in to your role
               </h1>
-              <p className="text-sm text-slate-600 mt-1">
-                Sign in to your workspace.
+              <p className="text-xs text-slate-600 mt-0.5">
+                Default password for all roles: <code className="font-semibold text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded border border-emerald-200">AgriBridgeAI@2026</code>
+              </p>
+            </div>
+
+            {/* 1-Click Role Quick Switcher */}
+            <div className="space-y-1.5 bg-slate-50/80 p-2.5 rounded-xl border border-slate-200/70">
+              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                1-Click Quick Demo Login Switcher:
+              </label>
+              <div className="flex flex-wrap gap-1.5">
+                {DEMO_ROLES.map((r) => {
+                  const isSelected = selectedRole === r.role || email === r.email;
+                  return (
+                    <button
+                      key={r.role}
+                      type="button"
+                      onClick={() => handleSelectRole(r)}
+                      className={`text-[11px] px-2.5 py-1 rounded-md font-semibold border transition-all duration-150 flex items-center gap-1 ${
+                        isSelected
+                          ? 'bg-emerald-700 text-white border-emerald-800 shadow-sm scale-102 ring-1 ring-emerald-500/50'
+                          : `${r.badgeColor} hover:brightness-95`
+                      }`}
+                    >
+                      <span>{r.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="text-[10px] text-slate-500 italic pt-0.5">
+                {DEMO_ROLES.find((r) => r.email === email)?.desc || 'Ready to sign in'}
               </p>
             </div>
 
@@ -97,14 +158,17 @@ export default function Login() {
             {error && <ErrorBanner message={error} />}
 
             {/* Form */}
-            <form onSubmit={handleLogin} className="space-y-4">
+            <form onSubmit={handleLogin} className="space-y-3.5">
               <Input
                 id="email"
                 label="Email Address"
                 type="email"
                 value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
+                onChange={(e) => {
+                  setEmail(e.target.value);
+                  setSelectedRole('');
+                }}
+                placeholder="admin@agribridge.com"
                 autoComplete="email"
                 icon={<MailIcon />}
               />
@@ -120,13 +184,14 @@ export default function Login() {
               />
 
               {/* Options Row */}
-              <div className="flex items-center justify-between pt-1">
+              <div className="flex items-center justify-between pt-0.5">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input 
                     type="checkbox" 
-                    className="h-3.5 w-3.5 rounded border-slate-400 bg-white/60 text-emerald-600 focus:ring-emerald-500/20 focus:ring-offset-0 cursor-pointer" 
+                    defaultChecked
+                    className="h-3.5 w-3.5 rounded border-slate-400 bg-white text-emerald-600 focus:ring-emerald-500/20 focus:ring-offset-0 cursor-pointer" 
                   />
-                  <span className="text-xs text-slate-600">Remember me</span>
+                  <span className="text-xs text-slate-600">Remember credentials</span>
                 </label>
                 <Link 
                   to="/forgot-password" 
@@ -136,23 +201,29 @@ export default function Login() {
                 </Link>
               </div>
 
-              {/* Submit */}
+              {/* Submit Button */}
               <Button type="submit" loading={loading} fullWidth className="mt-1">
-                {loading ? 'Signing in...' : 'Login'}
+                {loading ? 'Authenticating...' : `Sign in as ${selectedRole ? selectedRole.replace('_', ' ') : 'User'}`}
               </Button>
             </form>
+
+            {/* Platform Role Workflow Info Notice */}
+            <div className="text-[11px] text-slate-500 bg-emerald-50/70 p-2.5 rounded-lg border border-emerald-200/80 leading-relaxed">
+              <span className="font-semibold text-emerald-800">RBAC Workflow: </span>
+              No open self-signup. <strong>Admin</strong> directly creates active users. <strong>Admin Maker</strong> requests creation of roles (except Admin); requests require Admin approval before activation.
+            </div>
 
             {/* Divider */}
             <div className="flex items-center gap-3">
               <div className="flex-1 h-px bg-slate-200" />
               <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest">
-                Or continue with
+                Enterprise SSO
               </span>
               <div className="flex-1 h-px bg-slate-200" />
             </div>
 
-            {/* Social buttons (Google & Microsoft Only) */}
-            <div className="grid grid-cols-2 gap-3">
+            {/* Social buttons */}
+            <div className="grid grid-cols-2 gap-2.5">
               <SocialButton
                 label="Google"
                 onClick={() => handleSocialClick('Google')}
@@ -180,13 +251,13 @@ export default function Login() {
             </div>
 
             {/* Footer */}
-            <p className="text-center text-sm text-slate-600 pt-1">
-              Don't have an account?{' '}
+            <p className="text-center text-xs text-slate-600 pt-0.5">
+              Need access?{' '}
               <Link
                 to="/register"
                 className="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
               >
-                Sign Up
+                Request Workspace Account
               </Link>
             </p>
           </div>

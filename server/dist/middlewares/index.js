@@ -6,5 +6,4 @@ export function errorHandler(err, req, res, next) {
         errors: err.errors || null,
     });
 }
-export { authenticate } from './auth.middleware.js';
-export { authorize } from './role.middleware.js';
+export { authenticate, authorize } from '../modules/auth/middleware/index.js';
