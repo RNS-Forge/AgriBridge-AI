@@ -17,5 +17,26 @@ export { Pagination } from './Pagination/Pagination.js';
 export { ErrorBanner } from './ErrorBanner/ErrorBanner.js';
 export { Toast } from './Toast/Toast.js';
 export { SocialButton } from './SocialButton/SocialButton.js';
-export { MailIcon, LockIcon, UserIcon } from './icons/index.js';
+export {
+  MailIcon,
+  LockIcon,
+  UserIcon,
+  ShieldIcon,
+  PlantIcon,
+  TractorIcon,
+  PackageIcon,
+  CartIcon,
+  ScaleIcon,
+  UsersIcon,
+  AlertTriangleIcon,
+  CheckCircleIcon,
+  FileTextIcon,
+  CameraIcon,
+  BuildingIcon,
+  PlusIcon,
+  ClipboardIcon,
+  CloseIcon,
+  SparklesIcon,
+  FlaskIcon,
+} from './icons/index.js';
 export { Sidebar } from './Sidebar/Sidebar.js';

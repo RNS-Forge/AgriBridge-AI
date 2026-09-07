@@ -81,7 +81,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
 
         <div
-          className={`relative flex items-center rounded-xl border transition-all duration-300 ${borderColor}`}
+          className={`relative flex items-center rounded-md border transition-all duration-300 ${borderColor}`}
         >
           {icon && (
             <span

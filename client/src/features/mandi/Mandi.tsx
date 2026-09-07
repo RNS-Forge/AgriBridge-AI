@@ -57,7 +57,7 @@ export default function Mandi() {
   return (
     <div className="p-6 md:p-8 space-y-8">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-md border border-gray-200 p-6">
         <div className="space-y-2">
           <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
             Mandi Price Index
@@ -70,7 +70,7 @@ export default function Mandi() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-md border border-gray-200 p-6">
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-2">Commodity</label>
@@ -78,7 +78,7 @@ export default function Mandi() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="e.g. Cotton, Wheat"
             />
           </div>
@@ -88,14 +88,14 @@ export default function Mandi() {
               type="text"
               value={stateName}
               onChange={(e) => setStateName(e.target.value)}
-              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="e.g. Maharashtra, Gujarat"
             />
           </div>
           <div className="flex items-end">
             <Button
               onClick={fetchMandiPrices}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md transition-colors duration-200"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.183m0-4.992v4.99" />
@@ -112,7 +112,7 @@ export default function Mandi() {
           <p>Loading daily prices index...</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-md border border-gray-200 overflow-hidden">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600 uppercase tracking-wider">

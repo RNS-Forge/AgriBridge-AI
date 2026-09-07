@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input } from '../../components/ui/index.js';
+import { Button, Input, CloseIcon } from '../../components/ui/index.js';
 
 export default function AdminModerationView() {
   const [listings, setListings] = useState<any[]>([]);
@@ -56,7 +56,7 @@ export default function AdminModerationView() {
       </div>
 
       {/* Listings table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-md border border-slate-200 shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
           <h3 className="text-sm font-bold text-slate-800">
             Marketplace Active Listings ({listings.length})
@@ -98,7 +98,7 @@ export default function AdminModerationView() {
                     ₹{l.nearestMandiModalPrice || 68.5} / kg
                   </td>
                   <td className="px-6 py-3.5">
-                    <span className="px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    <span className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-200">
                       {l.status}
                     </span>
                   </td>
@@ -120,12 +120,14 @@ export default function AdminModerationView() {
       {/* Flag Modal */}
       {flagModalListing && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">
                 Remove Listing: {flagModalListing.cropName}
               </h3>
-              <button onClick={() => setFlagModalListing(null)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setFlagModalListing(null)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleModerate} className="space-y-3">
               <Input

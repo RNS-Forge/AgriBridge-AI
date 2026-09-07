@@ -15,7 +15,7 @@ export const Table = forwardRef<HTMLTableElement, TableProps>(
     },
     ref
   ) => (
-    <div className="overflow-x-auto rounded-xl border border-gray-200 shadow-sm">
+    <div className="overflow-x-auto rounded-md border border-gray-200 shadow-sm">
       <table
         ref={ref}
         className={`w-full border-collapse text-sm ${className}`}

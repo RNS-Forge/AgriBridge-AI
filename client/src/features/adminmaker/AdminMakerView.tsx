@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Button, Input } from '../../components/ui/index.js';
+import {
+  ShieldIcon,
+  CheckCircleIcon,
+  CloseIcon,
+  AlertTriangleIcon,
+} from '../../components/ui/icons/index.js';
 
 export default function AdminMakerView() {
   const location = useLocation();
@@ -105,15 +111,15 @@ export default function AdminMakerView() {
   const pendingCount = requests.filter((r) => r.status === 'PENDING_APPROVAL').length;
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-xl font-bold text-slate-800 tracking-tight">
+            <h1 className="text-xl font-bold text-slate-900 tracking-tight">
               Admin Maker Console
             </h1>
-            <span className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase bg-indigo-100 text-indigo-800 border border-indigo-200">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-indigo-50 text-indigo-800 border border-indigo-200">
               Maker Role (Under Admin Governance)
             </span>
           </div>
@@ -123,10 +129,10 @@ export default function AdminMakerView() {
         </div>
 
         {/* Quick Tab Controls */}
-        <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-xl border border-slate-200">
+        <div className="flex items-center gap-1.5 bg-slate-100 p-1 rounded-md border border-slate-200">
           <button
             onClick={() => handleTabChange('CREATE')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all ${
+            className={`px-3 py-1.5 rounded text-xs font-bold transition-colors ${
               activeTab === 'CREATE'
                 ? 'bg-indigo-700 text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
@@ -136,14 +142,14 @@ export default function AdminMakerView() {
           </button>
           <button
             onClick={() => handleTabChange('REQUESTS')}
-            className={`px-3.5 py-1.5 rounded-lg text-xs font-bold transition-all flex items-center gap-1.5 ${
+            className={`px-3 py-1.5 rounded text-xs font-bold transition-colors flex items-center gap-1.5 ${
               activeTab === 'REQUESTS'
                 ? 'bg-indigo-700 text-white shadow-xs'
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             <span>My Requests</span>
-            <span className={`text-[10px] px-1.5 py-0.2 rounded-full font-bold ${
+            <span className={`text-[10px] px-1.5 py-0.2 rounded font-bold ${
               activeTab === 'REQUESTS' ? 'bg-indigo-800 text-white' : 'bg-slate-200 text-slate-700'
             }`}>
               {requests.length}
@@ -153,11 +159,12 @@ export default function AdminMakerView() {
       </div>
 
       {/* Role Policy Reminder Banner */}
-      <div className="p-4 rounded-2xl bg-indigo-50/70 border border-indigo-200 text-xs text-indigo-950 space-y-1">
+      <div className="p-3.5 rounded-md bg-indigo-50/60 border border-indigo-200 text-xs text-indigo-950 space-y-1">
         <span className="font-bold block uppercase tracking-wider text-indigo-900 flex items-center gap-1.5">
-          <span>🛡️</span> Maker-Checker Governance Protocol:
+          <ShieldIcon className="w-3.5 h-3.5 text-indigo-700" />
+          Maker-Checker Governance Protocol:
         </span>
-        <ul className="list-disc list-inside space-y-1 text-indigo-900/85">
+        <ul className="list-disc list-inside space-y-0.5 text-indigo-900/85">
           <li><strong>Permitted Roles:</strong> Farmer, Farm Manager, Worker, Buyer, Mandi Agent, or another Admin Maker.</li>
           <li><strong>Role Boundary:</strong> Admin Maker can <strong>never</strong> create or request an <code>ADMIN</code> role.</li>
           <li><strong>Dual Authorization:</strong> Accounts submitted here enter <code>PENDING_APPROVAL</code> status until activated by an Admin. Default password is pre-configured as <code>AgriBridgeAI@2026</code>.</li>
@@ -166,10 +173,10 @@ export default function AdminMakerView() {
 
       {/* VIEW 1: Direct Creation Form (Shown when on /admin-maker/create-request) */}
       {activeTab === 'CREATE' && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 space-y-5">
+        <div className="bg-white rounded-md border border-slate-200 shadow-xs p-6 space-y-4">
           <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
             <div>
-              <h2 className="text-base font-bold text-slate-800">
+              <h2 className="text-sm font-bold text-slate-900">
                 Initiate New Account / Role Request
               </h2>
               <p className="text-xs text-slate-500 mt-0.5">
@@ -183,21 +190,22 @@ export default function AdminMakerView() {
 
           {/* Success Banner */}
           {successMsg && (
-            <div className="p-4 bg-emerald-50 border border-emerald-300 rounded-xl text-xs text-emerald-900 space-y-2">
+            <div className="p-3.5 bg-emerald-50 border border-emerald-300 rounded-md text-xs text-emerald-900 space-y-2">
               <div className="flex items-center justify-between">
                 <span className="font-bold flex items-center gap-1.5 text-emerald-800">
-                  <span>✓</span> Request Created Successfully!
+                  <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
+                  Request Created Successfully!
                 </span>
                 <button
                   onClick={() => setSuccessMsg('')}
-                  className="text-emerald-700 hover:text-emerald-900 font-bold"
+                  className="text-emerald-700 hover:text-emerald-900"
                 >
-                  ✕
+                  <CloseIcon className="w-3.5 h-3.5" />
                 </button>
               </div>
               <p>{successMsg}</p>
               {lastCreated && (
-                <div className="bg-white/80 p-2.5 rounded-lg border border-emerald-200 text-[11px] font-mono text-emerald-950 flex flex-wrap gap-4">
+                <div className="bg-white/80 p-2.5 rounded border border-emerald-200 text-[11px] font-mono text-emerald-950 flex flex-wrap gap-4">
                   <span>Request ID: <strong>{lastCreated.id}</strong></span>
                   <span>Role: <strong>{lastCreated.requestedRole}</strong></span>
                   <span>Status: <strong className="text-amber-700">{lastCreated.status}</strong></span>
@@ -225,22 +233,27 @@ export default function AdminMakerView() {
 
           {/* Error Banner */}
           {error && (
-            <div className="p-3.5 rounded-xl bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between">
-              <span>⚠️ {error}</span>
-              <button onClick={() => setError('')} className="text-rose-600 font-bold">✕</button>
+            <div className="p-3 rounded-md bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between">
+              <span className="flex items-center gap-1.5">
+                <AlertTriangleIcon className="w-3.5 h-3.5 text-rose-600" />
+                {error}
+              </span>
+              <button onClick={() => setError('')} className="text-rose-600 hover:text-rose-800">
+                <CloseIcon className="w-3.5 h-3.5" />
+              </button>
             </div>
           )}
 
           <form onSubmit={handleCreateRequest} className="space-y-4 max-w-2xl">
             {/* Role Selection */}
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1.5 uppercase tracking-wider">
+              <label className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
                 Select Platform Role to Request *
               </label>
               <select
                 value={requestedRole}
                 onChange={(e) => setRequestedRole(e.target.value)}
-                className="w-full text-xs px-3.5 py-2.5 border border-slate-300 rounded-xl bg-white text-slate-800 font-medium focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 outline-none"
+                className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-800 font-medium focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
               >
                 <option value="FARMER">FARMER — Cultivation, Cost Basis & Sell Produce</option>
                 <option value="FARM_MANAGER">FARM_MANAGER — Farm Operations & Consumables Stock</option>
@@ -311,7 +324,7 @@ export default function AdminMakerView() {
               <Button
                 type="submit"
                 loading={loading}
-                className="!bg-indigo-700 hover:!bg-indigo-800 !text-white px-6 py-2.5 text-xs font-bold rounded-xl shadow-sm"
+                className="!bg-indigo-700 hover:!bg-indigo-800 !text-white px-5 py-2 text-xs font-bold rounded-md shadow-xs"
               >
                 {loading ? 'Submitting Request...' : 'Submit Request for Admin Approval'}
               </Button>
@@ -319,7 +332,7 @@ export default function AdminMakerView() {
                 type="button"
                 variant="outline"
                 onClick={() => handleTabChange('REQUESTS')}
-                className="text-xs"
+                className="text-xs rounded-md"
               >
                 View Requests Tracker ({pendingCount} pending)
               </Button>
@@ -330,8 +343,8 @@ export default function AdminMakerView() {
 
       {/* VIEW 2: Requests History / Tracker */}
       {activeTab === 'REQUESTS' && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+        <div className="bg-white rounded-md border border-slate-200 shadow-xs overflow-hidden">
+          <div className="px-5 py-3.5 border-b border-slate-200 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
               <h3 className="text-sm font-bold text-slate-800">
                 Submitted Role Requests ({requests.length})
@@ -342,7 +355,7 @@ export default function AdminMakerView() {
             </div>
             <Button
               onClick={() => handleTabChange('CREATE')}
-              className="text-xs !bg-indigo-700 hover:!bg-indigo-800 !text-white self-start sm:self-auto"
+              className="text-xs !bg-indigo-700 hover:!bg-indigo-800 !text-white self-start sm:self-auto rounded-md"
             >
               + Create New Request
             </Button>
@@ -351,10 +364,10 @@ export default function AdminMakerView() {
           <div className="divide-y divide-slate-100">
             {requests.length === 0 ? (
               <div className="p-8 text-center space-y-3">
-                <p className="text-sm text-slate-500">No role requests found.</p>
+                <p className="text-xs text-slate-500">No role requests found.</p>
                 <Button
                   onClick={() => handleTabChange('CREATE')}
-                  className="text-xs !bg-indigo-700 hover:!bg-indigo-800 !text-white"
+                  className="text-xs !bg-indigo-700 hover:!bg-indigo-800 !text-white rounded-md"
                 >
                   Create Your First Request
                 </Button>
@@ -363,14 +376,14 @@ export default function AdminMakerView() {
               requests.map((r) => (
                 <div
                   key={r.id}
-                  className="p-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50/80 transition"
+                  className="p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 hover:bg-slate-50 transition-colors"
                 >
                   <div className="space-y-1">
                     <div className="flex items-center gap-2">
-                      <h4 className="text-sm font-bold text-slate-800">
+                      <h4 className="text-xs font-bold text-slate-900">
                         {r.firstName} {r.lastName}
                       </h4>
-                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-100 text-slate-700 border border-slate-200">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-slate-100 text-slate-700 border border-slate-200">
                         Role: {r.requestedRole}
                       </span>
                     </div>
@@ -386,12 +399,12 @@ export default function AdminMakerView() {
 
                   <div className="text-right sm:min-w-[180px]">
                     <span
-                      className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider inline-block ${
+                      className={`px-2.5 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider inline-block border ${
                         r.status === 'PENDING_APPROVAL'
-                          ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                          ? 'bg-amber-50 text-amber-800 border-amber-200'
                           : r.status === 'APPROVED'
-                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                          : 'bg-rose-100 text-rose-800 border border-rose-200'
+                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                          : 'bg-rose-50 text-rose-800 border-rose-200'
                       }`}
                     >
                       {r.status}

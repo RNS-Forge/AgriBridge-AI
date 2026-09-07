@@ -25,7 +25,7 @@ export default function AdminAuditLogsView() {
       </div>
 
       {/* Audit Logs Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-md border border-slate-200 shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
           <h3 className="text-sm font-bold text-slate-800">
             Audit Trail ({logs.length} Events)

@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { BuildingIcon, PackageIcon } from '../../components/ui/index.js';
 
 export default function ProfitReportsView() {
   const [reports, setReports] = useState<any[]>([]);
@@ -34,7 +35,7 @@ export default function ProfitReportsView() {
         {reports.map((report) => (
           <div
             key={report.id}
-            className="bg-white p-6 rounded-2xl border-2 border-emerald-200 shadow-sm space-y-5"
+            className="bg-white p-6 rounded-md border border-slate-200 shadow-sm space-y-5"
           >
             {/* Header info */}
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-100">
@@ -42,7 +43,15 @@ export default function ProfitReportsView() {
                 <div className="flex items-center gap-2">
                   <h2 className="text-lg font-bold text-slate-800">{report.cropName}</h2>
                   <span className="px-2.5 py-0.5 rounded text-xs font-bold bg-slate-100 text-slate-700">
-                    {report.saleType === 'MANDI_SALE' ? '🏛️ Mandi APMC Auction' : '📦 Direct Marketplace Sale'}
+                    {report.saleType === 'MANDI_SALE' ? (
+                      <span className="inline-flex items-center gap-1.5">
+                        <BuildingIcon className="w-3.5 h-3.5" /> Mandi APMC Auction
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1.5">
+                        <PackageIcon className="w-3.5 h-3.5" /> Direct Marketplace Sale
+                      </span>
+                    )}
                   </span>
                 </div>
                 <p className="text-xs text-slate-500 mt-0.5">
@@ -63,7 +72,7 @@ export default function ProfitReportsView() {
 
             {/* Arithmetic Breakdown ( radical transparency! ) */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-center">
-              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+              <div className="bg-slate-50 p-3.5 rounded-md border border-slate-200">
                 <span className="text-[10px] font-bold text-slate-400 uppercase">Gross Revenue</span>
                 <p className="text-base font-bold text-slate-800 mt-1">₹{report.grossRevenue?.toLocaleString()}</p>
                 <span className="text-[10px] text-slate-400">
@@ -71,19 +80,19 @@ export default function ProfitReportsView() {
                 </span>
               </div>
 
-              <div className="bg-slate-50 p-3.5 rounded-xl border border-slate-200">
+              <div className="bg-slate-50 p-3.5 rounded-md border border-slate-200">
                 <span className="text-[10px] font-bold text-slate-400 uppercase">Verified Cultivation Cost</span>
                 <p className="text-base font-bold text-red-700 mt-1">-₹{report.totalCost?.toLocaleString()}</p>
                 <span className="text-[10px] text-slate-400">Prorated cultivation expenses</span>
               </div>
 
-              <div className="bg-emerald-50 p-3.5 rounded-xl border border-emerald-300">
+              <div className="bg-emerald-50 p-3.5 rounded-md border border-emerald-300">
                 <span className="text-[10px] font-bold text-emerald-800 uppercase">Profit Per Kg</span>
                 <p className="text-base font-bold text-emerald-900 mt-1">+₹{report.profitPerKg}</p>
                 <span className="text-[10px] text-emerald-700">Over ₹32.96 cost basis</span>
               </div>
 
-              <div className="bg-emerald-50 p-3.5 rounded-xl border border-emerald-300">
+              <div className="bg-emerald-50 p-3.5 rounded-md border border-emerald-300">
                 <span className="text-[10px] font-bold text-emerald-800 uppercase">Profit Per Acre</span>
                 <p className="text-base font-bold text-emerald-900 mt-1">+₹{report.profitPerAcre?.toLocaleString()}</p>
                 <span className="text-[10px] text-emerald-700">10 acre plot yield</span>
@@ -98,7 +107,7 @@ export default function ProfitReportsView() {
                 </span>
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 text-xs">
                   {Object.entries(report.categoryBreakdown).map(([cat, amt]: [string, any]) => (
-                    <div key={cat} className="p-2.5 bg-slate-50 rounded-lg border border-slate-200">
+                    <div key={cat} className="p-2.5 bg-slate-50 rounded border border-slate-200">
                       <span className="text-[10px] text-slate-400 uppercase font-semibold block">{cat}</span>
                       <span className="font-bold text-slate-800 mt-0.5 block">₹{amt.toLocaleString()}</span>
                     </div>

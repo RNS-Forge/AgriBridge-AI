@@ -75,7 +75,7 @@ export default function ResetPassword() {
 
         {/* ───── Floating Form Card ───── */}
         <div className="relative z-20 w-full max-w-[440px] ml-auto h-screen flex items-center px-4 py-10">
-          <div className="w-full bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl shadow-2xl p-8 space-y-6 my-auto max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
+          <div className="w-full bg-white/60 backdrop-blur-xl border border-white/40 rounded-md shadow-2xl p-8 space-y-6 my-auto max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
             
             {/* Platform Name */}
             <div className="pb-2">

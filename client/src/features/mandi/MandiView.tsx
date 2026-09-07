@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/index.js';
-import { Button, Input } from '../../components/ui/index.js';
+import { Button, Input, ScaleIcon, CloseIcon } from '../../components/ui/index.js';
 
 export default function MandiView() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -169,7 +169,7 @@ export default function MandiView() {
           {slots.map((slot) => (
             <div
               key={slot.id}
-              className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3"
+              className="bg-white p-5 rounded-md border border-slate-200 shadow-sm space-y-3"
             >
               <div className="flex items-start justify-between">
                 <div>
@@ -180,12 +180,12 @@ export default function MandiView() {
                     Date: <strong>{new Date(slot.date).toLocaleDateString()}</strong> • Window: {slot.timeWindow}
                   </p>
                 </div>
-                <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded">
                   {slot.status}
                 </span>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs flex justify-between items-center">
+              <div className="p-3 bg-slate-50 rounded-md border border-slate-200 text-xs flex justify-between items-center">
                 <span>Capacity: <strong>{slot.capacityQuintals} Quintals</strong></span>
                 <span>Booked: <strong>{slot.bookedQuintals} Q</strong></span>
                 <span className="text-emerald-700 font-bold">
@@ -212,7 +212,7 @@ export default function MandiView() {
       {/* Slot Bookings & Auction Sales Management */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2">
         {/* Bookings Queue */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <div className="bg-white p-5 rounded-md border border-slate-200 shadow-sm space-y-3">
           <h2 className="text-sm font-bold text-slate-800 flex items-center justify-between">
             <span>Arrival Bookings ({bookings.length})</span>
             <span className="text-xs font-normal text-slate-400">Nashik Yard Gate</span>
@@ -222,7 +222,7 @@ export default function MandiView() {
             {bookings.map((b) => (
               <div
                 key={b.id}
-                className="p-4 rounded-xl border border-slate-200 bg-slate-50/50 space-y-2.5"
+                className="p-4 rounded-md border border-slate-200 bg-slate-50/50 space-y-2.5"
               >
                 <div className="flex items-center justify-between">
                   <div>
@@ -232,7 +232,7 @@ export default function MandiView() {
                     </p>
                   </div>
                   <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${
                       b.status === 'COMPLETED'
                         ? 'bg-emerald-100 text-emerald-800'
                         : b.status === 'CONFIRMED'
@@ -265,13 +265,14 @@ export default function MandiView() {
                 {isAgent && b.status === 'CONFIRMED' && (
                   <div className="pt-1 flex justify-end">
                     <Button
-                      className="text-xs bg-emerald-700 hover:bg-emerald-800"
+                      className="text-xs bg-emerald-700 hover:bg-emerald-800 inline-flex items-center gap-1.5"
                       onClick={() => {
                         setShowSaleModal(b);
                         setActualQty(String(b.expectedQuantityKg));
                       }}
                     >
-                      ⚖️ Record Actual Arrival & Auction Sale →
+                      <ScaleIcon className="w-3.5 h-3.5" />
+                      Record Actual Arrival & Auction Sale →
                     </Button>
                   </div>
                 )}
@@ -281,7 +282,7 @@ export default function MandiView() {
         </div>
 
         {/* Recorded Ground-Truth Sales & Payouts */}
-        <div className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm space-y-3">
+        <div className="bg-white p-5 rounded-md border border-slate-200 shadow-sm space-y-3">
           <h2 className="text-sm font-bold text-slate-800 flex items-center justify-between">
             <span>Ground-Truth Mandi Sales ({sales.length})</span>
             <span className="text-xs font-normal text-emerald-700">Net Payouts Disbursed</span>
@@ -291,7 +292,7 @@ export default function MandiView() {
             {sales.map((s) => (
               <div
                 key={s.id}
-                className="p-4 rounded-xl border border-emerald-200 bg-emerald-50/40 space-y-2"
+                className="p-4 rounded-md border border-emerald-200 bg-emerald-50/40 space-y-2"
               >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-bold text-slate-800">{s.cropName}</span>
@@ -327,15 +328,20 @@ export default function MandiView() {
       {/* Book Slot Modal (Farmer side with cost comparison!) */}
       {showBookModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">Book Mandi Arrival Slot</h3>
-              <button onClick={() => setShowBookModal(null)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setShowBookModal(null)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleBookSlot} className="space-y-3">
               {/* Cost Basis Context Banner (Prompt 11.6 - Informed Decision, Not Blind Booking!) */}
-              <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs text-emerald-900 space-y-1">
-                <span className="font-bold block">📊 Informed Booking Decision:</span>
+              <div className="p-3 bg-emerald-50 rounded-md border border-emerald-200 text-xs text-emerald-900 space-y-1">
+                <span className="font-bold flex items-center gap-1.5">
+                  <ScaleIcon className="w-3.5 h-3.5 text-emerald-700" />
+                  Informed Booking Decision:
+                </span>
                 <p>
                   Your Cultivation Cost Basis: <strong className="text-emerald-800">₹32.96 / kg</strong>. Expected Mandi Modal Wholesale Price:{' '}
                   <strong className="text-blue-800">₹68.50 / kg</strong>.
@@ -347,7 +353,7 @@ export default function MandiView() {
                 <select
                   value={bookCrop}
                   onChange={(e) => setBookCrop(e.target.value)}
-                  className="w-full text-xs px-3 py-2 border rounded-lg"
+                  className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md"
                 >
                   <option value="Organic Pomegranate (Bhagwa)">Organic Pomegranate (Bhagwa) — Plot A</option>
                   <option value="Thompson Seedless Grapes">Thompson Seedless Grapes — Plot B</option>
@@ -364,7 +370,7 @@ export default function MandiView() {
                 id="bookQty"
               />
 
-              <div className="p-2.5 bg-slate-50 rounded-lg text-xs text-slate-500">
+              <div className="p-2.5 bg-slate-50 border border-slate-200 rounded text-xs text-slate-500">
                 <span>Yard Window: {showBookModal.timeWindow} • Commission: 2.5%</span>
               </div>
 
@@ -380,10 +386,12 @@ export default function MandiView() {
       {/* Record Mandi Sale Modal (Mandi Agent side) */}
       {showSaleModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">Record Arrival & Auction Sale</h3>
-              <button onClick={() => setShowSaleModal(null)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setShowSaleModal(null)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleRecordSale} className="space-y-3">
               <div className="grid grid-cols-2 gap-2">
@@ -394,7 +402,7 @@ export default function MandiView() {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Grading</label>
-                  <select value={grade} onChange={(e) => setGrade(e.target.value)} className="w-full text-xs px-3 py-2 border rounded-lg">
+                  <select value={grade} onChange={(e) => setGrade(e.target.value)} className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md">
                     <option value="Grade A">Grade A</option>
                     <option value="Grade B">Grade B</option>
                     <option value="Grade C">Grade C</option>
@@ -404,7 +412,7 @@ export default function MandiView() {
               </div>
 
               {actualQty && salePrice && (
-                <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs space-y-1">
+                <div className="p-3 bg-emerald-50 rounded-md border border-emerald-200 text-xs space-y-1">
                   <div className="flex justify-between">
                     <span className="text-slate-500">Gross Auction Value:</span>
                     <strong className="text-slate-800">
@@ -434,10 +442,12 @@ export default function MandiView() {
       {/* Publish Slot Modal (Agent) */}
       {showCreateSlotModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">Publish Mandi Arrival Slot</h3>
-              <button onClick={() => setShowCreateSlotModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setShowCreateSlotModal(false)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleCreateSlot} className="space-y-3">
               <Input label="Slot Date" type="date" value={slotDate} onChange={(e) => setSlotDate(e.target.value)} required id="slotDate" />

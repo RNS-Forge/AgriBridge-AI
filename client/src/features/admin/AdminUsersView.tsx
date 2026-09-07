@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Input } from '../../components/ui/index.js';
+import { CheckCircleIcon, CloseIcon, ShieldIcon } from '../../components/ui/icons/index.js';
 
 export default function AdminUsersView() {
   const [users, setUsers] = useState<any[]>([]);
@@ -119,15 +120,15 @@ export default function AdminUsersView() {
   const pendingRequests = requests.filter((r) => r.status === 'PENDING_APPROVAL');
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-5">
       {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-              User Management & Admin Approval Queue (Prompt 14)
+            <h1 className="text-xl font-bold text-slate-900 tracking-tight">
+              User Management & Admin Approval Queue
             </h1>
-            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-purple-100 text-purple-800 border border-purple-200">
+            <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-purple-50 text-purple-800 border border-purple-200">
               Admin Authority
             </span>
           </div>
@@ -136,24 +137,24 @@ export default function AdminUsersView() {
           </p>
         </div>
 
-        <Button onClick={() => setShowDirectCreateModal(true)} className="text-xs bg-emerald-700 hover:bg-emerald-800">
+        <Button onClick={() => setShowDirectCreateModal(true)} className="text-xs !bg-emerald-700 hover:!bg-emerald-800 rounded-md">
           + Direct Create User (Instant Active)
         </Button>
       </div>
 
       {/* Tabs */}
-      <div className="flex items-center gap-3 border-b border-slate-200 pb-2">
+      <div className="flex items-center gap-2 border-b border-slate-200 pb-2">
         <button
           onClick={() => setActiveTab('REQUESTS')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 ${
+          className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-colors flex items-center gap-2 ${
             activeTab === 'REQUESTS'
-              ? 'bg-amber-600 text-white shadow-sm'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              ? 'bg-amber-700 text-white shadow-xs'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
           <span>Pending Approvals Queue</span>
           {pendingRequests.length > 0 && (
-            <span className="bg-white text-amber-800 text-[10px] px-2 py-0.5 rounded-full font-extrabold">
+            <span className="bg-white text-amber-900 text-[10px] px-1.5 py-0.2 rounded font-bold">
               {pendingRequests.length}
             </span>
           )}
@@ -161,14 +162,14 @@ export default function AdminUsersView() {
 
         <button
           onClick={() => setActiveTab('USERS')}
-          className={`px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 ${
+          className={`px-3.5 py-1.5 rounded-md text-xs font-bold transition-colors flex items-center gap-2 ${
             activeTab === 'USERS'
-              ? 'bg-slate-900 text-white shadow-sm'
-              : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+              ? 'bg-slate-900 text-white shadow-xs'
+              : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
           }`}
         >
           <span>Active User Directory</span>
-          <span className="bg-slate-200 text-slate-800 text-[10px] px-2 py-0.5 rounded-full font-bold">
+          <span className="bg-slate-200 text-slate-800 text-[10px] px-1.5 py-0.2 rounded font-bold">
             {users.length}
           </span>
         </button>
@@ -176,12 +177,12 @@ export default function AdminUsersView() {
 
       {/* Tab 1: Pending Approvals Queue */}
       {activeTab === 'REQUESTS' && (
-        <div className="space-y-4">
+        <div className="space-y-3">
           {requests.length > 0 ? (
             requests.map((req) => (
               <div
                 key={req.id}
-                className={`p-5 rounded-2xl border shadow-sm space-y-3 ${
+                className={`p-4 rounded-md border shadow-xs space-y-3 ${
                   req.status === 'PENDING_APPROVAL'
                     ? 'bg-white border-amber-300 ring-1 ring-amber-300/40'
                     : 'bg-slate-50 border-slate-200 opacity-80'
@@ -190,10 +191,10 @@ export default function AdminUsersView() {
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-2 border-b border-slate-100">
                   <div>
                     <div className="flex items-center gap-2">
-                      <h3 className="text-sm font-bold text-slate-800">
+                      <h3 className="text-xs font-bold text-slate-900">
                         {req.firstName} {req.lastName}
                       </h3>
-                      <span className="px-2.5 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800">
+                      <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-50 text-emerald-800 border border-emerald-200">
                         Role: {req.requestedRole}
                       </span>
                     </div>
@@ -204,12 +205,12 @@ export default function AdminUsersView() {
 
                   <div className="flex items-center gap-2">
                     <span
-                      className={`px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${
+                      className={`px-2.5 py-0.5 rounded text-[10px] font-bold uppercase border ${
                         req.status === 'PENDING_APPROVAL'
-                          ? 'bg-amber-100 text-amber-800 border border-amber-200'
+                          ? 'bg-amber-50 text-amber-800 border-amber-200'
                           : req.status === 'APPROVED'
-                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
-                          : 'bg-red-100 text-red-800 border border-red-200'
+                          ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                          : 'bg-rose-50 text-rose-800 border-rose-200'
                       }`}
                     >
                       {req.status}
@@ -218,38 +219,42 @@ export default function AdminUsersView() {
                 </div>
 
                 <div className="text-xs text-slate-600 grid grid-cols-1 md:grid-cols-2 gap-2">
-                  <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                  <div className="bg-slate-50 p-2.5 rounded-md border border-slate-200">
                     <span className="text-[10px] text-slate-400 block font-semibold">REQUEST CREATED BY</span>
                     <strong className="text-slate-700">{req.requestedBy}</strong>
                   </div>
-                  <div className="bg-slate-50 p-2.5 rounded-lg border border-slate-200">
+                  <div className="bg-slate-50 p-2.5 rounded-md border border-slate-200">
                     <span className="text-[10px] text-slate-400 block font-semibold">APPLICANT NOTES</span>
                     <span className="italic text-slate-700">{req.notes || 'None'}</span>
                   </div>
                 </div>
 
                 {req.status === 'PENDING_APPROVAL' && (
-                  <div className="pt-2 border-t border-slate-100 flex items-center justify-end gap-2">
+                  <div className="pt-2 flex items-center justify-end gap-2 border-t border-slate-100">
                     <Button
                       variant="outline"
-                      className="text-xs px-3 py-1.5 text-red-600 border-red-300 hover:bg-red-50"
+                      className="text-xs px-3 py-1.5 text-red-600 border-red-200 hover:bg-red-50 rounded-md"
                       onClick={() => setRejectModalId(req.id)}
                     >
-                      Reject Request
+                      <span className="flex items-center gap-1">
+                        <CloseIcon className="w-3.5 h-3.5" /> Reject
+                      </span>
                     </Button>
                     <Button
-                      className="text-xs px-4 py-1.5 bg-emerald-700 hover:bg-emerald-800"
+                      className="text-xs px-4 py-1.5 !bg-emerald-700 hover:!bg-emerald-800 text-white rounded-md shadow-xs"
                       onClick={() => handleApprove(req.id)}
                     >
-                      ✓ Approve & Create Active User
+                      <span className="flex items-center gap-1.5">
+                        <CheckCircleIcon className="w-3.5 h-3.5" /> Approve & Create Active User
+                      </span>
                     </Button>
                   </div>
                 )}
               </div>
             ))
           ) : (
-            <div className="p-12 text-center bg-white rounded-2xl border border-slate-200">
-              <p className="text-sm text-slate-500">No user requests in the queue.</p>
+            <div className="p-8 text-center bg-white rounded-md border border-slate-200">
+              <p className="text-xs text-slate-500">No user requests in the queue.</p>
             </div>
           )}
         </div>
@@ -257,50 +262,45 @@ export default function AdminUsersView() {
 
       {/* Tab 2: User Directory */}
       {activeTab === 'USERS' && (
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-          <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-            <h3 className="text-sm font-bold text-slate-800">
+        <div className="bg-white rounded-md border border-slate-200 shadow-xs overflow-hidden">
+          <div className="px-5 py-3.5 border-b border-slate-200 flex items-center justify-between">
+            <h3 className="text-sm font-bold text-slate-900">
               Platform Registered Users ({users.length})
             </h3>
             <span className="text-xs text-slate-500 font-mono">
-              Default password for all: AgriBridgeAI@2026
+              Live Directory
             </span>
           </div>
 
           <div className="overflow-x-auto">
-            <table className="w-full text-xs text-left text-slate-600">
-              <thead className="text-[10px] font-bold text-slate-400 uppercase bg-slate-50 border-b border-slate-200">
+            <table className="w-full text-left text-xs">
+              <thead className="bg-slate-50 border-b border-slate-200 text-slate-600 uppercase text-[10px] font-bold tracking-wider">
                 <tr>
-                  <th className="px-6 py-3">Name</th>
-                  <th className="px-6 py-3">Email</th>
-                  <th className="px-6 py-3">Roles</th>
-                  <th className="px-6 py-3">Phone</th>
-                  <th className="px-6 py-3">Status</th>
-                  <th className="px-6 py-3 text-right">Actions</th>
+                  <th className="px-4 py-2.5">User</th>
+                  <th className="px-4 py-2.5">Roles</th>
+                  <th className="px-4 py-2.5">Phone</th>
+                  <th className="px-4 py-2.5">Status</th>
+                  <th className="px-4 py-2.5 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100">
                 {users.map((u) => (
-                  <tr key={u.id} className="hover:bg-slate-50 transition">
-                    <td className="px-6 py-3.5 font-bold text-slate-800">
-                      {u.firstName} {u.lastName}
+                  <tr key={u.id} className="hover:bg-slate-50 transition-colors">
+                    <td className="px-4 py-2.5">
+                      <p className="font-bold text-slate-900">{u.firstName} {u.lastName}</p>
+                      <p className="text-slate-500 text-[11px] font-mono">{u.email}</p>
                     </td>
-                    <td className="px-6 py-3.5 font-mono text-slate-700">
-                      {u.email}
-                    </td>
-                    <td className="px-6 py-3.5">
+                    <td className="px-4 py-2.5">
                       <div className="flex flex-wrap gap-1">
-                        {u.roles?.map((r: string) => (
+                        {u.roles.map((r: string) => (
                           <span
                             key={r}
-                            className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                            className={`px-1.5 py-0.5 rounded text-[10px] font-bold uppercase border ${
                               r === 'ADMIN'
-                                ? 'bg-purple-100 text-purple-800'
+                                ? 'bg-purple-50 text-purple-800 border-purple-200'
                                 : r === 'ADMIN_MAKER'
-                                ? 'bg-indigo-100 text-indigo-800'
-                                : r === 'FARMER'
-                                ? 'bg-emerald-100 text-emerald-800'
-                                : 'bg-slate-100 text-slate-700'
+                                ? 'bg-indigo-50 text-indigo-800 border-indigo-200'
+                                : 'bg-slate-100 text-slate-700 border-slate-200'
                             }`}
                           >
                             {r}
@@ -308,25 +308,25 @@ export default function AdminUsersView() {
                         ))}
                       </div>
                     </td>
-                    <td className="px-6 py-3.5 text-slate-500">
-                      {u.phone || '—'}
-                    </td>
-                    <td className="px-6 py-3.5">
+                    <td className="px-4 py-2.5 text-slate-600 font-mono text-[11px]">{u.phone || '—'}</td>
+                    <td className="px-4 py-2.5">
                       <span
-                        className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase ${
+                        className={`px-2 py-0.5 rounded text-[10px] font-bold uppercase border ${
                           u.status === 'active'
-                            ? 'bg-emerald-100 text-emerald-800'
-                            : 'bg-red-100 text-red-800'
+                            ? 'bg-emerald-50 text-emerald-800 border-emerald-200'
+                            : 'bg-rose-50 text-rose-800 border-rose-200'
                         }`}
                       >
                         {u.status}
                       </span>
                     </td>
-                    <td className="px-6 py-3.5 text-right">
+                    <td className="px-4 py-2.5 text-right">
                       <button
                         onClick={() => handleToggleStatus(u.id, u.status)}
-                        className={`text-xs font-semibold hover:underline ${
-                          u.status === 'active' ? 'text-red-600' : 'text-emerald-600'
+                        className={`px-2.5 py-1 rounded text-[11px] font-bold transition-colors border ${
+                          u.status === 'active'
+                            ? 'text-rose-700 border-rose-200 hover:bg-rose-50'
+                            : 'text-emerald-700 border-emerald-200 hover:bg-emerald-50'
                         }`}
                       >
                         {u.status === 'active' ? 'Suspend' : 'Activate'}
@@ -343,14 +343,19 @@ export default function AdminUsersView() {
       {/* Direct Create User Modal */}
       {showDirectCreateModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
-            <div className="flex justify-between items-center border-b pb-3">
-              <h3 className="text-base font-bold text-slate-800">Directly Create Active User</h3>
-              <button onClick={() => setShowDirectCreateModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+          <div className="bg-white rounded-md max-w-md w-full p-5 space-y-3 shadow-lg border border-slate-200">
+            <div className="flex justify-between items-center border-b pb-2.5">
+              <h3 className="text-sm font-bold text-slate-900">Directly Create Active User</h3>
+              <button onClick={() => setShowDirectCreateModal(false)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleDirectCreateUser} className="space-y-3">
-              <div className="p-3 bg-purple-50 rounded-xl border border-purple-200 text-xs text-purple-900">
-                <strong>Super Admin Privilege:</strong> Admin can create any role directly (including Admin Maker and Admin) without going through approval. Password will be set to default <code>AgriBridgeAI@2026</code>.
+              <div className="p-2.5 bg-purple-50 rounded-md border border-purple-200 text-xs text-purple-900 flex items-start gap-2">
+                <ShieldIcon className="w-4 h-4 text-purple-700 flex-shrink-0 mt-0.5" />
+                <div>
+                  <strong>Super Admin Privilege:</strong> Admin can create any role directly (including Admin Maker and Admin) without going through approval. Password will be set to default <code>AgriBridgeAI@2026</code>.
+                </div>
               </div>
 
               <div>
@@ -358,7 +363,7 @@ export default function AdminUsersView() {
                 <select
                   value={role}
                   onChange={(e) => setRole(e.target.value)}
-                  className="w-full text-xs px-3 py-2 border rounded-lg bg-white"
+                  className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-800"
                 >
                   <option value="ADMIN_MAKER">ADMIN_MAKER (Under Admin; can request roles)</option>
                   <option value="ADMIN">ADMIN (Super Administrator)</option>
@@ -379,8 +384,8 @@ export default function AdminUsersView() {
               <Input label="Phone Number" type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+91 98765 00000" id="phone" />
 
               <div className="pt-2 flex justify-end gap-2">
-                <Button variant="outline" type="button" onClick={() => setShowDirectCreateModal(false)}>Cancel</Button>
-                <Button type="submit">Create Active User</Button>
+                <Button variant="outline" type="button" onClick={() => setShowDirectCreateModal(false)} className="rounded-md">Cancel</Button>
+                <Button type="submit" className="rounded-md !bg-emerald-700 hover:!bg-emerald-800 text-white">Create Active User</Button>
               </div>
             </form>
           </div>
@@ -390,10 +395,12 @@ export default function AdminUsersView() {
       {/* Reject Request Modal */}
       {rejectModalId && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
-            <div className="flex justify-between items-center border-b pb-3">
-              <h3 className="text-base font-bold text-slate-800">Reject User Request</h3>
-              <button onClick={() => setRejectModalId(null)} className="text-slate-400 hover:text-slate-600">✕</button>
+          <div className="bg-white rounded-md max-w-md w-full p-5 space-y-3 shadow-lg border border-slate-200">
+            <div className="flex justify-between items-center border-b pb-2.5">
+              <h3 className="text-sm font-bold text-slate-900">Reject User Request</h3>
+              <button onClick={() => setRejectModalId(null)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleReject} className="space-y-3">
               <Input
@@ -405,8 +412,8 @@ export default function AdminUsersView() {
                 id="rejectReason"
               />
               <div className="pt-2 flex justify-end gap-2">
-                <Button variant="outline" type="button" onClick={() => setRejectModalId(null)}>Cancel</Button>
-                <Button type="submit" className="bg-red-600 hover:bg-red-700 text-white">Confirm Rejection</Button>
+                <Button variant="outline" type="button" onClick={() => setRejectModalId(null)} className="rounded-md">Cancel</Button>
+                <Button type="submit" className="!bg-red-600 hover:!bg-red-700 text-white rounded-md">Confirm Rejection</Button>
               </div>
             </form>
           </div>

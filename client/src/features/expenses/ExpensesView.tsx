@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input } from '../../components/ui/index.js';
+import { Button, Input, CloseIcon } from '../../components/ui/index.js';
 
 export default function ExpensesView() {
   const [expenses, setExpenses] = useState<any[]>([]);
@@ -85,7 +85,7 @@ export default function ExpensesView() {
 
       {/* Hero: The Cost Basis Aggregation Card */}
       {costSummary && (
-        <div className="bg-gradient-to-br from-white to-emerald-50/40 p-6 rounded-2xl border-2 border-emerald-300 shadow-sm space-y-4">
+        <div className="bg-gradient-to-br from-white to-emerald-50/40 p-6 rounded-md border border-emerald-300 shadow-sm space-y-4">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-3 border-b border-emerald-200">
             <div>
               <span className="text-[10px] font-bold uppercase tracking-wider text-emerald-800">
@@ -105,19 +105,19 @@ export default function ExpensesView() {
 
           {/* 4 Stat Cards */}
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 text-center">
-            <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
+            <div className="bg-white p-3 rounded-md border border-slate-200 shadow-xs">
               <span className="text-[10px] font-bold text-slate-400 uppercase">Summed Cultivation Cost</span>
               <p className="text-lg font-bold text-slate-800 mt-1">₹{costSummary.totalExpense?.toLocaleString()}</p>
             </div>
-            <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
+            <div className="bg-white p-3 rounded-md border border-slate-200 shadow-xs">
               <span className="text-[10px] font-bold text-slate-400 uppercase">Cost Per Acre</span>
               <p className="text-lg font-bold text-slate-800 mt-1">₹{costSummary.costPerAcre?.toLocaleString()}</p>
             </div>
-            <div className="bg-white p-3 rounded-xl border border-emerald-400 bg-emerald-50/50 shadow-xs">
+            <div className="bg-white p-3 rounded-md border border-emerald-400 bg-emerald-50/50 shadow-xs">
               <span className="text-[10px] font-bold text-emerald-800 uppercase">Verified Cost Basis</span>
               <p className="text-lg font-bold text-emerald-900 mt-1">₹{costSummary.costPerKg} / kg</p>
             </div>
-            <div className="bg-white p-3 rounded-xl border border-slate-200 shadow-xs">
+            <div className="bg-white p-3 rounded-md border border-slate-200 shadow-xs">
               <span className="text-[10px] font-bold text-slate-400 uppercase">Mandi Benchmark</span>
               <p className="text-lg font-bold text-blue-700 mt-1">₹68.50 / kg</p>
             </div>
@@ -133,7 +133,7 @@ export default function ExpensesView() {
                 {Object.entries(costSummary.categoryBreakdown).map(([cat, amt]: [string, any]) => {
                   const pct = Math.round((amt / costSummary.totalExpense) * 100);
                   return (
-                    <div key={cat} className="bg-white p-2.5 rounded-lg border border-slate-200 text-xs">
+                    <div key={cat} className="bg-white p-2.5 rounded border border-slate-200 text-xs">
                       <div className="flex justify-between items-center text-[10px] text-slate-500 font-semibold uppercase">
                         <span>{cat}</span>
                         <span>{pct}%</span>
@@ -149,7 +149,7 @@ export default function ExpensesView() {
       )}
 
       {/* Expenses Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="bg-white rounded-md border border-slate-200 shadow-sm overflow-hidden">
         <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
           <h3 className="text-sm font-bold text-slate-800">
             Recorded Cultivation Expenses ({expenses.length} Entries)
@@ -175,7 +175,7 @@ export default function ExpensesView() {
               {expenses.map((exp) => (
                 <tr key={exp.id} className="hover:bg-slate-50/80 transition">
                   <td className="px-6 py-3.5 font-bold text-slate-800 flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                    <span className="w-2 h-2 rounded bg-emerald-500" />
                     {exp.category}
                   </td>
                   <td className="px-6 py-3.5 font-bold text-slate-900">
@@ -213,10 +213,12 @@ export default function ExpensesView() {
       {/* Add Expense Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">Log Field Expense</h3>
-              <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleAddExpense} className="space-y-3">
               <div className="grid grid-cols-2 gap-2">
@@ -225,7 +227,7 @@ export default function ExpensesView() {
                   <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
-                    className="w-full text-xs px-3 py-2 border rounded-lg"
+                    className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md"
                   >
                     <option value="SEEDS">Seeds / Saplings</option>
                     <option value="FERTILIZER">Fertilizer & Nutrients</option>

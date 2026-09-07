@@ -141,7 +141,7 @@ export default function Farmers() {
   return (
     <div className="p-6 md:p-8 space-y-8">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-md border border-gray-200 p-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
@@ -154,7 +154,7 @@ export default function Farmers() {
           </div>
           <Button
             onClick={() => setShowAddModal(true)}
-            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+            className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md transition-colors duration-200"
           >
             <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -170,7 +170,7 @@ export default function Farmers() {
           <p>Loading farmer records...</p>
         </div>
       ) : (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <div className="bg-white rounded-md border border-gray-200 overflow-hidden">
           <table className="w-full text-left border-collapse">
             <thead>
               <tr className="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -211,7 +211,7 @@ export default function Farmers() {
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold border ${
+                      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs font-semibold border ${
                         farmer.kycStatus === 'verified'
                           ? 'bg-emerald-600/10 text-emerald-600 border-emerald-600/20'
                           : 'bg-amber-600/10 text-amber-600 border-amber-600/20'
@@ -229,7 +229,7 @@ export default function Farmers() {
                     {farmer.kycStatus !== 'verified' && (
                       <Button
                         onClick={() => handleApproveKYC(farmer.id)}
-                        className="px-3 py-1.5 bg-white border border-gray-200 text-gray-700 text-xs font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                        className="px-3 py-1.5 bg-white border border-gray-200 text-gray-700 text-xs font-semibold rounded-md hover:bg-gray-50 transition-colors duration-200"
                       >
                         Approve KYC
                       </Button>
@@ -254,14 +254,14 @@ export default function Farmers() {
       {/* Add Farmer Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
-          <div className="w-full max-w-2xl bg-white border border-gray-200 rounded-xl overflow-hidden max-h-[90vh] overflow-y-auto shadow-sm">
+          <div className="w-full max-w-2xl bg-white border border-gray-200 rounded-md overflow-hidden max-h-[90vh] overflow-y-auto shadow-sm">
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <h3 className="text-lg font-semibold text-gray-900">Onboard New Farmer</h3>
               </div>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-lg"
+                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-md"
                 aria-label="Close modal"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -278,7 +278,7 @@ export default function Farmers() {
                     required
                     value={firstName}
                     onChange={e => setFirstName(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="Rajesh"
                   />
                 </div>
@@ -289,7 +289,7 @@ export default function Farmers() {
                     required
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="Sharma"
                   />
                 </div>
@@ -302,7 +302,7 @@ export default function Farmers() {
                     required
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="farmer@example.com"
                   />
                 </div>
@@ -313,7 +313,7 @@ export default function Farmers() {
                     required
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="••••••••"
                   />
                 </div>
@@ -326,7 +326,7 @@ export default function Farmers() {
                     required
                     value={aadhaarNumber}
                     onChange={e => setAadhaarNumber(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="1234-5678-9012"
                   />
                 </div>
@@ -337,7 +337,7 @@ export default function Farmers() {
                     required
                     value={registrationNumber}
                     onChange={e => setRegistrationNumber(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="REG-001"
                   />
                 </div>
@@ -350,7 +350,7 @@ export default function Farmers() {
                     required
                     value={bankName}
                     onChange={e => setBankName(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="State Bank"
                   />
                 </div>
@@ -361,7 +361,7 @@ export default function Farmers() {
                     required
                     value={accountNumber}
                     onChange={e => setAccountNumber(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="1234567890"
                   />
                 </div>
@@ -372,7 +372,7 @@ export default function Farmers() {
                     required
                     value={ifscCode}
                     onChange={e => setIfscCode(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="SBIN0001234"
                   />
                 </div>
@@ -385,7 +385,7 @@ export default function Farmers() {
                     required
                     value={farmName}
                     onChange={e => setFarmName(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="Green Valley Farm"
                   />
                 </div>
@@ -396,14 +396,14 @@ export default function Farmers() {
                     required
                     value={totalAreaHectares}
                     onChange={e => setTotalAreaHectares(Number(e.target.value))}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="5"
                   />
                 </div>
               </div>
               <Button
                 type="submit"
-                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md transition-colors duration-200"
               >
                 Register Farmer
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

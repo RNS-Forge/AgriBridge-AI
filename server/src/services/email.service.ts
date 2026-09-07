@@ -112,30 +112,33 @@ function buildOtpEmailHtml({ otp, purpose }: OtpEmailParams): string {
   <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#eef2f1; padding: 32px 16px;">
     <tr>
       <td align="center">
-        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background-color:#ffffff; border-radius:14px; overflow:hidden; box-shadow: 0 6px 24px rgba(16,24,40,0.08);">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px; width:100%; background-color:#ffffff; border-radius:6px; overflow:hidden; border: 1px solid #e2e8f0; box-shadow: 0 4px 12px rgba(16,24,40,0.05);">
 
           <!-- Hero banner -->
           <tr>
             <td style="position:relative; padding:0;">
-              <div style="background: linear-gradient(135deg, rgba(6,95,70,0.88) 0%, rgba(13,148,136,0.80) 55%, rgba(16,185,129,0.55) 100%); padding: 44px 36px;">
+              <div style="background: linear-gradient(135deg, #065f46 0%, #0d9488 100%); padding: 36px 32px;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                   <tr>
                     <td>
                       <table role="presentation" cellpadding="0" cellspacing="0">
                         <tr>
-                          <td style="background:#ffffff; border-radius:10px; width:44px; height:44px; text-align:center; vertical-align:middle;">
-                            <span style="font-size:22px; line-height:44px;">🌱</span>
+                          <td style="background:#ffffff; border-radius:4px; width:36px; height:36px; text-align:center; vertical-align:middle;">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#059669" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle;">
+                              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                              <path d="M9 12l2 2 4-4"/>
+                            </svg>
                           </td>
                           <td style="padding-left:12px;">
-                            <span style="color:#ffffff; font-size:24px; font-weight:700; letter-spacing:0.3px; font-family: Arial, Helvetica, sans-serif;">AgriBridge AI</span>
+                            <span style="color:#ffffff; font-size:22px; font-weight:700; letter-spacing:0.3px; font-family: Arial, Helvetica, sans-serif;">AgriBridge AI</span>
                           </td>
                         </tr>
                       </table>
                     </td>
                   </tr>
                   <tr>
-                    <td style="padding-top:18px;">
-                      <span style="color:rgba(255,255,255,0.95); font-size:14px; letter-spacing:0.2px;">Connecting Mandi Scales to Global Workflows</span>
+                    <td style="padding-top:14px;">
+                      <span style="color:rgba(255,255,255,0.92); font-size:13px; letter-spacing:0.2px;">Connecting Mandi Scales to Global Agricultural Workflows</span>
                     </td>
                   </tr>
                 </table>
@@ -158,7 +161,7 @@ function buildOtpEmailHtml({ otp, purpose }: OtpEmailParams): string {
             <td style="padding: 20px 40px;">
               <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
                 <tr>
-                  <td align="center" style="background:#f0fdf9; border:2px dashed #10b981; border-radius:10px; padding:24px;">
+                  <td align="center" style="background:#f0fdf9; border:2px dashed #10b981; border-radius:4px; padding:24px;">
                     <span style="font-size:34px; font-weight:700; color:#0d9488; letter-spacing:8px; font-family: 'Courier New', monospace;">${otp}</span>
                   </td>
                 </tr>
@@ -169,10 +172,10 @@ function buildOtpEmailHtml({ otp, purpose }: OtpEmailParams): string {
           <!-- Notice -->
           <tr>
             <td style="padding: 4px 40px 8px 40px;">
-              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fff7ed; border-radius:8px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fff7ed; border-radius:4px; border: 1px solid #fed7aa;">
                 <tr>
                   <td style="padding:14px 16px; color:#92400e; font-size:13px; line-height:1.6;">
-                    <strong>⏱ Expires in 10 minutes.</strong> For your security, never share this code with anyone — AgriBridge staff will never ask for it.
+                    <strong>Expires in 10 minutes.</strong> For your security, never share this code with anyone — AgriBridge staff will never ask for it.
                   </td>
                 </tr>
               </table>
@@ -197,11 +200,11 @@ function buildOtpEmailHtml({ otp, purpose }: OtpEmailParams): string {
           <!-- Footer -->
           <tr>
             <td style="padding: 24px 40px 32px 40px;" align="center">
-              <p style="color:#9ca3af; font-size:12px; margin:0 0 6px 0;">
-                🚜 Farm &nbsp;·&nbsp; 📦 Warehouse &nbsp;·&nbsp; 🚛 Logistics &nbsp;·&nbsp; 🚢 Global Trade
+              <p style="color:#64748b; font-size:12px; margin:0 0 6px 0; font-weight:500;">
+                Farm Management &nbsp;·&nbsp; Mandi Benchmarking &nbsp;·&nbsp; Logistics Tracking &nbsp;·&nbsp; Global Trade
               </p>
               <p style="color:#9ca3af; font-size:12px; margin:0;">
-                © 2024 AgriBridge AI. All rights reserved.
+                © 2026 AgriBridge AI. All rights reserved.
               </p>
             </td>
           </tr>

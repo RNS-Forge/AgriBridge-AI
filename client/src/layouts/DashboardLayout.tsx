@@ -253,7 +253,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
               <span>/</span>
               <span className="text-slate-800 font-bold">{currentPageLabel}</span>
             </div>
-            <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+            <span className="hidden sm:inline-flex px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
               Phase 1 Live
             </span>
           </div>
@@ -263,25 +263,27 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             {import.meta.env.VITE_DEMO !== 'false' && (
               <a
                 href="/demo/login"
-                className="text-xs font-semibold px-2.5 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg hover:bg-emerald-100 flex items-center gap-1.5 transition-colors shadow-xs"
+                className="text-xs font-semibold px-2.5 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-md hover:bg-emerald-100 flex items-center gap-1.5 transition-colors shadow-xs"
                 title="Open 1-Click Demo Sandbox"
               >
-                <span>🎮</span>
+                <svg className="w-3.5 h-3.5 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.414 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z" />
+                </svg>
                 <span className="hidden md:inline">Demo Sandbox</span>
               </a>
             )}
 
             {/* Role Badge */}
-            <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-100/90 rounded-lg border border-slate-200 text-xs">
-              <span className="text-slate-500 text-[11px] font-medium">Role:</span>
-              <span className="font-bold text-emerald-800 uppercase tracking-wide text-[11px]">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 rounded-md border border-slate-200 text-xs">
+              <span className="text-slate-500 text-[10px] font-medium">Role:</span>
+              <span className="font-bold text-emerald-800 uppercase tracking-wide text-[10px]">
                 {primaryRole.replace('_', ' ')}
               </span>
             </div>
 
             {/* User Profile avatar */}
             <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-700 to-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
+              <div className="w-7 h-7 rounded-md bg-emerald-800 border border-emerald-700 text-white font-bold text-xs flex items-center justify-center shadow-xs">
                 {user?.firstName?.[0] || 'U'}
               </div>
               <div className="hidden sm:block text-left text-xs">

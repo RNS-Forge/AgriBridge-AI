@@ -81,14 +81,14 @@ export default function Register() {
 
         {/* ───── White Glassmorphic Card ───── */}
         <div className="relative z-20 w-full max-w-[460px] ml-auto h-screen flex items-center px-4 py-6">
-          <div className="w-full bg-white/75 backdrop-blur-xl border border-white/60 rounded-2xl shadow-2xl p-7 my-auto space-y-4 max-h-[calc(100vh-32px)] overflow-y-auto scrollbar-hide">
+          <div className="w-full bg-white/75 backdrop-blur-xl border border-white/60 rounded-md shadow-2xl p-7 my-auto space-y-4 max-h-[calc(100vh-32px)] overflow-y-auto scrollbar-hide">
             
             {/* Platform Name */}
             <div className="flex items-center justify-between pb-1 border-b border-slate-200/60">
               <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
                 AgriBridge<span className="text-emerald-600">AI</span>
               </h2>
-              <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded-full bg-slate-100 text-slate-700 border border-slate-200">
+              <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded bg-slate-100 text-slate-700 border border-slate-200">
                 Approval Queue
               </span>
             </div>
@@ -96,7 +96,7 @@ export default function Register() {
             {submittedRequest ? (
               /* Success confirmation state */
               <div className="space-y-4 py-4 text-center">
-                <div className="w-14 h-14 mx-auto bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center">
+                <div className="w-14 h-14 mx-auto bg-emerald-100 text-emerald-600 rounded-md flex items-center justify-center">
                   <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                   </svg>
@@ -107,7 +107,7 @@ export default function Register() {
                     Per platform security policy, open self-signup is disabled. Your account request for <strong className="text-emerald-700">{submittedRequest.email}</strong> as <strong className="text-emerald-700">{submittedRequest.requestedRole}</strong> has been routed to the <strong>Admin Approval Queue</strong>.
                   </p>
                 </div>
-                <div className="bg-slate-50 p-3 rounded-xl border border-slate-200 text-left text-xs space-y-1">
+                <div className="bg-slate-50 p-3 rounded-md border border-slate-200 text-left text-xs space-y-1">
                   <div className="flex justify-between">
                     <span className="text-slate-500">Request ID:</span>
                     <span className="font-mono font-medium text-slate-700">{submittedRequest.id}</span>
@@ -196,7 +196,7 @@ export default function Register() {
                         id="roleSelect"
                         value={requestedRole}
                         onChange={(e) => setRequestedRole(e.target.value)}
-                        className="w-full text-xs px-3 py-2 border border-slate-300 rounded-lg bg-white/90 text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
+                        className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md bg-white/90 text-slate-800 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500"
                       >
                         <option value="FARMER">Farmer (Cultivation, Cost Basis & Sell)</option>
                         <option value="FARM_MANAGER">Farm Manager (Operations & Inventory)</option>

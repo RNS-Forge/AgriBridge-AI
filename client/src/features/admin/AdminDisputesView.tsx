@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input } from '../../components/ui/index.js';
+import { Button, Input, CloseIcon } from '../../components/ui/index.js';
 
 export default function AdminDisputesView() {
   const [disputes, setDisputes] = useState<any[]>([]);
@@ -59,7 +59,7 @@ export default function AdminDisputesView() {
         {disputes.map((d) => (
           <div
             key={d.id}
-            className={`p-6 rounded-2xl border shadow-sm space-y-4 ${
+            className={`p-6 rounded-md border shadow-sm space-y-4 ${
               d.status === 'OPEN' ? 'bg-white border-amber-300' : 'bg-slate-50 border-slate-200'
             }`}
           >
@@ -68,7 +68,7 @@ export default function AdminDisputesView() {
                 <div className="flex items-center gap-2">
                   <h3 className="text-base font-bold text-slate-800">{d.orderId}</h3>
                   <span
-                    className={`px-2.5 py-0.5 rounded-full text-xs font-bold uppercase ${
+                    className={`px-2.5 py-0.5 rounded text-xs font-bold uppercase ${
                       d.status === 'OPEN'
                         ? 'bg-amber-100 text-amber-800 border border-amber-200'
                         : 'bg-emerald-100 text-emerald-800 border border-emerald-200'
@@ -92,13 +92,13 @@ export default function AdminDisputesView() {
               )}
             </div>
 
-            <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs">
+            <div className="p-3 bg-slate-50 rounded-md border border-slate-200 text-xs">
               <span className="text-slate-400 font-bold block uppercase text-[10px]">Complaint Summary</span>
               <p className="text-slate-800 mt-0.5 leading-relaxed">{d.reason}</p>
             </div>
 
             {d.resolution && (
-              <div className="p-3 bg-emerald-50 rounded-xl border border-emerald-200 text-xs">
+              <div className="p-3 bg-emerald-50 rounded-md border border-emerald-200 text-xs">
                 <span className="text-emerald-800 font-bold block uppercase text-[10px]">Admin Resolution</span>
                 <p className="text-emerald-900 mt-0.5 font-medium">{d.resolution}</p>
               </div>
@@ -110,12 +110,14 @@ export default function AdminDisputesView() {
       {/* Resolve Modal */}
       {resolveModalDispute && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">
                 Resolve Dispute: {resolveModalDispute.orderId}
               </h3>
-              <button onClick={() => setResolveModalDispute(null)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setResolveModalDispute(null)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleResolve} className="space-y-3">
               <Input

@@ -217,7 +217,7 @@ export default function Marketplace() {
   return (
     <div className="p-6 md:p-8 space-y-8">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-md border border-gray-200 p-6">
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
           <div className="space-y-2">
             <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
@@ -231,7 +231,7 @@ export default function Marketplace() {
           {isFpoAdmin && (
             <Button
               onClick={() => setShowAddModal(true)}
-              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md transition-colors duration-200"
             >
               <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
@@ -243,7 +243,7 @@ export default function Marketplace() {
       </div>
 
       {/* Filters */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-md border border-gray-200 p-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">Search Listing</label>
@@ -251,7 +251,7 @@ export default function Marketplace() {
               type="text"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="Search by variety or description..."
             />
           </div>
@@ -261,7 +261,7 @@ export default function Marketplace() {
               type="number"
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
-              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="0"
             />
           </div>
@@ -271,7 +271,7 @@ export default function Marketplace() {
               type="number"
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
-              className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+              className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
               placeholder="100"
             />
           </div>
@@ -288,7 +288,7 @@ export default function Marketplace() {
           {listings.map((listing) => (
             <div
               key={listing.id}
-              className="bg-white rounded-xl border border-gray-200 p-6 space-y-4 hover:shadow-sm transition-all duration-200"
+              className="bg-white rounded-md border border-gray-200 p-6 space-y-4 hover:shadow-sm transition-all duration-200"
             >
               <div className="flex justify-between items-start mb-3">
                 <h3 className="text-base font-semibold text-gray-900">{listing.title}</h3>
@@ -298,11 +298,11 @@ export default function Marketplace() {
               </div>
               <p className="text-sm text-gray-500 mb-4 line-clamp-2">{listing.description}</p>
               <div className="grid grid-cols-2 gap-4 text-xs mb-6">
-                <div className="bg-gray-50 rounded-lg p-3">
+                <div className="bg-gray-50 rounded-md p-3">
                   <span className="block font-semibold text-gray-600 mb-1">Quantity</span>
                   <span className="text-gray-900 font-medium">{listing.quantityKg} kg</span>
                 </div>
-                <div className="bg-gray-50 rounded-lg p-3">
+                <div className="bg-gray-50 rounded-md p-3">
                   <span className="block font-semibold text-gray-600 mb-1">FPO Owner</span>
                   <span className="text-gray-900 font-medium">{listing.fpoName || 'AgriBridge FPO'}</span>
                 </div>
@@ -318,7 +318,7 @@ export default function Marketplace() {
                       View Active Buyer Offers
                     </button>
                     {offers[listing.id]?.map((off) => (
-                      <div key={off.id} className="bg-gray-50 p-3 rounded-lg border border-gray-200 text-xs space-y-2">
+                      <div key={off.id} className="bg-gray-50 p-3 rounded-md border border-gray-200 text-xs space-y-2">
                         <div className="flex justify-between font-semibold">
                           <span>{off.buyerName}</span>
                           <span className="text-emerald-600">{off.offerPricePerKg} INR/kg</span>
@@ -330,13 +330,13 @@ export default function Marketplace() {
                         <div className="flex space-x-2 pt-1">
                           <Button
                             onClick={() => handleAcceptOffer(off.id)}
-                            className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors duration-200"
+                            className="px-3 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-md transition-colors duration-200"
                           >
                             Accept
                           </Button>
                           <Button
                             onClick={() => setActiveCounterOfferId(off.id)}
-                            className="px-3 py-1 bg-white border border-gray-200 text-gray-700 text-xs font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                            className="px-3 py-1 bg-white border border-gray-200 text-gray-700 text-xs font-semibold rounded-md hover:bg-gray-50 transition-colors duration-200"
                           >
                             Counter
                           </Button>
@@ -348,11 +348,11 @@ export default function Marketplace() {
                               value={counterPrice}
                               onChange={(e) => setCounterPrice(e.target.value)}
                               placeholder="Counter Price"
-                              className="bg-white border border-gray-300 rounded-lg px-2 py-1 text-gray-900 text-xs w-24 focus:border-blue-500 focus:ring-blue-500"
+                              className="bg-white border border-gray-300 rounded-md px-2 py-1 text-gray-900 text-xs w-24 focus:border-blue-500 focus:ring-blue-500"
                             />
                             <Button
                               onClick={() => handleCounterOffer(off.id)}
-                              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-lg transition-colors duration-200"
+                              className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-semibold rounded-md transition-colors duration-200"
                             >
                               Submit
                             </Button>
@@ -364,7 +364,7 @@ export default function Marketplace() {
                 ) : (
                   <Button
                     onClick={() => setSelectedListing(listing)}
-                    className="w-full py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                    className="w-full py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-md hover:bg-gray-50 transition-colors duration-200"
                   >
                     Submit Purchase Offer
                   </Button>
@@ -378,14 +378,14 @@ export default function Marketplace() {
       {/* Create Listing Modal */}
       {showAddModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="w-full max-w-md bg-white border border-gray-200 rounded-md overflow-hidden shadow-sm">
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <h3 className="text-lg font-semibold text-gray-900">Create Marketplace Listing</h3>
               </div>
               <button
                 onClick={() => setShowAddModal(false)}
-                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-lg"
+                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-md"
                 aria-label="Close modal"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -401,7 +401,7 @@ export default function Marketplace() {
                   required
                   value={newTitle}
                   onChange={e => setNewTitle(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="e.g. Premium Cotton Grade A"
                 />
               </div>
@@ -410,7 +410,7 @@ export default function Marketplace() {
                 <textarea
                   value={newDesc}
                   onChange={e => setNewDesc(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 resize-none"
+                  className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500 resize-none"
                   placeholder="Details about grade, moisture, harvest date..."
                   rows={3}
                 />
@@ -423,7 +423,7 @@ export default function Marketplace() {
                     required
                     value={newQty}
                     onChange={e => setNewQty(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="10000"
                   />
                 </div>
@@ -435,14 +435,14 @@ export default function Marketplace() {
                     required
                     value={newPrice}
                     onChange={e => setNewPrice(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="25.00"
                   />
                 </div>
               </div>
               <Button
                 type="submit"
-                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md transition-colors duration-200"
               >
                 Publish Listing
                 <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -457,14 +457,14 @@ export default function Marketplace() {
       {/* Offer Modal */}
       {selectedListing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="w-full max-w-md bg-white border border-gray-200 rounded-md overflow-hidden shadow-sm">
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <h3 className="text-lg font-semibold text-gray-900">Submit Purchase Offer</h3>
               </div>
               <button
                 onClick={() => setSelectedListing(null)}
-                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-lg"
+                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-md"
                 aria-label="Close modal"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -473,7 +473,7 @@ export default function Marketplace() {
               </button>
             </div>
             <div className="p-6 space-y-4">
-              <div className="bg-gray-50 rounded-lg p-4 border border-gray-200">
+              <div className="bg-gray-50 rounded-md p-4 border border-gray-200">
                 <p className="text-xs text-gray-500 mb-1">Making offer on:</p>
                 <p className="text-sm font-semibold text-gray-900">{selectedListing.title}</p>
                 <p className="text-xs text-emerald-600 mt-1">Current Price: {selectedListing.pricePerKg} INR/kg</p>
@@ -487,7 +487,7 @@ export default function Marketplace() {
                     required
                     value={offerPrice}
                     onChange={e => setOfferPrice(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="e.g. 24.50"
                   />
                 </div>
@@ -498,13 +498,13 @@ export default function Marketplace() {
                     required
                     value={offerQty}
                     onChange={e => setOfferQty(e.target.value)}
-                    className="w-full bg-white border border-gray-300 rounded-lg px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                    className="w-full bg-white border border-gray-300 rounded-md px-4 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                     placeholder="e.g. 10000"
                   />
                 </div>
                 <Button
                   type="submit"
-                  className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+                  className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md transition-colors duration-200"
                 >
                   Submit Offer
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

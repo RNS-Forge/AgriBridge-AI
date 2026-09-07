@@ -26,7 +26,7 @@ export const EmptyState = forwardRef<HTMLDivElement, EmptyStateProps>(
         aria-live="polite"
         className={`
           flex flex-col items-center justify-center
-          rounded-xl
+          rounded-md
           p-6
           text-center
           ${className}
