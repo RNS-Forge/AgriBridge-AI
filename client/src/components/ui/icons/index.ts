@@ -11,6 +11,7 @@ export {
   UsersIcon,
   AlertTriangleIcon,
   CheckCircleIcon,
+  CheckIcon,
   FileTextIcon,
   CameraIcon,
   BuildingIcon,

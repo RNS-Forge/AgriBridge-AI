@@ -30,6 +30,7 @@ export {
   UsersIcon,
   AlertTriangleIcon,
   CheckCircleIcon,
+  CheckIcon,
   FileTextIcon,
   CameraIcon,
   BuildingIcon,
@@ -40,3 +41,11 @@ export {
   FlaskIcon,
 } from './icons/index.js';
 export { Sidebar } from './Sidebar/Sidebar.js';
+export {
+  Logo,
+  LogoImage,
+  LogoIcon,
+  LogoSelectorModal,
+  LOGO_DETAILS,
+  setGlobalLogoChoice,
+} from './Logo/index.js';

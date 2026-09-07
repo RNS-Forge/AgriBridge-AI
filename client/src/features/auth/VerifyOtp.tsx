@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../../components/ui/Button/index.js';
 import { ErrorBanner } from '../../components/ui/ErrorBanner/index.js';
+import { Logo } from '../../components/ui/index.js';
 
 export default function VerifyOtp() {
   const [otp, setOtp] = useState('');
@@ -80,12 +81,7 @@ export default function VerifyOtp() {
         <div className="relative z-10 flex flex-col justify-between p-10 xl:p-12 w-full">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-md bg-white/20 border border-white/30 flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 007.92 12.446A9 9 0 1112 2.992z" />
-              </svg>
-            </div>
-            <span className="text-lg font-bold text-white tracking-tight">AgriBridge<span className="text-emerald-200">AI</span></span>
+            <Logo variant="option3" size="md" light showText={true} />
           </div>
 
           {/* Center messaging */}
@@ -146,12 +142,7 @@ export default function VerifyOtp() {
         <div className="relative z-10 w-full max-w-md my-auto max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-2 mb-8">
-            <div className="w-9 h-9 rounded bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center">
-              <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 007.92 12.446A9 9 0 1112 2.992z" />
-              </svg>
-            </div>
-            <span className="text-base font-bold text-slate-800">AgriBridge<span className="text-emerald-600">AI</span></span>
+            <Logo variant="option3" size="md" showText={true} />
           </div>
 
           {/* Header */}

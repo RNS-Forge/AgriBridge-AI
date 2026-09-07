@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { setCredentials } from '../../store/authSlice.js';
-import { Input, Button, ErrorBanner, Toast, MailIcon, LockIcon } from '../../components/ui/index.js';
+import { Input, Button, ErrorBanner, Toast, MailIcon, LockIcon, Logo } from '../../components/ui/index.js';
 import {
   ShieldIcon,
   ClipboardIcon,
@@ -178,18 +178,11 @@ export default function DemoLogin() {
             
             {/* Top Brand & Banner */}
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between pb-4 border-b border-slate-200 gap-3">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h1 className="text-2xl font-bold text-slate-900 tracking-tight">
-                    AgriBridge<span className="text-emerald-600">AI</span>
-                  </h1>
-                  <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
-                    Demo Sandbox
-                  </span>
-                </div>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  1-Click Role-Based Authentication & Workflows Sandbox
-                </p>
+              <div className="flex items-center gap-3">
+                <Logo variant="option3" size="md" showText={true} />
+                <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded bg-emerald-50 text-emerald-800 border border-emerald-200">
+                  Demo Sandbox
+                </span>
               </div>
 
               <Link

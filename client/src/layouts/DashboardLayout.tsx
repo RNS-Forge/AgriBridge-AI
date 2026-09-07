@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAppSelector, useAppDispatch } from '../hooks';
 import { logout } from '../store';
-import { Sidebar } from '../components/ui';
+import { Sidebar, LogoSelectorModal } from '../components/ui';
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
@@ -211,6 +211,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
   const navigate = useNavigate();
   const location = useLocation();
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const [showLogoModal, setShowLogoModal] = useState(false);
 
   // User's active roles
   const userRoles = user?.roles || ['FARMER'];
@@ -233,7 +234,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
 
   return (
     <div className="flex min-h-screen bg-slate-50 text-gray-900 font-sans">
-      {/* Sidebar */}
+      {/* Sidebar Component */}
       <Sidebar
         user={user}
         sidebarOpen={sidebarOpen}
@@ -243,15 +244,20 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         icons={Icons}
       />
 
-      {/* Main Area */}
-      <div className={`flex-1 flex flex-col min-h-screen ${sidebarOpen ? 'ml-64' : 'ml-16'} transition-all duration-300 ease-in-out`}>
-        {/* Top bar */}
-        <header className="h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/90 flex items-center justify-between px-6 sticky top-0 z-30 shadow-xs">
+      {/* Main Area with margin synced to sidebar */}
+      <div className={`flex-1 flex flex-col min-h-screen ${sidebarOpen ? 'ml-48' : 'ml-14'} transition-all duration-300 ease-in-out`}>
+        {/* Top bar with emerald accent border */}
+        <header className="h-16 bg-white border-b border-emerald-200 flex items-center justify-between px-6 sticky top-0 z-30 shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
-              <span className="text-slate-500">AgriBridge AI</span>
-              <span>/</span>
-              <span className="text-slate-800 font-bold">{currentPageLabel}</span>
+            <div className="flex items-center gap-2.5 text-xs font-semibold text-slate-500">
+              <img
+                src="/logos/logo-option3.jpg"
+                alt="AgriBridge AI"
+                className="w-7 h-7 object-contain rounded-md shadow-sm border border-emerald-500/30 bg-white"
+              />
+              <span className="text-slate-800 font-bold text-sm">AgriBridge AI</span>
+              <span className="text-slate-400">/</span>
+              <span className="text-emerald-800 font-bold">{currentPageLabel}</span>
             </div>
             <span className="hidden sm:inline-flex px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
               Phase 1 Live
@@ -259,6 +265,20 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
 
           <div className="flex items-center space-x-3">
+            {/* Logo Identity Selector trigger button */}
+            <button
+              onClick={() => setShowLogoModal(true)}
+              className="text-xs font-semibold px-2.5 py-1.5 bg-white border border-emerald-300 text-emerald-900 rounded-md hover:bg-emerald-50 flex items-center gap-1.5 transition-colors shadow-xs"
+              title="Brand Logo Identity"
+            >
+              <img
+                src="/logos/logo-option3.jpg"
+                alt="Logo"
+                className="w-4 h-4 object-contain rounded shadow-xs"
+              />
+              <span className="hidden md:inline">Logo: Option 3</span>
+            </button>
+
             {/* Demo Sandbox Quick Link if enabled */}
             {import.meta.env.VITE_DEMO !== 'false' && (
               <a
@@ -274,15 +294,15 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
             )}
 
             {/* Role Badge */}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-slate-100 rounded-md border border-slate-200 text-xs">
-              <span className="text-slate-500 text-[10px] font-medium">Role:</span>
-              <span className="font-bold text-emerald-800 uppercase tracking-wide text-[10px]">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 bg-emerald-50 rounded-md border border-emerald-200 text-xs">
+              <span className="text-emerald-700 text-[10px] font-medium">Role:</span>
+              <span className="font-bold text-emerald-900 uppercase tracking-wide text-[10px]">
                 {primaryRole.replace('_', ' ')}
               </span>
             </div>
 
             {/* User Profile avatar */}
-            <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
+            <div className="flex items-center gap-2.5 pl-2 border-l border-emerald-200">
               <div className="w-7 h-7 rounded-md bg-emerald-800 border border-emerald-700 text-white font-bold text-xs flex items-center justify-center shadow-xs">
                 {user?.firstName?.[0] || 'U'}
               </div>
@@ -296,11 +316,14 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
           </div>
         </header>
 
+        {/* Brand Logo Selector Modal */}
+        <LogoSelectorModal isOpen={showLogoModal} onClose={() => setShowLogoModal(false)} />
+
         {/* Scrollable Page Content */}
-        <main className="flex-1 overflow-y-auto p-5 md:p-8 bg-slate-50/80">
+        <main className="flex-1 overflow-y-auto p-5 md:p-8 bg-slate-50">
           {children}
         </main>
       </div>
     </div>
   );
-}
+}

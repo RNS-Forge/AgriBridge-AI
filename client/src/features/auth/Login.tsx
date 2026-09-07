@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { setCredentials } from '../../store/authSlice.js';
-import { Input, Button, ErrorBanner, SocialButton, Toast, MailIcon, LockIcon } from '../../components/ui/index.js';
+import { Input, Button, ErrorBanner, SocialButton, Toast, MailIcon, LockIcon, Logo } from '../../components/ui/index.js';
 import { API_BASE_URL } from '../../services/api.js';
 
 export default function Login() {
@@ -77,13 +77,11 @@ export default function Login() {
           <div className="w-full bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-md shadow-sm p-7 space-y-5 my-auto max-h-[calc(100vh-40px)] overflow-y-auto scrollbar-hide">
             
             {/* Platform Brand */}
-            <div className="flex items-center justify-between pb-1 border-b border-slate-200/60">
-              <div>
-                <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
-                  AgriBridge<span className="text-emerald-600">AI</span>
-                </h2>
-                <p className="text-[11px] text-slate-500 font-medium">Cultivate → Sell Enterprise Platform</p>
-              </div>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/60">
+              <Logo variant="option3" size="md" showText={true} />
+              <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">
+                Phase 1 Live
+              </span>
             </div>
 
             {/* Header */}

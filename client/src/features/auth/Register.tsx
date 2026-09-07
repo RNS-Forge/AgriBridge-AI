@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { Input, Button, ErrorBanner, Toast } from '../../components/ui/index.js';
+import { Input, Button, ErrorBanner, Toast, Logo } from '../../components/ui/index.js';
 import { MailIcon, LockIcon, UserIcon } from '../../components/ui/index.js';
 
 export default function Register() {
@@ -84,10 +84,8 @@ export default function Register() {
           <div className="w-full bg-white/75 backdrop-blur-xl border border-white/60 rounded-md shadow-2xl p-7 my-auto space-y-4 max-h-[calc(100vh-32px)] overflow-y-auto scrollbar-hide">
             
             {/* Platform Name */}
-            <div className="flex items-center justify-between pb-1 border-b border-slate-200/60">
-              <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
-                AgriBridge<span className="text-emerald-600">AI</span>
-              </h2>
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200/60">
+              <Logo variant="option3" size="md" showText={true} />
               <span className="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider rounded bg-slate-100 text-slate-700 border border-slate-200">
                 Approval Queue
               </span>
