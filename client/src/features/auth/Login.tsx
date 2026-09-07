@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { setCredentials } from '../../store/authSlice.js';
 import { Input, Button, ErrorBanner, SocialButton, Toast, MailIcon, LockIcon } from '../../components/ui/index.js';
+import { API_BASE_URL } from '../../services/api.js';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -24,14 +25,14 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch('http://localhost:8000/api/v1/auth/login', {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.trim(), password }),
       });
       const data = await res.json();
 
-      if (!res.ok) {
+      if (!res.ok || !data.success) {
         throw new Error(data.message || 'Authentication failed');
       }
 
@@ -46,7 +47,6 @@ export default function Login() {
 
   return (
     <>
-      {/* Custom CSS for hiding scrollbar */}
       <style>{`
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
@@ -70,26 +70,32 @@ export default function Login() {
         </div>
 
         {/* Subtle gradient overlay for depth */}
-        <div className="absolute inset-0 z-10 bg-gradient-to-l from-white/80 via-transparent to-transparent pointer-events-none" />
+        <div className="absolute inset-0 z-10 bg-gradient-to-l from-white/85 via-white/40 to-transparent pointer-events-none" />
 
         {/* ───── Floating Form Card ───── */}
-        <div className="relative z-20 w-full max-w-[440px] ml-auto h-screen flex items-center px-4 py-10">
-          <div className="w-full bg-white/60 backdrop-blur-xl border border-white/40 rounded-2xl shadow-2xl p-8 space-y-6 my-auto max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
+        <div className="relative z-20 w-full max-w-[480px] ml-auto h-screen flex items-center px-4 py-8">
+          <div className="w-full bg-white/75 backdrop-blur-xl border border-white/60 rounded-2xl shadow-2xl p-7 space-y-5 my-auto max-h-[calc(100vh-40px)] overflow-y-auto scrollbar-hide">
             
-            {/* Platform Name (No Logo) */}
-            <div className="pb-2">
-              <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
-                AgriBridge<span className="text-emerald-600">AI</span>
-              </h2>
+            {/* Platform Brand */}
+            <div className="flex items-center justify-between pb-1 border-b border-slate-200/60">
+              <div>
+                <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
+                  AgriBridge<span className="text-emerald-600">AI</span>
+                </h2>
+                <p className="text-[11px] text-slate-500 font-medium">Cultivate → Sell Enterprise Platform</p>
+              </div>
+              <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                Secure Portal
+              </span>
             </div>
 
             {/* Header */}
             <div>
-              <h1 className="text-2xl font-bold text-slate-800 tracking-tight">
-                Welcome back
+              <h1 className="text-xl font-bold text-slate-800 tracking-tight">
+                Sign in to your account
               </h1>
-              <p className="text-sm text-slate-600 mt-1">
-                Sign in to your workspace.
+              <p className="text-xs text-slate-600 mt-0.5">
+                Enter your authorized credentials to access your workspace.
               </p>
             </div>
 
@@ -102,9 +108,10 @@ export default function Login() {
                 id="email"
                 label="Email Address"
                 type="email"
+                required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="admin@example.com"
+                placeholder="name@organization.com"
                 autoComplete="email"
                 icon={<MailIcon />}
               />
@@ -112,6 +119,7 @@ export default function Login() {
                 id="password"
                 label="Password"
                 type="password"
+                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
@@ -120,13 +128,14 @@ export default function Login() {
               />
 
               {/* Options Row */}
-              <div className="flex items-center justify-between pt-1">
+              <div className="flex items-center justify-between pt-0.5">
                 <label className="flex items-center gap-2 cursor-pointer">
                   <input 
                     type="checkbox" 
-                    className="h-3.5 w-3.5 rounded border-slate-400 bg-white/60 text-emerald-600 focus:ring-emerald-500/20 focus:ring-offset-0 cursor-pointer" 
+                    defaultChecked
+                    className="h-3.5 w-3.5 rounded border-slate-400 bg-white text-emerald-600 focus:ring-emerald-500/20 focus:ring-offset-0 cursor-pointer" 
                   />
-                  <span className="text-xs text-slate-600">Remember me</span>
+                  <span className="text-xs text-slate-600">Remember credentials</span>
                 </label>
                 <Link 
                   to="/forgot-password" 
@@ -136,23 +145,42 @@ export default function Login() {
                 </Link>
               </div>
 
-              {/* Submit */}
+              {/* Submit Button */}
               <Button type="submit" loading={loading} fullWidth className="mt-1">
-                {loading ? 'Signing in...' : 'Login'}
+                {loading ? 'Authenticating...' : 'Sign In'}
               </Button>
             </form>
+
+            {/* Link to Demo Login Sandbox if enabled in environment */}
+            {import.meta.env.VITE_DEMO !== 'false' && (
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-1">
+                <p className="text-[11px] text-slate-500 font-medium">Looking for testing accounts?</p>
+                <Link
+                  to="/demo/login"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-lg transition-colors"
+                >
+                  <span>🎮 Try Demo / Sandbox Login →</span>
+                </Link>
+              </div>
+            )}
+
+            {/* Platform Role Workflow Info Notice */}
+            <div className="text-[11px] text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-200 leading-relaxed">
+              <span className="font-semibold text-slate-700">Access Governance: </span>
+              Closed enterprise registration. New accounts require Admin authorization or an Admin Maker invitation.
+            </div>
 
             {/* Divider */}
             <div className="flex items-center gap-3">
               <div className="flex-1 h-px bg-slate-200" />
               <span className="text-[10px] text-slate-400 font-semibold uppercase tracking-widest">
-                Or continue with
+                Enterprise SSO
               </span>
               <div className="flex-1 h-px bg-slate-200" />
             </div>
 
-            {/* Social buttons (Google & Microsoft Only) */}
-            <div className="grid grid-cols-2 gap-3">
+            {/* Social buttons */}
+            <div className="grid grid-cols-2 gap-2.5">
               <SocialButton
                 label="Google"
                 onClick={() => handleSocialClick('Google')}
@@ -180,13 +208,13 @@ export default function Login() {
             </div>
 
             {/* Footer */}
-            <p className="text-center text-sm text-slate-600 pt-1">
-              Don't have an account?{' '}
+            <p className="text-center text-xs text-slate-600 pt-0.5">
+              Need access?{' '}
               <Link
                 to="/register"
                 className="text-emerald-600 font-semibold hover:text-emerald-700 transition-colors"
               >
-                Sign Up
+                Request Workspace Account
               </Link>
             </p>
           </div>

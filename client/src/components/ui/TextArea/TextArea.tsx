@@ -1,4 +1,4 @@
-import { forwardRef, ReactNode, useState } from 'react';
+import { forwardRef, useState } from 'react';
 
 interface TextAreaProps {
   id: string;
