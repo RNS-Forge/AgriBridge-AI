@@ -47,18 +47,48 @@ function generateToken(user: any) {
 }
 
 // ─────────────────────────────────────────────────────────────────────────────
+const DEMO_EMAILS = [
+  'admin@agribridge.com',
+  'adminmaker@agribridge.com',
+  'farmer@agribridge.com',
+  'manager@agribridge.com',
+  'worker@agribridge.com',
+  'buyer@agribridge.com',
+  'mandi@agribridge.com',
+  'mandiagent@agribridge.com',
+  'farmmanager@agribridge.com',
+];
+
+// Return environment auth configuration (demo mode status)
+router.get('/auth/config', (_req: Request, res: Response) => {
+  return res.status(200).json({
+    success: true,
+    data: {
+      demoEnabled: Boolean(config.DEMO),
+    },
+  });
+});
+
 // 1. AUTH & RBAC (Prompt 2 + User specific requirements)
 // ─────────────────────────────────────────────────────────────────────────────
 
 // Login supporting all roles & default admin@agribridge.com with AgriBridgeAI@2026
 router.post('/auth/login', (req: Request, res: Response) => {
-  const { email, password } = req.body;
+  const { email, password, isDemo } = req.body;
 
   if (!email || !password) {
     return res.status(400).json({ success: false, message: 'Email and password are required' });
   }
 
   const cleanEmail = email.trim().toLowerCase();
+
+  // If DEMO is disabled in environment, strictly disallow demo accounts & demo login
+  if (!config.DEMO && (isDemo || DEMO_EMAILS.includes(cleanEmail))) {
+    return res.status(403).json({
+      success: false,
+      message: 'Demo accounts and demo login are disabled (DEMO=false). Please log in with original registered credentials.',
+    });
+  }
 
   // Find user by email
   let user = phase1Store.users.find((u) => u.email.toLowerCase() === cleanEmail);

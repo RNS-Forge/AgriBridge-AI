@@ -27,6 +27,13 @@ const configSchema = z.object({
   SMTP_USER: z.string().optional(),
   SMTP_PASS: z.string().optional(),
   SMTP_FROM: z.string().optional(),
+  DEMO: z.preprocess((val) => {
+    if (typeof val === 'string') {
+      return val.trim().toLowerCase() === 'true' || val.trim() === '1';
+    }
+    if (typeof val === 'boolean') return val;
+    return true;
+  }, z.boolean()).default(true),
 });
 
 export const config = configSchema.parse({
@@ -45,6 +52,7 @@ export const config = configSchema.parse({
   SMTP_USER: process.env.SMTP_USER,
   SMTP_PASS: process.env.SMTP_PASS,
   SMTP_FROM: process.env.SMTP_FROM,
+  DEMO: process.env.DEMO ?? process.env.demo,
 });
 
 // Initialize Supabase client

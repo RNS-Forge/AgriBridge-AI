@@ -3,42 +3,17 @@ import { useDispatch } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { setCredentials } from '../../store/authSlice.js';
 import { Input, Button, ErrorBanner, SocialButton, Toast, MailIcon, LockIcon } from '../../components/ui/index.js';
-
-interface RoleDemoOption {
-  role: string;
-  name: string;
-  email: string;
-  badgeColor: string;
-  desc: string;
-}
-
-const DEMO_ROLES: RoleDemoOption[] = [
-  { role: 'ADMIN', name: 'Admin', email: 'admin@agribridge.com', badgeColor: 'bg-purple-100 text-purple-800 border-purple-300', desc: 'Full platform authority & approvals' },
-  { role: 'ADMIN_MAKER', name: 'Admin Maker', email: 'adminmaker@agribridge.com', badgeColor: 'bg-indigo-100 text-indigo-800 border-indigo-300', desc: 'Creates roles under Admin approval' },
-  { role: 'FARMER', name: 'Farmer', email: 'farmer@agribridge.com', badgeColor: 'bg-emerald-100 text-emerald-800 border-emerald-300', desc: 'Cultivation, cost-basis & sell' },
-  { role: 'FARM_MANAGER', name: 'Farm Manager', email: 'farmmanager@agribridge.com', badgeColor: 'bg-teal-100 text-teal-800 border-teal-300', desc: 'Tasks, stages & inventory logging' },
-  { role: 'WORKER', name: 'Worker', email: 'worker@agribridge.com', badgeColor: 'bg-blue-100 text-blue-800 border-blue-300', desc: 'Field tasks & photo evidence' },
-  { role: 'BUYER', name: 'Buyer', email: 'buyer@agribridge.com', badgeColor: 'bg-amber-100 text-amber-800 border-amber-300', desc: 'Browse marketplace & make offers' },
-  { role: 'MANDI_AGENT', name: 'Mandi Agent', email: 'mandiagent@agribridge.com', badgeColor: 'bg-orange-100 text-orange-800 border-orange-300', desc: 'Yard arrival slots & auction sales' },
-];
+import { API_BASE_URL } from '../../services/api.js';
 
 export default function Login() {
-  const [email, setEmail] = useState('admin@agribridge.com');
-  const [password, setPassword] = useState('AgriBridgeAI@2026');
-  const [selectedRole, setSelectedRole] = useState('ADMIN');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<{ message: string } | null>(null);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-
-  const handleSelectRole = (r: RoleDemoOption) => {
-    setSelectedRole(r.role);
-    setEmail(r.email);
-    setPassword('AgriBridgeAI@2026');
-    setError('');
-  };
 
   const handleSocialClick = (provider: string) => {
     setToast({ message: `Sign in with ${provider} will be available soon.` });
@@ -50,10 +25,10 @@ export default function Login() {
     setLoading(true);
 
     try {
-      const res = await fetch('http://localhost:8000/api/v1/auth/login', {
+      const res = await fetch(`${API_BASE_URL}/auth/login`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: email.trim(), password }),
       });
       const data = await res.json();
 
@@ -72,7 +47,6 @@ export default function Login() {
 
   return (
     <>
-      {/* Custom CSS for hiding scrollbar */}
       <style>{`
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
@@ -108,49 +82,20 @@ export default function Login() {
                 <h2 className="text-2xl font-extrabold text-slate-800 tracking-tight">
                   AgriBridge<span className="text-emerald-600">AI</span>
                 </h2>
-                <p className="text-[11px] text-slate-500 font-medium">Cultivate → Sell Platform</p>
+                <p className="text-[11px] text-slate-500 font-medium">Cultivate → Sell Enterprise Platform</p>
               </div>
               <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
-                Phase 1 Live
+                Secure Portal
               </span>
             </div>
 
             {/* Header */}
             <div>
               <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-                Sign in to your role
+                Sign in to your account
               </h1>
               <p className="text-xs text-slate-600 mt-0.5">
-                Default password for all roles: <code className="font-semibold text-emerald-700 bg-emerald-50 px-1 py-0.5 rounded border border-emerald-200">AgriBridgeAI@2026</code>
-              </p>
-            </div>
-
-            {/* 1-Click Role Quick Switcher */}
-            <div className="space-y-1.5 bg-slate-50/80 p-2.5 rounded-xl border border-slate-200/70">
-              <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wider">
-                1-Click Quick Demo Login Switcher:
-              </label>
-              <div className="flex flex-wrap gap-1.5">
-                {DEMO_ROLES.map((r) => {
-                  const isSelected = selectedRole === r.role || email === r.email;
-                  return (
-                    <button
-                      key={r.role}
-                      type="button"
-                      onClick={() => handleSelectRole(r)}
-                      className={`text-[11px] px-2.5 py-1 rounded-md font-semibold border transition-all duration-150 flex items-center gap-1 ${
-                        isSelected
-                          ? 'bg-emerald-700 text-white border-emerald-800 shadow-sm scale-102 ring-1 ring-emerald-500/50'
-                          : `${r.badgeColor} hover:brightness-95`
-                      }`}
-                    >
-                      <span>{r.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
-              <p className="text-[10px] text-slate-500 italic pt-0.5">
-                {DEMO_ROLES.find((r) => r.email === email)?.desc || 'Ready to sign in'}
+                Enter your authorized credentials to access your workspace.
               </p>
             </div>
 
@@ -158,17 +103,15 @@ export default function Login() {
             {error && <ErrorBanner message={error} />}
 
             {/* Form */}
-            <form onSubmit={handleLogin} className="space-y-3.5">
+            <form onSubmit={handleLogin} className="space-y-4">
               <Input
                 id="email"
                 label="Email Address"
                 type="email"
+                required
                 value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  setSelectedRole('');
-                }}
-                placeholder="admin@agribridge.com"
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@organization.com"
                 autoComplete="email"
                 icon={<MailIcon />}
               />
@@ -176,6 +119,7 @@ export default function Login() {
                 id="password"
                 label="Password"
                 type="password"
+                required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••••••"
@@ -203,14 +147,27 @@ export default function Login() {
 
               {/* Submit Button */}
               <Button type="submit" loading={loading} fullWidth className="mt-1">
-                {loading ? 'Authenticating...' : `Sign in as ${selectedRole ? selectedRole.replace('_', ' ') : 'User'}`}
+                {loading ? 'Authenticating...' : 'Sign In'}
               </Button>
             </form>
 
+            {/* Link to Demo Login Sandbox if enabled in environment */}
+            {import.meta.env.VITE_DEMO !== 'false' && (
+              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-1">
+                <p className="text-[11px] text-slate-500 font-medium">Looking for testing accounts?</p>
+                <Link
+                  to="/demo/login"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-lg transition-colors"
+                >
+                  <span>🎮 Try Demo / Sandbox Login →</span>
+                </Link>
+              </div>
+            )}
+
             {/* Platform Role Workflow Info Notice */}
-            <div className="text-[11px] text-slate-500 bg-emerald-50/70 p-2.5 rounded-lg border border-emerald-200/80 leading-relaxed">
-              <span className="font-semibold text-emerald-800">RBAC Workflow: </span>
-              No open self-signup. <strong>Admin</strong> directly creates active users. <strong>Admin Maker</strong> requests creation of roles (except Admin); requests require Admin approval before activation.
+            <div className="text-[11px] text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-200 leading-relaxed">
+              <span className="font-semibold text-slate-700">Access Governance: </span>
+              Closed enterprise registration. New accounts require Admin authorization or an Admin Maker invitation.
             </div>
 
             {/* Divider */}
