@@ -84,9 +84,6 @@ export default function Login() {
                 </h2>
                 <p className="text-[11px] text-slate-500 font-medium">Cultivate → Sell Enterprise Platform</p>
               </div>
-              <span className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
-                Secure Portal
-              </span>
             </div>
 
             {/* Header */}
@@ -150,19 +147,6 @@ export default function Login() {
                 {loading ? 'Authenticating...' : 'Sign In'}
               </Button>
             </form>
-
-            {/* Link to Demo Login Sandbox if enabled in environment */}
-            {import.meta.env.VITE_DEMO !== 'false' && (
-              <div className="p-3 bg-slate-50 border border-slate-200 rounded-xl text-center space-y-1">
-                <p className="text-[11px] text-slate-500 font-medium">Looking for testing accounts?</p>
-                <Link
-                  to="/demo/login"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-emerald-700 hover:text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-300 px-3 py-1.5 rounded-lg transition-colors"
-                >
-                  <span>🎮 Try Demo / Sandbox Login →</span>
-                </Link>
-              </div>
-            )}
 
             {/* Platform Role Workflow Info Notice */}
             <div className="text-[11px] text-slate-500 bg-slate-50 p-2.5 rounded-lg border border-slate-200 leading-relaxed">

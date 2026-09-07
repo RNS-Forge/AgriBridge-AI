@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { RootState } from '../../store/index.js';
+import { API_BASE_URL } from '../../services/api.js';
 
 export default function Dashboard() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -14,7 +15,7 @@ export default function Dashboard() {
 
   useEffect(() => {
     // Fetch weather
-    fetch('http://localhost:8000/api/v1/weather/farms/farm-01')
+    fetch(`${API_BASE_URL}/weather/farms/farm-01`)
       .then((r) => r.json())
       .then((d) => {
         if (d.success) setWeatherData(d.data);
@@ -22,7 +23,7 @@ export default function Dashboard() {
       .catch(() => {});
 
     // Fetch crop cost summary
-    fetch('http://localhost:8000/api/v1/crop-cycles/cc-01/cost-summary')
+    fetch(`${API_BASE_URL}/crop-cycles/cc-01/cost-summary`)
       .then((r) => r.json())
       .then((d) => {
         if (d.success) setCropCostSummary(d.data);
@@ -30,7 +31,7 @@ export default function Dashboard() {
       .catch(() => {});
 
     // Fetch tasks
-    fetch('http://localhost:8000/api/v1/tasks')
+    fetch(`${API_BASE_URL}/tasks`)
       .then((r) => r.json())
       .then((d) => {
         if (d.success) setActiveTasks(d.data);
@@ -39,7 +40,7 @@ export default function Dashboard() {
 
     // Fetch admin summary if Admin or Admin Maker
     if (primaryRole === 'ADMIN' || primaryRole === 'ADMIN_MAKER' || primaryRole === 'SuperAdmin') {
-      fetch('http://localhost:8000/api/v1/admin/dashboard-summary')
+      fetch(`${API_BASE_URL}/admin/dashboard-summary`)
         .then((r) => r.json())
         .then((d) => {
           if (d.success) setAdminSummary(d.data);

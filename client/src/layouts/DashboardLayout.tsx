@@ -244,32 +244,48 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       />
 
       {/* Main Area */}
-      <div className={`flex-1 flex flex-col min-h-screen ${sidebarOpen ? 'ml-48' : 'ml-14'} transition-all duration-300 ease-in-out`}>
+      <div className={`flex-1 flex flex-col min-h-screen ${sidebarOpen ? 'ml-64' : 'ml-16'} transition-all duration-300 ease-in-out`}>
         {/* Top bar */}
-        <header className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 sticky top-0 z-30 shadow-sm">
+        <header className="h-16 bg-white/95 backdrop-blur-md border-b border-slate-200/90 flex items-center justify-between px-6 sticky top-0 z-30 shadow-xs">
           <div className="flex items-center gap-3">
-            <h2 className="text-base font-bold text-slate-800">{currentPageLabel}</h2>
-            <span className="hidden md:inline-flex px-2.5 py-0.5 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Phase 1
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-400">
+              <span className="text-slate-500">AgriBridge AI</span>
+              <span>/</span>
+              <span className="text-slate-800 font-bold">{currentPageLabel}</span>
+            </div>
+            <span className="hidden sm:inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Phase 1 Live
             </span>
           </div>
 
           <div className="flex items-center space-x-3">
+            {/* Demo Sandbox Quick Link if enabled */}
+            {import.meta.env.VITE_DEMO !== 'false' && (
+              <a
+                href="/demo/login"
+                className="text-xs font-semibold px-2.5 py-1.5 bg-emerald-50 text-emerald-800 border border-emerald-200 rounded-lg hover:bg-emerald-100 flex items-center gap-1.5 transition-colors shadow-xs"
+                title="Open 1-Click Demo Sandbox"
+              >
+                <span>🎮</span>
+                <span className="hidden md:inline">Demo Sandbox</span>
+              </a>
+            )}
+
             {/* Role Badge */}
-            <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-100 rounded-lg border border-slate-200 text-xs">
-              <span className="text-slate-500">Active Role:</span>
-              <span className="font-bold text-emerald-800 uppercase tracking-wide">
+            <div className="flex items-center gap-1.5 px-3 py-1 bg-slate-100/90 rounded-lg border border-slate-200 text-xs">
+              <span className="text-slate-500 text-[11px] font-medium">Role:</span>
+              <span className="font-bold text-emerald-800 uppercase tracking-wide text-[11px]">
                 {primaryRole.replace('_', ' ')}
               </span>
             </div>
 
             {/* User Profile avatar */}
-            <div className="flex items-center gap-2 pl-2 border-l border-slate-200">
-              <div className="w-8 h-8 rounded-full bg-emerald-700 text-white font-bold text-xs flex items-center justify-center shadow-sm">
+            <div className="flex items-center gap-2.5 pl-2 border-l border-slate-200">
+              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-emerald-700 to-emerald-600 text-white font-bold text-xs flex items-center justify-center shadow-xs">
                 {user?.firstName?.[0] || 'U'}
               </div>
               <div className="hidden sm:block text-left text-xs">
-                <p className="font-semibold text-slate-800 leading-tight">
+                <p className="font-bold text-slate-800 leading-tight">
                   {user?.firstName} {user?.lastName}
                 </p>
                 <p className="text-[10px] text-slate-500 truncate max-w-[140px]">{user?.email}</p>
@@ -279,7 +295,7 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
         </header>
 
         {/* Scrollable Page Content */}
-        <main className="flex-1 overflow-y-auto p-6 md:p-8 bg-slate-50/70">
+        <main className="flex-1 overflow-y-auto p-5 md:p-8 bg-slate-50/80">
           {children}
         </main>
       </div>
