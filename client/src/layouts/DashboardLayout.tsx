@@ -247,38 +247,16 @@ export function DashboardLayout({ children }: DashboardLayoutProps) {
       {/* Main Area with margin synced to sidebar */}
       <div className={`flex-1 flex flex-col min-h-screen ${sidebarOpen ? 'ml-48' : 'ml-14'} transition-all duration-300 ease-in-out`}>
         {/* Top bar with emerald accent border */}
-        <header className="h-16 bg-white border-b border-emerald-200 flex items-center justify-between px-6 sticky top-0 z-30 shadow-xs">
+        <header className="h-16 bg-white border-b border-emerald-200/80 flex items-center justify-between px-6 sticky top-0 z-30 shadow-xs">
           <div className="flex items-center gap-3">
-            <div className="flex items-center gap-2.5 text-xs font-semibold text-slate-500">
-              <img
-                src="/logos/logo-option3.jpg"
-                alt="AgriBridge AI"
-                className="w-7 h-7 object-contain rounded-md shadow-sm border border-emerald-500/30 bg-white"
-              />
-              <span className="text-slate-800 font-bold text-sm">AgriBridge AI</span>
-              <span className="text-slate-400">/</span>
-              <span className="text-emerald-800 font-bold">{currentPageLabel}</span>
+            <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
+              <span className="text-slate-800 font-bold text-sm tracking-tight">AgriBridge AI</span>
+              <span className="text-slate-300">/</span>
+              <span className="text-emerald-800 font-bold text-sm">{currentPageLabel}</span>
             </div>
-            <span className="hidden sm:inline-flex px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 border border-emerald-200">
-              Phase 1 Live
-            </span>
           </div>
 
           <div className="flex items-center space-x-3">
-            {/* Logo Identity Selector trigger button */}
-            <button
-              onClick={() => setShowLogoModal(true)}
-              className="text-xs font-semibold px-2.5 py-1.5 bg-white border border-emerald-300 text-emerald-900 rounded-md hover:bg-emerald-50 flex items-center gap-1.5 transition-colors shadow-xs"
-              title="Brand Logo Identity"
-            >
-              <img
-                src="/logos/logo-option3.jpg"
-                alt="Logo"
-                className="w-4 h-4 object-contain rounded shadow-xs"
-              />
-              <span className="hidden md:inline">Logo: Option 3</span>
-            </button>
-
             {/* Demo Sandbox Quick Link if enabled */}
             {import.meta.env.VITE_DEMO !== 'false' && (
               <a

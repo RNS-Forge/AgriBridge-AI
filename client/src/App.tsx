@@ -12,7 +12,7 @@ import VerifyOtp from './features/auth/VerifyOtp.js';
 import ForgotPassword from './features/auth/ForgotPassword.js';
 import ResetPassword from './features/auth/ResetPassword.js';
 
-// Core Phase 1 feature pages
+// Core platform feature pages
 import Dashboard from './features/dashboard/Dashboard.js';
 import FarmsPlots from './features/farmer/FarmsPlots.js';
 import CropCycles from './features/crops/CropCycles.js';

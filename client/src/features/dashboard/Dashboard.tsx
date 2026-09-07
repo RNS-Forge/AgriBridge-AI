@@ -68,7 +68,6 @@ export default function Dashboard() {
             <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-emerald-500/30 text-emerald-100 border border-emerald-400/30">
               {primaryRole.replace('_', ' ')} WORKSPACE
             </span>
-            <span className="text-xs text-emerald-200">Phase 1 Live</span>
           </div>
           <h1 className="text-xl font-bold tracking-tight">
             Welcome back, {user?.firstName || 'Farmer'}!
@@ -216,7 +215,7 @@ export default function Dashboard() {
             <div className="bg-white p-4 rounded-md border border-slate-200 shadow-xs">
               <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Total Platform Users</span>
               <p className="text-2xl font-bold text-slate-900 mt-1">{adminSummary?.totalUsers ?? 7}</p>
-              <span className="text-xs text-slate-500 font-medium">Across 7 Phase 1 roles</span>
+              <span className="text-xs text-slate-500 font-medium">Across 7 platform roles</span>
             </div>
             <div className="bg-white p-4 rounded-md border border-slate-200 shadow-xs">
               <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Active Produce Listings</span>

@@ -2,7 +2,7 @@ import crypto from 'crypto';
 import { supabase } from '../config/index.js';
 
 // ---------------------------------------------------------------------------
-// AgriBridge Phase 1: In-Memory Resilient Store & State Engine
+// AgriBridge: In-Memory Resilient Store & State Engine
 // Seeded with realistic data for all 7 roles, farms, crop cycles, expenses,
 // mandi prices, marketplace listings, offers, orders, and profit reports.
 // ---------------------------------------------------------------------------

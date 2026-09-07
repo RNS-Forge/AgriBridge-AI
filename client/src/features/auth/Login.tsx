@@ -79,9 +79,6 @@ export default function Login() {
             {/* Platform Brand */}
             <div className="flex items-center justify-between pb-3 border-b border-slate-200/60">
               <Logo variant="option3" size="md" showText={true} />
-              <span className="text-[10px] font-bold uppercase tracking-wider bg-emerald-50 text-emerald-700 px-2 py-0.5 rounded border border-emerald-200">
-                Phase 1 Live
-              </span>
             </div>
 
             {/* Header */}
