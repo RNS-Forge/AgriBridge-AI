@@ -1,12 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Button, Input } from '../../components/ui/index.js';
+import { Button, Input, Logo } from '../../components/ui/index.js';
 import {
   ShieldIcon,
   CheckCircleIcon,
   CloseIcon,
   AlertTriangleIcon,
+  UserIcon,
+  MailIcon,
 } from '../../components/ui/icons/index.js';
+
+const PhoneIcon = () => (
+  <svg className="w-4 h-4 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
+    <path strokeLinecap="round" strokeLinejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z" />
+  </svg>
+);
 
 export default function AdminMakerView() {
   const location = useLocation();
@@ -173,171 +181,221 @@ export default function AdminMakerView() {
 
       {/* VIEW 1: Direct Creation Form (Shown when on /admin-maker/create-request) */}
       {activeTab === 'CREATE' && (
-        <div className="bg-white rounded-md border border-slate-200 shadow-xs p-6 space-y-4">
-          <div className="border-b border-slate-100 pb-3 flex items-center justify-between">
-            <div>
-              <h2 className="text-sm font-bold text-slate-900">
-                Initiate New Account / Role Request
-              </h2>
-              <p className="text-xs text-slate-500 mt-0.5">
-                Fill in applicant details to propose an enterprise account.
-              </p>
-            </div>
-            <span className="text-xs font-medium text-slate-400">
-              Admin Maker Form
-            </span>
+        <div className="relative min-h-[calc(100vh-220px)] w-full rounded-2xl overflow-hidden border border-slate-200/90 shadow-sm bg-slate-900 flex flex-col lg:flex-row">
+          {/* Static Background Artwork (Identical to Sign-In Page) */}
+          <div className="absolute inset-0 z-0">
+            <div
+              className="w-full h-full bg-cover bg-center bg-no-repeat"
+              style={{ backgroundImage: "url('/logo/bg-login.png')" }}
+            />
           </div>
 
-          {/* Success Banner */}
-          {successMsg && (
-            <div className="p-3.5 bg-emerald-50 border border-emerald-300 rounded-md text-xs text-emerald-900 space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="font-bold flex items-center gap-1.5 text-emerald-800">
-                  <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
-                  Request Created Successfully!
-                </span>
-                <button
-                  onClick={() => setSuccessMsg('')}
-                  className="text-emerald-700 hover:text-emerald-900"
-                >
-                  <CloseIcon className="w-3.5 h-3.5" />
-                </button>
-              </div>
-              <p>{successMsg}</p>
-              {lastCreated && (
-                <div className="bg-white/80 p-2.5 rounded border border-emerald-200 text-[11px] font-mono text-emerald-950 flex flex-wrap gap-4">
-                  <span>Request ID: <strong>{lastCreated.id}</strong></span>
-                  <span>Role: <strong>{lastCreated.requestedRole}</strong></span>
-                  <span>Status: <strong className="text-amber-700">{lastCreated.status}</strong></span>
-                </div>
-              )}
-              <div className="pt-1 flex gap-3">
-                <button
-                  onClick={() => handleTabChange('REQUESTS')}
-                  className="text-xs font-bold text-emerald-800 hover:underline"
-                >
-                  View in Requests Tracker →
-                </button>
-                <button
-                  onClick={() => {
-                    setSuccessMsg('');
-                    setLastCreated(null);
-                  }}
-                  className="text-xs font-semibold text-slate-600 hover:text-slate-800"
-                >
-                  Submit Another
-                </button>
-              </div>
-            </div>
-          )}
+          {/* Smooth Gradient Overlays */}
+          <div className="absolute inset-0 z-10 bg-gradient-to-r from-slate-950/80 via-slate-900/50 to-white/95 pointer-events-none hidden lg:block" />
+          <div className="absolute inset-0 z-10 bg-white/90 backdrop-blur-sm pointer-events-none lg:hidden" />
 
-          {/* Error Banner */}
-          {error && (
-            <div className="p-3 rounded-md bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between">
-              <span className="flex items-center gap-1.5">
-                <AlertTriangleIcon className="w-3.5 h-3.5 text-rose-600" />
-                {error}
-              </span>
-              <button onClick={() => setError('')} className="text-rose-600 hover:text-rose-800">
-                <CloseIcon className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          )}
-
-          <form onSubmit={handleCreateRequest} className="space-y-4 max-w-2xl">
-            {/* Role Selection */}
+          {/* Left Side: Context & Governance Info */}
+          <div className="relative z-20 w-full lg:w-1/2 p-6 lg:p-8 flex flex-col justify-between text-white space-y-6">
             <div>
-              <label className="block text-xs font-bold text-slate-700 mb-1 uppercase tracking-wider">
-                Select Platform Role to Request *
-              </label>
-              <select
-                value={requestedRole}
-                onChange={(e) => setRequestedRole(e.target.value)}
-                className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-800 font-medium focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 outline-none"
-              >
-                <option value="FARMER">FARMER — Cultivation, Cost Basis & Sell Produce</option>
-                <option value="FARM_MANAGER">FARM_MANAGER — Farm Operations & Consumables Stock</option>
-                <option value="WORKER">WORKER — Field Tasks & Operational Execution</option>
-                <option value="BUYER">BUYER — Marketplace Produce Procurement & Orders</option>
-                <option value="MANDI_AGENT">MANDI_AGENT — APMC Mandi Arrivals & Live Auctions</option>
-                <option value="ADMIN_MAKER">ADMIN_MAKER — Secondary Maker under Admin Governance</option>
-              </select>
-              <p className="text-[11px] text-slate-400 mt-1 italic">
-                *Admin role cannot be created or requested by Admin Maker per platform security policy.
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-black/40 backdrop-blur-md border border-white/20 mb-3">
+                <ShieldIcon className="w-3.5 h-3.5 text-indigo-400" />
+                <span className="text-[11px] font-bold tracking-wider uppercase text-indigo-300">
+                  Four-Eye Principle Maker Console
+                </span>
+              </div>
+              <h2 className="text-2xl font-extrabold text-white tracking-tight leading-tight">
+                Initiate Role Creation Request
+              </h2>
+              <p className="text-xs lg:text-sm text-slate-200 mt-2 max-w-md leading-relaxed">
+                As an Admin Maker, submit proposed accounts for platform participants. Your requests are dispatched directly to the Administrator for verification and immediate activation.
               </p>
             </div>
 
-            {/* Name Fields */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Input
-                label="First Name *"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-                required
-                placeholder="e.g. Ramesh"
-                id="first"
-              />
-              <Input
-                label="Last Name *"
-                value={lastName}
-                onChange={(e) => setLastName(e.target.value)}
-                required
-                placeholder="e.g. Patel"
-                id="last"
-              />
+            <div className="bg-slate-900/70 backdrop-blur-xl rounded-xl border border-white/15 p-4 space-y-2">
+              <span className="text-[10px] font-bold text-indigo-300 uppercase tracking-wider block">
+                Maker Protocol Compliance
+              </span>
+              <ul className="text-xs text-slate-200 space-y-1.5">
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+                  <span>Propose Farmers, Managers, Workers, Buyers & Mandi Agents</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+                  <span>Dual authorization required before account activation</span>
+                </li>
+                <li className="flex items-center gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-indigo-400" />
+                  <span>Initial password pre-configured as <code>AgriBridgeAI@2026</code></span>
+                </li>
+              </ul>
             </div>
 
-            {/* Email & Phone */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <Input
-                label="Email Address *"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                placeholder="applicant@agribridge.com"
-                id="reqEmail"
-              />
-              <Input
-                label="Phone Number"
-                type="tel"
-                value={phone}
-                onChange={(e) => setPhone(e.target.value)}
-                placeholder="+91 98765 43210"
-                id="reqPhone"
-              />
-            </div>
-
-            {/* Notes / Organization info */}
-            <div>
-              <Input
-                label="Organization / Farm Name / Operational Notes"
-                value={notes}
-                onChange={(e) => setNotes(e.target.value)}
-                placeholder="e.g. FPO member onboarding for Nashik Onion Cluster (Plot 4B)"
-                id="reqNotes"
-              />
-            </div>
-
-            {/* Submit button */}
-            <div className="pt-2 flex items-center gap-3">
-              <Button
-                type="submit"
-                loading={loading}
-                className="!bg-indigo-700 hover:!bg-indigo-800 !text-white px-5 py-2 text-xs font-bold rounded-md shadow-xs"
-              >
-                {loading ? 'Submitting Request...' : 'Submit Request for Admin Approval'}
-              </Button>
-              <Button
+            <div className="text-xs text-slate-300 flex items-center justify-between">
+              <span>Looking for past submissions?</span>
+              <button
                 type="button"
-                variant="outline"
                 onClick={() => handleTabChange('REQUESTS')}
-                className="text-xs rounded-md"
+                className="text-xs font-bold text-indigo-300 hover:text-white underline"
               >
-                View Requests Tracker ({pendingCount} pending)
-              </Button>
+                Go to Requests Tracker ({pendingCount} pending) →
+              </button>
             </div>
-          </form>
+          </div>
+
+          {/* Right Side: Floating Card Matching Sign-In Page Design */}
+          <div className="relative z-20 w-full lg:w-1/2 flex items-center justify-center p-4 lg:p-6">
+            <div className="w-full max-w-[480px] bg-white/95 backdrop-blur-xl border border-slate-200/90 rounded-xl shadow-xl p-6 lg:p-7 space-y-4 my-auto max-h-[calc(100vh-220px)] overflow-y-auto table-scroll">
+              
+              {/* Brand Header */}
+              <div className="flex items-center justify-between pb-3 border-b border-slate-200/60">
+                <Logo variant="option3" size="md" showText={true} />
+                <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase tracking-wider bg-indigo-50 text-indigo-800 border border-indigo-200 flex items-center gap-1">
+                  <ShieldIcon className="w-3 h-3 text-indigo-700" />
+                  Maker Request
+                </span>
+              </div>
+
+              <div>
+                <h3 className="text-lg font-bold text-slate-800 tracking-tight">
+                  Propose New User Account
+                </h3>
+                <p className="text-xs text-slate-600 mt-0.5">
+                  Fill in applicant identity details to submit for Admin review.
+                </p>
+              </div>
+
+              {/* Success Banner */}
+              {successMsg && (
+                <div className="p-3 bg-emerald-50 border border-emerald-300 rounded-md text-xs text-emerald-900 space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="font-bold flex items-center gap-1.5 text-emerald-800">
+                      <CheckCircleIcon className="w-4 h-4 text-emerald-600" />
+                      Request Submitted!
+                    </span>
+                    <button
+                      onClick={() => setSuccessMsg('')}
+                      className="text-emerald-700 hover:text-emerald-900"
+                    >
+                      <CloseIcon className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                  <p>{successMsg}</p>
+                  {lastCreated && (
+                    <div className="bg-white/80 p-2.5 rounded border border-emerald-200 text-[11px] font-mono text-emerald-950 flex flex-wrap gap-4">
+                      <span>Request ID: <strong>{lastCreated.id}</strong></span>
+                      <span>Role: <strong>{lastCreated.requestedRole}</strong></span>
+                      <span>Status: <strong className="text-amber-700">{lastCreated.status}</strong></span>
+                    </div>
+                  )}
+                  <button
+                    onClick={() => handleTabChange('REQUESTS')}
+                    className="text-xs font-bold text-emerald-800 underline"
+                  >
+                    View in Requests Tracker →
+                  </button>
+                </div>
+              )}
+
+              {/* Error Banner */}
+              {error && (
+                <div className="p-3 rounded-md bg-rose-50 border border-rose-200 text-xs text-rose-800 flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <AlertTriangleIcon className="w-3.5 h-3.5 text-rose-600" />
+                    {error}
+                  </span>
+                  <button onClick={() => setError('')} className="text-rose-600 hover:text-rose-800">
+                    <CloseIcon className="w-3.5 h-3.5" />
+                  </button>
+                </div>
+              )}
+
+              <form onSubmit={handleCreateRequest} className="space-y-3.5">
+                {/* Role Selection */}
+                <div>
+                  <label className="block text-xs font-semibold text-slate-700 mb-1">
+                    Select Platform Role to Propose *
+                  </label>
+                  <select
+                    value={requestedRole}
+                    onChange={(e) => setRequestedRole(e.target.value)}
+                    className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md bg-white text-slate-800 font-semibold focus:ring-1 focus:ring-indigo-500 outline-none"
+                  >
+                    <option value="FARMER">FARMER — Cultivation, Cost Basis & Produce Sales</option>
+                    <option value="FARM_MANAGER">FARM_MANAGER — Farm Operations & Consumables Stock</option>
+                    <option value="WORKER">WORKER — Field Tasks & Operational Execution</option>
+                    <option value="BUYER">BUYER — Marketplace Procurement & Direct Orders</option>
+                    <option value="MANDI_AGENT">MANDI_AGENT — APMC Yard Arrivals & Auctions</option>
+                    <option value="ADMIN_MAKER">ADMIN_MAKER — Operational Maker Account</option>
+                  </select>
+                </div>
+
+                {/* Name Fields */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Input
+                    label="First Name *"
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
+                    required
+                    placeholder="e.g. Ramesh"
+                    id="first"
+                    icon={<UserIcon />}
+                  />
+                  <Input
+                    label="Last Name *"
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    required
+                    placeholder="e.g. Patel"
+                    id="last"
+                    icon={<UserIcon />}
+                  />
+                </div>
+
+                {/* Email & Phone */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <Input
+                    label="Official Email Address *"
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    required
+                    placeholder="applicant@agribridge.com"
+                    id="reqEmail"
+                    icon={<MailIcon />}
+                  />
+                  <Input
+                    label="Phone Number"
+                    type="tel"
+                    value={phone}
+                    onChange={(e) => setPhone(e.target.value)}
+                    placeholder="+91 98765 43210"
+                    id="reqPhone"
+                    icon={<PhoneIcon />}
+                  />
+                </div>
+
+                {/* Notes / Organization info */}
+                <Input
+                  label="Organization / Farm Cluster Notes"
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="e.g. Nashik Onion Cluster (Plot 4B)"
+                  id="reqNotes"
+                />
+
+                {/* Submit button */}
+                <Button
+                  type="submit"
+                  loading={loading}
+                  fullWidth
+                  className="!bg-indigo-700 hover:!bg-indigo-800 text-white font-bold py-2.5 shadow-xs"
+                >
+                  {loading ? 'Submitting Request...' : 'Submit Request for Admin Approval'}
+                </Button>
+              </form>
+            </div>
+          </div>
         </div>
       )}
 
@@ -361,7 +419,7 @@ export default function AdminMakerView() {
             </Button>
           </div>
 
-          <div className="divide-y divide-slate-100">
+          <div className="divide-y divide-slate-100 max-h-[calc(100vh-270px)] overflow-y-auto table-scroll">
             {requests.length === 0 ? (
               <div className="p-8 text-center space-y-3">
                 <p className="text-xs text-slate-500">No role requests found.</p>

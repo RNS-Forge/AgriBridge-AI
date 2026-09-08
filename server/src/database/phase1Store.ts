@@ -7,6 +7,16 @@ import { supabase } from '../config/index.js';
 // mandi prices, marketplace listings, offers, orders, and profit reports.
 // ---------------------------------------------------------------------------
 
+export interface InternalUser {
+  id: string;
+  firstName: string;
+  lastName: string;
+  designation: string;
+  email: string;
+  isActive: boolean;
+  createdAt: string;
+}
+
 export interface StoredUser {
   id: string;
   email: string;
@@ -17,6 +27,16 @@ export interface StoredUser {
   roles: string[];
   status: 'active' | 'suspended' | 'pending' | 'pending_approval';
   tenantId?: string | null;
+  companyName?: string;
+  country?: string;
+  recentActivityAt?: string;
+  permissions?: string[];
+  internalUsers?: InternalUser[];
+  profilePicture?: string;
+  designation?: string;
+  isEmailVerified?: boolean;
+  twoFactorEnabled?: boolean;
+  emailOtp?: string;
   createdAt: string;
 }
 
@@ -31,6 +51,7 @@ export interface StoredUserRequest {
   requestedBy: string; // 'adminmaker@agribridge.com' or 'SELF_REGISTER'
   status: 'PENDING_APPROVAL' | 'APPROVED' | 'REJECTED';
   notes?: string;
+  profilePicture?: string;
   reviewedBy?: string;
   reviewedAt?: string;
   createdAt: string;
@@ -130,6 +151,7 @@ export interface StoredExpense {
 export interface StoredMarketPrice {
   id: string;
   cropName: string;
+  variety?: string;
   mandiName: string;
   district: string;
   state: string;
@@ -138,6 +160,15 @@ export interface StoredMarketPrice {
   modalPrice: number; // Rs/kg reference
   date: string; // As of date
   arrivalVolumeQuintals?: number;
+  govApiRef?: string;
+  source?: 'GOV_AGMARKNET' | 'GOV_ENAM' | 'MANUAL';
+  trend?: 'UP' | 'DOWN' | 'STABLE';
+  changePercent?: string;
+  isBlocked?: boolean; // When true, blocked by admin, completely hidden from non-admin users
+  blockedReason?: string;
+  blockedAt?: string;
+  blockedBy?: string;
+  lastSyncTimestamp?: string;
 }
 
 export interface StoredProduceListing {
@@ -340,6 +371,17 @@ class Phase1Store {
 
   seedDefaults() {
     // 1. Users for each of the 7 roles (Password: AgriBridgeAI@2026)
+    const ALL_PERMISSIONS = [
+      'farm_overview', 'plots_manage', 'crop_cycles', 'growth_stages', 'harvest_log', 'weather_radar',
+      'task_schedule', 'labor_assign', 'proof_photos', 'wage_attendance',
+      'expense_entry', 'cost_basis_engine', 'fertilizer_cost', 'profit_loss_reports',
+      'inventory_ledger', 'reorder_alerts', 'stock_adjust', 'vendor_depot',
+      'produce_listings', 'buyer_bids', 'sales_orders', 'logistics_dispatch',
+      'mandi_ticker', 'slot_booking', 'auction_verify', 'payout_settlement',
+      'user_management', 'role_requests', 'moderation', 'disputes_desk', 'audit_logs',
+      'profile_view', 'profile_edit', 'bank_details', 'doc_vault', 'entity_masters'
+    ];
+
     this.users = [
       {
         id: 'usr-admin-01',
@@ -350,6 +392,15 @@ class Phase1Store {
         phone: '+91 98765 00001',
         roles: ['ADMIN'],
         status: 'active',
+        companyName: 'AgriBridge AI HQ',
+        country: 'INDIA',
+        recentActivityAt: 'Sep 8, 2026 3:10 PM',
+        profilePicture: '/avatars/avatar_admin.jpg',
+        permissions: ALL_PERMISSIONS,
+        internalUsers: [
+          { id: 'sub-01', firstName: 'Anita', lastName: 'Rao', designation: 'Compliance Auditor', email: 'anita.rao@agribridge.com', isActive: true, createdAt: 'Aug 15, 2026 11:20 AM' },
+          { id: 'sub-02', firstName: 'Kiran', lastName: 'Kumar', designation: 'Technical Operations', email: 'kiran.ops@agribridge.com', isActive: true, createdAt: 'Aug 20, 2026 04:30 PM' },
+        ],
         createdAt: '2026-08-01T10:00:00Z',
       },
       {
@@ -361,6 +412,14 @@ class Phase1Store {
         phone: '+91 98765 00002',
         roles: ['ADMIN_MAKER'],
         status: 'active',
+        companyName: 'AgriBridge Regional Governance',
+        country: 'INDIA',
+        recentActivityAt: 'Sep 8, 2026 12:10 PM',
+        profilePicture: '/avatars/avatar_admin_maker.svg',
+        permissions: ['role_requests', 'profile_view', 'profile_edit', 'audit_logs'],
+        internalUsers: [
+          { id: 'sub-07', firstName: 'Rupesh', lastName: 'More', designation: 'Application Verifier', email: 'rupesh.more@agribridge.com', isActive: true, createdAt: 'Aug 22, 2026 10:15 AM' },
+        ],
         createdAt: '2026-08-02T11:00:00Z',
       },
       {
@@ -372,6 +431,21 @@ class Phase1Store {
         phone: '+91 98765 11111',
         roles: ['FARMER'],
         status: 'active',
+        companyName: 'GreenValley Agro Farms',
+        country: 'INDIA',
+        recentActivityAt: 'Sep 8, 2026 1:45 PM',
+        profilePicture: '/avatars/avatar_farmer.jpg',
+        permissions: [
+          'farm_overview', 'plots_manage', 'crop_cycles', 'growth_stages', 'harvest_log', 'weather_radar',
+          'task_schedule', 'labor_assign', 'proof_photos', 'wage_attendance',
+          'expense_entry', 'cost_basis_engine', 'fertilizer_cost', 'profit_loss_reports',
+          'produce_listings', 'sales_orders', 'mandi_ticker', 'slot_booking',
+          'profile_view', 'profile_edit', 'bank_details'
+        ],
+        internalUsers: [
+          { id: 'sub-03', firstName: 'Ravi', lastName: 'Sharma', designation: 'Farm Supervisor', email: 'ravi.sharma@greenvalley.in', isActive: true, createdAt: 'Aug 10, 2026 09:00 AM' },
+          { id: 'sub-08', firstName: 'Devendra', lastName: 'Patil', designation: 'Plot Agronomist', email: 'devendra@greenvalley.in', isActive: false, createdAt: 'Aug 18, 2026 02:40 PM' },
+        ],
         createdAt: '2026-08-05T09:30:00Z',
       },
       {
@@ -383,6 +457,19 @@ class Phase1Store {
         phone: '+91 98765 22222',
         roles: ['FARM_MANAGER'],
         status: 'active',
+        companyName: 'Sahyadri Agronomy Estates',
+        country: 'INDIA',
+        recentActivityAt: 'Sep 8, 2026 11:30 AM',
+        profilePicture: '/avatars/avatar_farm_manager.jpg',
+        permissions: [
+          'farm_overview', 'plots_manage', 'crop_cycles', 'growth_stages', 'harvest_log', 'weather_radar',
+          'task_schedule', 'labor_assign', 'proof_photos',
+          'inventory_ledger', 'reorder_alerts', 'stock_adjust', 'vendor_depot',
+          'expense_entry', 'fertilizer_cost', 'profile_view'
+        ],
+        internalUsers: [
+          { id: 'sub-05', firstName: 'Manoj', lastName: 'Kadam', designation: 'Inventory Storekeeper', email: 'manoj@sahyadriagro.com', isActive: true, createdAt: 'Aug 14, 2026 10:00 AM' },
+        ],
         createdAt: '2026-08-06T10:00:00Z',
       },
       {
@@ -394,6 +481,12 @@ class Phase1Store {
         phone: '+91 98765 33333',
         roles: ['WORKER'],
         status: 'active',
+        companyName: 'Field Operations Unit 3',
+        country: 'INDIA',
+        recentActivityAt: 'Sep 5, 2026 06:20 PM',
+        profilePicture: '/avatars/avatar_worker.svg',
+        permissions: ['task_schedule', 'proof_photos', 'wage_attendance', 'profile_view'],
+        internalUsers: [],
         createdAt: '2026-08-07T08:00:00Z',
       },
       {
@@ -405,6 +498,15 @@ class Phase1Store {
         phone: '+91 98765 44444',
         roles: ['BUYER'],
         status: 'active',
+        companyName: 'BigBasket Wholesale Hub',
+        country: 'INDIA',
+        recentActivityAt: 'Sep 7, 2026 5:12 PM',
+        profilePicture: '/avatars/avatar_buyer.svg',
+        permissions: ['produce_listings', 'buyer_bids', 'sales_orders', 'logistics_dispatch', 'profile_view', 'bank_details'],
+        internalUsers: [
+          { id: 'sub-04', firstName: 'Priya', lastName: 'Nair', designation: 'Category Manager', email: 'priya.nair@bigbasket.in', isActive: true, createdAt: 'Aug 12, 2026 02:15 PM' },
+          { id: 'sub-09', firstName: 'Rohit', lastName: 'Desai', designation: 'Logistics Inspector', email: 'rohit.desai@bigbasket.in', isActive: true, createdAt: 'Aug 25, 2026 11:00 AM' },
+        ],
         createdAt: '2026-08-08T12:00:00Z',
       },
       {
@@ -416,6 +518,14 @@ class Phase1Store {
         phone: '+91 98765 55555',
         roles: ['MANDI_AGENT'],
         status: 'active',
+        companyName: 'Apex APMC Commission Agency',
+        country: 'INDIA',
+        recentActivityAt: 'Sep 6, 2026 04:00 PM',
+        profilePicture: '/avatars/avatar_mandi_agent.svg',
+        permissions: ['mandi_ticker', 'slot_booking', 'auction_verify', 'payout_settlement', 'profile_view', 'bank_details'],
+        internalUsers: [
+          { id: 'sub-06', firstName: 'Sachin', lastName: 'Jadhav', designation: 'Weighbridge Clerk', email: 'sachin.apmc@apex.in', isActive: true, createdAt: 'Aug 18, 2026 03:00 PM' },
+        ],
         createdAt: '2026-08-09T07:30:00Z',
       },
     ];
@@ -737,43 +847,320 @@ class Phase1Store {
       },
     ];
 
-    // 8. Mandi Prices Reference (Agmarknet Style Wholesale Benchmarks)
+    // 8. Mandi Prices Reference (Government Agmarknet & e-NAM Wholesale Feeds)
+    const todayStr = new Date().toISOString().split('T')[0];
+    const nowIso = new Date().toISOString();
+
     this.mandiPrices = [
       {
-        id: 'mp-01',
-        cropName: 'Organic Pomegranate (Bhagwa)',
+        id: 'gov-mp-01',
+        cropName: 'Organic Pomegranate',
+        variety: 'Bhagwa Super Red',
         mandiName: 'Nashik APMC Yard',
         district: 'Nashik',
         state: 'Maharashtra',
         minPrice: 55.0,
         maxPrice: 78.0,
         modalPrice: 68.5,
-        date: '2026-09-06',
+        date: todayStr,
         arrivalVolumeQuintals: 1450,
+        govApiRef: 'AGMARKNET-MH-NSK-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'UP',
+        changePercent: '+3.4%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
       },
       {
-        id: 'mp-02',
+        id: 'gov-mp-02',
         cropName: 'Thompson Seedless Grapes',
+        variety: 'Export Grade-A',
         mandiName: 'Pimpalgaon Baswant APMC',
         district: 'Nashik',
         state: 'Maharashtra',
         minPrice: 65.0,
         maxPrice: 94.0,
         modalPrice: 82.0,
-        date: '2026-09-06',
+        date: todayStr,
         arrivalVolumeQuintals: 2100,
+        govApiRef: 'AGMARKNET-MH-PMP-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'UP',
+        changePercent: '+4.1%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
       },
       {
-        id: 'mp-03',
-        cropName: 'Soyabean (Yellow)',
+        id: 'gov-mp-03',
+        cropName: 'Yellow Soyabean',
+        variety: 'JS-335 FAQ',
         mandiName: 'Latur APMC Yard',
         district: 'Latur',
         state: 'Maharashtra',
         minPrice: 42.0,
         maxPrice: 49.5,
         modalPrice: 46.8,
-        date: '2026-09-06',
+        date: todayStr,
         arrivalVolumeQuintals: 3200,
+        govApiRef: 'AGMARKNET-MH-LTR-0908',
+        source: 'GOV_ENAM',
+        trend: 'STABLE',
+        changePercent: '0.0%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-04',
+        cropName: 'Red Onion',
+        variety: 'Nashik Special Red',
+        mandiName: 'Lasalgaon APMC Yard',
+        district: 'Nashik',
+        state: 'Maharashtra',
+        minPrice: 22.0,
+        maxPrice: 34.5,
+        modalPrice: 28.0,
+        date: todayStr,
+        arrivalVolumeQuintals: 8400,
+        govApiRef: 'AGMARKNET-MH-LSL-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'DOWN',
+        changePercent: '-2.1%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-05',
+        cropName: 'Sharbati Wheat',
+        variety: 'Sehore Premium',
+        mandiName: 'Indore Krishi Upaj Mandi',
+        district: 'Indore',
+        state: 'Madhya Pradesh',
+        minPrice: 31.0,
+        maxPrice: 38.5,
+        modalPrice: 35.2,
+        date: todayStr,
+        arrivalVolumeQuintals: 4600,
+        govApiRef: 'AGMARKNET-MP-IND-0908',
+        source: 'GOV_ENAM',
+        trend: 'UP',
+        changePercent: '+1.7%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-06',
+        cropName: 'Basmati Paddy',
+        variety: 'Pusa 1121 Supreme',
+        mandiName: 'Amritsar Grain Market',
+        district: 'Amritsar',
+        state: 'Punjab',
+        minPrice: 38.0,
+        maxPrice: 46.0,
+        modalPrice: 43.5,
+        date: todayStr,
+        arrivalVolumeQuintals: 5800,
+        govApiRef: 'AGMARKNET-PB-ASR-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'UP',
+        changePercent: '+2.8%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-07',
+        cropName: 'Raw Cotton (Kapas)',
+        variety: 'Shankar-6 Long Staple',
+        mandiName: 'Rajkot Market Yard',
+        district: 'Rajkot',
+        state: 'Gujarat',
+        minPrice: 68.0,
+        maxPrice: 77.5,
+        modalPrice: 73.0,
+        date: todayStr,
+        arrivalVolumeQuintals: 2900,
+        govApiRef: 'AGMARKNET-GJ-RJK-0908',
+        source: 'GOV_ENAM',
+        trend: 'DOWN',
+        changePercent: '-1.4%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-08',
+        cropName: 'Guntur Red Chilli',
+        variety: 'Sannam S4 Dry',
+        mandiName: 'Guntur Mirchi Yard',
+        district: 'Guntur',
+        state: 'Andhra Pradesh',
+        minPrice: 175.0,
+        maxPrice: 225.0,
+        modalPrice: 198.0,
+        date: todayStr,
+        arrivalVolumeQuintals: 1850,
+        govApiRef: 'AGMARKNET-AP-GNT-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'UP',
+        changePercent: '+5.2%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-09',
+        cropName: 'Fresh Ginger',
+        variety: 'Green Fresh Grade-1',
+        mandiName: 'Shimoga APMC Market',
+        district: 'Shimoga',
+        state: 'Karnataka',
+        minPrice: 52.0,
+        maxPrice: 70.0,
+        modalPrice: 62.5,
+        date: todayStr,
+        arrivalVolumeQuintals: 1100,
+        govApiRef: 'AGMARKNET-KA-SHM-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'UP',
+        changePercent: '+1.9%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-10',
+        cropName: 'Tomato Hybrid',
+        variety: 'Abhinav Firm Red',
+        mandiName: 'Kolar APMC Yard',
+        district: 'Kolar',
+        state: 'Karnataka',
+        minPrice: 16.0,
+        maxPrice: 26.0,
+        modalPrice: 21.0,
+        date: todayStr,
+        arrivalVolumeQuintals: 7200,
+        govApiRef: 'AGMARKNET-KA-KLR-0908',
+        source: 'GOV_ENAM',
+        trend: 'DOWN',
+        changePercent: '-3.8%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-11',
+        cropName: 'Turmeric Fingers',
+        variety: 'Salem Gold Unpolished',
+        mandiName: 'Erode APMC Market',
+        district: 'Erode',
+        state: 'Tamil Nadu',
+        minPrice: 118.0,
+        maxPrice: 154.0,
+        modalPrice: 136.0,
+        date: todayStr,
+        arrivalVolumeQuintals: 1400,
+        govApiRef: 'AGMARKNET-TN-ERD-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'UP',
+        changePercent: '+3.1%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-12',
+        cropName: 'Mustard Seed (Sarson)',
+        variety: 'Black Bold 42% Oil',
+        mandiName: 'Kota Krishi Mandi',
+        district: 'Kota',
+        state: 'Rajasthan',
+        minPrice: 52.5,
+        maxPrice: 61.0,
+        modalPrice: 57.5,
+        date: todayStr,
+        arrivalVolumeQuintals: 3600,
+        govApiRef: 'AGMARKNET-RJ-KOT-0908',
+        source: 'GOV_ENAM',
+        trend: 'STABLE',
+        changePercent: '0.0%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-13',
+        cropName: 'Bengal Gram (Chana)',
+        variety: 'Desi Chana Grade-A',
+        mandiName: 'Bhopal Central Mandi',
+        district: 'Bhopal',
+        state: 'Madhya Pradesh',
+        minPrice: 58.0,
+        maxPrice: 66.5,
+        modalPrice: 62.0,
+        date: todayStr,
+        arrivalVolumeQuintals: 2400,
+        govApiRef: 'AGMARKNET-MP-BHP-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'UP',
+        changePercent: '+2.0%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-14',
+        cropName: 'Potato',
+        variety: 'Jyoti Table Potato',
+        mandiName: 'Agra Mandi Samiti',
+        district: 'Agra',
+        state: 'Uttar Pradesh',
+        minPrice: 14.0,
+        maxPrice: 21.0,
+        modalPrice: 17.5,
+        date: todayStr,
+        arrivalVolumeQuintals: 9500,
+        govApiRef: 'AGMARKNET-UP-AGR-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'DOWN',
+        changePercent: '-1.5%',
+        isBlocked: false,
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-15',
+        cropName: 'Green Cardamom',
+        variety: '8mm Bold Extra Green',
+        mandiName: 'Vandanmedu Spices Yard',
+        district: 'Idukki',
+        state: 'Kerala',
+        minPrice: 1850.0,
+        maxPrice: 2400.0,
+        modalPrice: 2120.0,
+        date: todayStr,
+        arrivalVolumeQuintals: 120,
+        govApiRef: 'AGMARKNET-KL-IDK-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'UP',
+        changePercent: '+6.4%',
+        isBlocked: true,
+        blockedReason: 'Admin Quality & Auction Discrepancy Review',
+        blockedAt: '2026-09-08T10:15:00Z',
+        blockedBy: 'admin@agribridge.com',
+        lastSyncTimestamp: nowIso,
+      },
+      {
+        id: 'gov-mp-16',
+        cropName: 'Alphonso Mango',
+        variety: 'Ratnagiri GI Tagged',
+        mandiName: 'Ratnagiri APMC Market',
+        district: 'Ratnagiri',
+        state: 'Maharashtra',
+        minPrice: 180.0,
+        maxPrice: 260.0,
+        modalPrice: 220.0,
+        date: todayStr,
+        arrivalVolumeQuintals: 310,
+        govApiRef: 'AGMARKNET-MH-RTN-0908',
+        source: 'GOV_AGMARKNET',
+        trend: 'DOWN',
+        changePercent: '-4.2%',
+        isBlocked: true,
+        blockedReason: 'End of harvest seasonal price volatility safeguard',
+        blockedAt: '2026-09-08T11:30:00Z',
+        blockedBy: 'admin@agribridge.com',
+        lastSyncTimestamp: nowIso,
       },
     ];
 

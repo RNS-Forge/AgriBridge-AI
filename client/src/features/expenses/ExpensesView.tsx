@@ -68,7 +68,7 @@ export default function ExpensesView() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-              Expense Management & Cost Basis Engine (Prompt 7)
+              Expense Management & Cost Basis Engine
             </h1>
             <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-300">
               Core Differentiator
@@ -159,9 +159,9 @@ export default function ExpensesView() {
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left text-slate-600">
-            <thead className="text-[10px] font-bold text-slate-400 uppercase bg-slate-50 border-b border-slate-200">
+        <div className="overflow-auto max-h-[calc(100vh-380px)] w-full max-w-full min-w-0 table-scroll">
+          <table className="w-full text-xs text-left text-slate-600 min-w-[750px]">
+            <thead className="sticky top-0 z-10 text-[10px] font-bold text-slate-400 uppercase bg-slate-50 border-b border-slate-200 shadow-[0_1px_0_0_#e2e8f0]">
               <tr>
                 <th className="px-6 py-3">Category</th>
                 <th className="px-6 py-3">Amount</th>

@@ -49,3 +49,22 @@ export {
   LOGO_DETAILS,
   setGlobalLogoChoice,
 } from './Logo/index.js';
+export {
+  EnterpriseDataTable,
+  EnterpriseCheckbox,
+  type EnterpriseCheckboxProps,
+  type DataTableColumn,
+  type DataTableTab,
+  type BulkAction,
+} from './DataTable/EnterpriseDataTable.js';
+export {
+  BulkUploadModal,
+  type ColumnDefinition,
+} from './DataTable/BulkUploadModal.js';
+export {
+  exportToCsv,
+  downloadSampleTemplate,
+  type ExportColumn,
+} from './DataTable/exportUtils.js';
+export { Switch, type SwitchProps } from './Switch/Switch.js';
+

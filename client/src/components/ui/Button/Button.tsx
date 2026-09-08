@@ -71,7 +71,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const baseStyles = `
-      relative font-semibold overflow-hidden
+      relative font-semibold overflow-hidden whitespace-nowrap select-none
       transition-colors duration-200
       focus:outline-none
       disabled:opacity-50 disabled:cursor-not-allowed

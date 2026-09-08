@@ -6,6 +6,20 @@ export default {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: [
+          '"Plus Jakarta Sans"',
+          'system-ui',
+          '-apple-system',
+          'BlinkMacSystemFont',
+          '"Segoe UI"',
+          'Roboto',
+          'Oxygen',
+          'Ubuntu',
+          'Cantarell',
+          'sans-serif',
+        ],
+      },
       colors: {
         primary: {
           50: '#f0fdf4',
@@ -18,8 +32,8 @@ export default {
           50: '#fffbeb',
           500: '#f59e0b',
           900: '#78350f',
-        }
-      }
+        },
+      },
     },
   },
   plugins: [],

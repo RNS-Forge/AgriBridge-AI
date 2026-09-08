@@ -13,6 +13,15 @@ export interface User {
   lastName?: string;
   roles: string[];
   tenantId?: string;
+  phone?: string;
+  companyName?: string;
+  designation?: string;
+  country?: string;
+  profilePicture?: string;
+  recentActivityAt?: string;
+  dateJoined?: string;
+  isEmailVerified?: boolean;
+  twoFactorEnabled?: boolean;
 }
 
 export interface AuthState {

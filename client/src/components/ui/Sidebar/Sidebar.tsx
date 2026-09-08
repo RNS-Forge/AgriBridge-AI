@@ -32,20 +32,20 @@ export function Sidebar({
   return (
     <aside
       className={`fixed left-0 top-0 h-full bg-emerald-900 text-white flex flex-col justify-between z-40 transition-all duration-300 ease-in-out border-r border-emerald-800 ${
-        sidebarOpen ? 'w-49' : 'w-14'
+        sidebarOpen ? 'w-48' : 'w-14'
       }`}
     >
       <div className="flex flex-col h-[calc(100%-95px)] relative">
         {/* Header containing Logo & Toggle Button */}
         <div className="h-16 flex items-center justify-between px-3 border-b border-emerald-800 relative flex-shrink-0">
           {sidebarOpen ? (
-            <div className="flex items-center gap-2 min-w-0 pr-2">
+            <div className="flex items-center gap-2 min-w-0">
               <img
                 src="/logos/logo-option3.jpg"
                 alt="AgriBridge AI"
                 className="w-7 h-7 object-contain rounded-md shadow-md shadow-black/40 border border-emerald-400/50 bg-white flex-shrink-0"
               />
-              <span className="text-base font-bold text-emerald-100 tracking-wide truncate">
+              <span className="text-sm font-bold text-emerald-100 tracking-tight whitespace-nowrap">
                 AgriBridge AI
               </span>
             </div>
@@ -124,19 +124,31 @@ export function Sidebar({
       <div className={`p-2.5 border-t border-emerald-800 bg-emerald-950/40 flex-shrink-0 ${sidebarOpen ? '' : 'flex flex-col items-center'}`}>
         {sidebarOpen ? (
           <>
-            <div className="flex items-center space-x-2 mb-2.5">
-              <div className="w-8 h-8 rounded-full bg-emerald-800 border border-emerald-700 flex items-center justify-center font-bold text-xs text-emerald-100 flex-shrink-0">
-                {getInitials(user?.firstName, user?.lastName) || 'U'}
-              </div>
+            <Link
+              to="/profile"
+              className="flex items-center space-x-2 mb-2.5 hover:bg-emerald-800/40 p-1.5 rounded-lg transition-colors group cursor-pointer"
+              title="View & Edit Profile"
+            >
+              {user?.profilePicture ? (
+                <img
+                  src={user.profilePicture}
+                  alt="Avatar"
+                  className="w-8 h-8 rounded-full object-cover border border-emerald-400/60 flex-shrink-0 shadow-2xs group-hover:scale-105 transition-transform"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-emerald-800 border border-emerald-700 flex items-center justify-center font-bold text-xs text-emerald-100 flex-shrink-0 group-hover:scale-105 transition-transform">
+                  {getInitials(user?.firstName, user?.lastName) || 'U'}
+                </div>
+              )}
               <div className="truncate min-w-0">
-                <p className="text-xs font-semibold text-emerald-50 truncate">
+                <p className="text-xs font-semibold text-emerald-50 truncate group-hover:text-white transition-colors">
                   {user?.firstName} {user?.lastName}
                 </p>
                 <span className="inline-block text-[9px] bg-emerald-800/50 text-emerald-200 font-mono px-1.5 py-0.5 rounded border border-emerald-700">
                   {user?.roles?.[0]?.replace('_', ' ') || 'USER'}
                 </span>
               </div>
-            </div>
+            </Link>
             <button
               onClick={onLogout}
               className="w-full py-1.5 bg-emerald-800/40 hover:bg-red-700/80 hover:text-white hover:border-red-600 rounded-md text-[10px] font-semibold text-emerald-100 border border-emerald-700 transition-colors duration-200 cursor-pointer"
@@ -146,12 +158,23 @@ export function Sidebar({
           </>
         ) : (
           <div className="space-y-2.5 flex flex-col items-center">
-            <div
-              className="w-8 h-8 rounded-full bg-emerald-800 border border-emerald-700 flex items-center justify-center font-bold text-xs text-emerald-100"
-              title={`${user?.firstName} ${user?.lastName} (${user?.roles?.[0]})`}
+            <Link
+              to="/profile"
+              className="group cursor-pointer block"
+              title={`${user?.firstName} ${user?.lastName} - View Profile`}
             >
-              {getInitials(user?.firstName, user?.lastName) || 'U'}
-            </div>
+              {user?.profilePicture ? (
+                <img
+                  src={user.profilePicture}
+                  alt="Avatar"
+                  className="w-8 h-8 rounded-full object-cover border border-emerald-400/60 shadow-2xs group-hover:scale-110 transition-transform"
+                />
+              ) : (
+                <div className="w-8 h-8 rounded-full bg-emerald-800 border border-emerald-700 flex items-center justify-center font-bold text-xs text-emerald-100 group-hover:scale-110 transition-transform">
+                  {getInitials(user?.firstName, user?.lastName) || 'U'}
+                </div>
+              )}
+            </Link>
             <button
               onClick={onLogout}
               className="p-1.5 bg-emerald-800/40 hover:bg-red-700/80 hover:text-white hover:border-red-600 rounded-md text-emerald-100 border border-emerald-700 transition-colors cursor-pointer"

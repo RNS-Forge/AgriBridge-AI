@@ -116,7 +116,7 @@ export default function MarketplaceView() {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-              Produce Marketplace — Direct Farmgate Sale (Prompt 10)
+              Produce Marketplace — Direct Farmgate Sale
             </h1>
             <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-300">
               Signature Feature
@@ -177,7 +177,7 @@ export default function MarketplaceView() {
                   <p className="text-base font-bold text-blue-700">₹{l.nearestMandiModalPrice || 68.5} / kg</p>
                 </div>
 
-                {/* Farmer Only Private Cost-Basis (Prompt 10 Privacy Rule!) */}
+                {/* Farmer Only Private Cost-Basis */}
                 {isFarmer && l.costPerKg ? (
                   <div className="bg-white p-2.5 rounded border border-emerald-300 bg-emerald-50/40">
                     <div className="flex items-center justify-center gap-1">
@@ -217,7 +217,7 @@ export default function MarketplaceView() {
         </div>
       </div>
 
-      {/* Offers & Negotiation Section (Prompt 10) */}
+      {/* Offers & Negotiation Section */}
       <div className="space-y-3 pt-2">
         <div className="flex items-center justify-between">
           <h2 className="text-xs font-bold uppercase tracking-wider text-slate-500">
@@ -281,7 +281,7 @@ export default function MarketplaceView() {
                   )}
                 </div>
 
-                {/* 3-Way Comparison Box (Prompt 10 core feature!) */}
+                {/* 3-Way Comparison Box */}
                 <div className="p-3 bg-slate-50/80 rounded-md border border-slate-200 text-xs flex flex-wrap items-center justify-between gap-3">
                   <div className="flex items-center gap-4">
                     <div>

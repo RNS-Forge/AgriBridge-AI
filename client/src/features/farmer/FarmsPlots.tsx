@@ -103,7 +103,7 @@ export default function FarmsPlots() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-            Farms & Plots Management (Prompt 3)
+            Farms & Plots Management
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Every crop cycle, task, and cultivation expense traces back to a specific Plot.

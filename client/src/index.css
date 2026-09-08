@@ -5,12 +5,22 @@
 @tailwind utilities;
 
 @layer base {
+  *, ::before, ::after {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
+  html {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  }
   body {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
     color: #1e293b;
     background-color: #f8fafc;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  button, input, optgroup, select, textarea {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif !important;
   }
 }
 
@@ -18,10 +28,64 @@ html, body, #root {
   margin: 0;
   padding: 0;
   width: 100%;
-  min-height: 100%;
+  max-width: 100vw;
+  height: 100%;
+  max-height: 100vh;
 }
 
-/* Custom Scrollbars for Sidebar and Content */
+/* Scrollable page and content */
+main {
+  overflow-y: auto;
+  overflow-x: auto;
+}
+
+/* Custom sleek scrollbars for vertical and horizontal */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Scrollable table container */
+.table-scroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: #94a3b8 #f1f5f9;
+}
+
+.table-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+.table-scroll::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-top: 1px solid #e2e8f0;
+}
+
+.table-scroll::-webkit-scrollbar-thumb {
+  background: #94a3b8;
+  border-radius: 4px;
+}
+
+.table-scroll::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+/* Custom Scrollbars for Sidebar */
 .sidebar-scroll::-webkit-scrollbar {
   width: 5px;
 }
@@ -38,22 +102,6 @@ html, body, #root {
 .sidebar-scroll {
   scrollbar-width: thin;
   scrollbar-color: rgba(16, 185, 129, 0.25) transparent;
-}
-
-/* General Custom Scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #f1f5f9;
-}
-::-webkit-scrollbar-thumb {
-  background: #cbd5e1;
-  border-radius: 9999px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #94a3b8;
 }
 
 /* Card Hover and Polish Utilities */

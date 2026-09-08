@@ -145,7 +145,7 @@ export default function MandiView() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-            Mandi Agent & Slot Booking (Prompt 11)
+            Mandi Agent & Slot Booking
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             The alternative selling path alongside direct-to-buyer. Book arrival slots, record APMC auction price, and deduct commission.
@@ -336,7 +336,7 @@ export default function MandiView() {
               </button>
             </div>
             <form onSubmit={handleBookSlot} className="space-y-3">
-              {/* Cost Basis Context Banner (Prompt 11.6 - Informed Decision, Not Blind Booking!) */}
+              {/* Cost Basis Context Banner */}
               <div className="p-3 bg-emerald-50 rounded-md border border-emerald-200 text-xs text-emerald-900 space-y-1">
                 <span className="font-bold flex items-center gap-1.5">
                   <ScaleIcon className="w-3.5 h-3.5 text-emerald-700" />

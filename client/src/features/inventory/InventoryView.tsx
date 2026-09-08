@@ -87,7 +87,7 @@ export default function InventoryView() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-            Inventory & Consumables (Prompt 6)
+            Inventory & Consumables
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Track seeds, fertilizers, and pesticides. Logging consumption against a crop cycle automatically creates linked expense entries.

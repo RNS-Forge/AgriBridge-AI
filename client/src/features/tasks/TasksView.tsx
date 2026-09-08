@@ -116,7 +116,7 @@ export default function TasksView() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-            Field Task & Work Management (Prompt 5)
+            Field Task & Work Management
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             {isWorker

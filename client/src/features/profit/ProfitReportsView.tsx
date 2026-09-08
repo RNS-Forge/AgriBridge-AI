@@ -19,7 +19,7 @@ export default function ProfitReportsView() {
       <div>
         <div className="flex items-center gap-2 mb-1">
           <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-            Profit Report Engine (Prompt 13)
+            Profit Report Engine
           </h1>
           <span className="px-2 py-0.5 rounded text-[10px] font-bold uppercase bg-emerald-100 text-emerald-800 border border-emerald-300">
             Radical Financial Transparency

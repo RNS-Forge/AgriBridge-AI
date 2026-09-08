@@ -121,7 +121,7 @@ export default function CropCycles() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-            Crop Lifecycle & Harvest Tracking (Prompt 4)
+            Crop Lifecycle & Harvest Tracking
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Stage progression and harvest records feed directly into real-time cost-per-kg calculations.

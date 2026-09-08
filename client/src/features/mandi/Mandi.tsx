@@ -5,14 +5,20 @@ import { Button } from '../../components/ui/Button/index.js';
 
 interface MandiPrice {
   id: string;
-  marketId: string;
-  commodityName: string;
-  variety: string;
-  arrivalVolumeTonnes: string;
-  minPrice: string;
-  maxPrice: string;
-  modalPrice: string;
-  priceDate: string;
+  marketId?: string;
+  commodityName?: string;
+  cropName?: string;
+  variety?: string;
+  arrivalVolumeTonnes?: string | number;
+  arrivalVolumeQuintals?: number;
+  minPrice: string | number;
+  maxPrice: string | number;
+  modalPrice: string | number;
+  priceDate?: string;
+  date?: string;
+  mandiName?: string;
+  district?: string;
+  state?: string;
   market?: {
     marketName: string;
     district: string;
@@ -112,50 +118,61 @@ export default function Mandi() {
           <p>Loading daily prices index...</p>
         </div>
       ) : (
-        <div className="bg-white rounded-md border border-gray-200 overflow-hidden">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                <th className="px-6 py-4">Market</th>
-                <th className="px-6 py-4">Commodity / Variety</th>
-                <th className="px-6 py-4">Arrival Volume</th>
-                <th className="px-6 py-4">Min Price</th>
-                <th className="px-6 py-4">Max Price</th>
-                <th className="px-6 py-4 font-bold text-amber-600">Modal Price</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200 text-sm text-gray-600">
-              {prices.length === 0 ? (
-                <tr>
-                  <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
-                    <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227 4.773L5.636 16.591M5.636 7.409l1.591-1.591" />
-                    </svg>
-                    <p>No mandi pricing records found matching current filter context.</p>
-                  </td>
+        <div className="bg-white rounded-md border border-gray-200 overflow-hidden w-full max-w-full min-w-0 shadow-xs">
+          <div className="overflow-auto max-h-[calc(100vh-280px)] w-full max-w-full table-scroll">
+            <table className="w-full text-left border-collapse min-w-[800px]">
+              <thead className="sticky top-0 z-10 bg-gray-50 shadow-[0_1px_0_0_#e5e7eb]">
+                <tr className="border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                  <th className="px-6 py-4">Market</th>
+                  <th className="px-6 py-4">Commodity / Variety</th>
+                  <th className="px-6 py-4">Arrival Volume</th>
+                  <th className="px-6 py-4">Min Price</th>
+                  <th className="px-6 py-4">Max Price</th>
+                  <th className="px-6 py-4 font-bold text-amber-600">Modal Price</th>
                 </tr>
-              ) : (
-                prices.map((price) => (
-                  <tr key={price.id} className="hover:bg-gray-50 transition-colors">
-                    <td className="px-6 py-4">
-                      <p className="font-semibold text-gray-900">{price.market?.marketName}</p>
-                      <p className="text-xs text-gray-500">
-                        {price.market?.district}, {price.market?.state}
-                      </p>
+              </thead>
+              <tbody className="divide-y divide-gray-200 text-sm text-gray-600">
+                {prices.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-12 text-center text-gray-500">
+                      <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 3v2.25m6.364.386l-1.591 1.591M21 12h-2.25m-.386 6.364l-1.591-1.591M12 18.75V21m-4.773-4.227l-1.591 1.591M5.25 12H3m4.227 4.773L5.636 16.591M5.636 7.409l1.591-1.591" />
+                      </svg>
+                      <p>No mandi pricing records found matching current filter context.</p>
                     </td>
-                    <td className="px-6 py-4">
-                      <p className="font-semibold text-gray-900">{price.commodityName}</p>
-                      <p className="text-xs text-gray-500">{price.variety || 'N/A'}</p>
-                    </td>
-                    <td className="px-6 py-4">{price.arrivalVolumeTonnes ? `${price.arrivalVolumeTonnes} Tonnes` : 'N/A'}</td>
-                    <td className="px-6 py-4">{price.minPrice} INR/q</td>
-                    <td className="px-6 py-4">{price.maxPrice} INR/q</td>
-                    <td className="px-6 py-4 font-bold text-amber-600">{price.modalPrice} INR/q</td>
                   </tr>
-                ))
-              )}
-            </tbody>
-          </table>
+                ) : (
+                  prices.map((price) => {
+                    const mandiName = price.market?.marketName || price.mandiName || 'APMC Yard';
+                    const location = price.market ? `${price.market.district}, ${price.market.state}` : `${price.district || ''}, ${price.state || ''}`;
+                    const crop = price.commodityName || price.cropName || 'Commodity';
+                    const arrival = price.arrivalVolumeTonnes
+                      ? `${price.arrivalVolumeTonnes} Tonnes`
+                      : price.arrivalVolumeQuintals
+                      ? `${price.arrivalVolumeQuintals.toLocaleString()} Qtl`
+                      : 'N/A';
+
+                    return (
+                      <tr key={price.id} className="hover:bg-gray-50 transition-colors">
+                        <td className="px-6 py-4">
+                          <p className="font-semibold text-gray-900">{mandiName}</p>
+                          <p className="text-xs text-gray-500">{location}</p>
+                        </td>
+                        <td className="px-6 py-4">
+                          <p className="font-semibold text-gray-900">{crop}</p>
+                          <p className="text-xs text-gray-500">{price.variety || 'Standard'}</p>
+                        </td>
+                        <td className="px-6 py-4">{arrival}</td>
+                        <td className="px-6 py-4">₹{price.minPrice}/kg</td>
+                        <td className="px-6 py-4">₹{price.maxPrice}/kg</td>
+                        <td className="px-6 py-4 font-bold text-emerald-700">₹{price.modalPrice}/kg</td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       )}
     </div>

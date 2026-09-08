@@ -57,7 +57,7 @@ export default function OrdersView() {
       {/* Header */}
       <div>
         <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-          Orders & Logistics Tracking (Prompts 10 & 12)
+          Orders & Logistics Tracking
         </h1>
         <p className="text-xs text-slate-500 mt-0.5">
           Lifecycle: SCHEDULED → PICKED_UP → DELIVERED → COMPLETED. Completing an order automatically triggers the Profit Report engine.

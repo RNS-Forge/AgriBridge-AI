@@ -19,4 +19,4 @@ export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 
 // Re-export slice actions so callers never need to reach into the slice file.
-export { setCredentials, logout } from './authSlice';
+export { setCredentials, logout, updateUser } from './authSlice';

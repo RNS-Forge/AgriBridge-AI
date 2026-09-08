@@ -170,10 +170,11 @@ export default function Farmers() {
           <p>Loading farmer records...</p>
         </div>
       ) : (
-        <div className="bg-white rounded-md border border-gray-200 overflow-hidden">
-          <table className="w-full text-left border-collapse">
-            <thead>
-              <tr className="border-b border-gray-200 bg-gray-50 text-xs font-semibold text-gray-600 uppercase tracking-wider">
+        <div className="bg-white rounded-md border border-gray-200 overflow-hidden w-full max-w-full min-w-0 shadow-xs">
+          <div className="overflow-auto max-h-[calc(100vh-280px)] w-full max-w-full table-scroll">
+            <table className="w-full text-left border-collapse min-w-[800px]">
+            <thead className="sticky top-0 z-10 bg-gray-50 shadow-[0_1px_0_0_#e5e7eb]">
+              <tr className="border-b border-gray-200 text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 <th className="px-6 py-4">Name</th>
                 <th className="px-6 py-4">Reg Number</th>
                 <th className="px-6 py-4">Farm Detail</th>
@@ -239,6 +240,7 @@ export default function Farmers() {
               ))}
             </tbody>
           </table>
+          </div>
           {farmers.length === 0 && (
             <div className="text-center py-12 text-gray-500">
               <svg className="w-12 h-12 mx-auto mb-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
