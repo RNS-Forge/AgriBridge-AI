@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="200" height="200">
+  <defs>
+    <linearGradient id="bgMandi" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#b45309" />
+      <stop offset="100%" stop-color="#78350f" />
+    </linearGradient>
+    <linearGradient id="skinM" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#edd1ba" />
+      <stop offset="100%" stop-color="#c9976e" />
+    </linearGradient>
+    <linearGradient id="waistcoat" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#991b1b" />
+      <stop offset="100%" stop-color="#7f1d1d" />
+    </linearGradient>
+    <filter id="shadowM" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="4" stdDeviation="4" flood-opacity="0.25" />
+    </filter>
+  </defs>
+
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="100" fill="url(#bgMandi)" />
+
+  <!-- Body / Kurta (Cream/White) -->
+  <path d="M38 185 c0 -35 25 -52 62 -52 s62 17 62 52 v15 H38 z" fill="#fef3c7" filter="url(#shadowM)" />
+
+  <!-- Nehru Waistcoat (Maroon) -->
+  <path d="M54 140 c0 -8 8 -12 18 -14 L88 185 L56 185 z" fill="url(#waistcoat)" />
+  <path d="M146 140 c0 -8 -8 -12 -18 -14 L112 185 L144 185 z" fill="url(#waistcoat)" />
+  <!-- Mandarin Collar -->
+  <path d="M78 128 q22 4 44 0 v8 q-22 4 -44 0 z" fill="#991b1b" />
+  <!-- Gold Buttons -->
+  <circle cx="100" cy="148" r="2" fill="#fbbf24" />
+  <circle cx="100" cy="160" r="2" fill="#fbbf24" />
+  <circle cx="100" cy="172" r="2" fill="#fbbf24" />
+  <!-- Gold Pocket Pen -->
+  <line x1="68" y1="150" x2="68" y2="162" stroke="#fbbf24" stroke-width="2" stroke-linecap="round" />
+
+  <!-- Neck -->
+  <path d="M86 106 h28 v26 c0 7 -6 12 -14 12 s-14 -5 -14 -12 z" fill="#c9976e" />
+
+  <!-- Head / Face -->
+  <ellipse cx="100" cy="86" rx="29" ry="35" fill="url(#skinM)" filter="url(#shadowM)" />
+
+  <!-- Hair -->
+  <path d="M69 76 c0 -26 16 -38 33 -38 s33 12 33 38 c-10 -7 -22 -8 -33 -8 s-23 1 -33 8 z" fill="#1c1917" />
+
+  <!-- Ears -->
+  <ellipse cx="70" cy="88" rx="4.5" ry="7.5" fill="#c9976e" />
+  <ellipse cx="130" cy="88" rx="4.5" ry="7.5" fill="#c9976e" />
+
+  <!-- Eyebrows -->
+  <path d="M81 76 q10 -3 15 1" stroke="#1c1917" stroke-width="2.5" stroke-linecap="round" fill="none" />
+  <path d="M119 76 q-10 -3 -15 1" stroke="#1c1917" stroke-width="2.5" stroke-linecap="round" fill="none" />
+
+  <!-- Eyes -->
+  <ellipse cx="87" cy="83" rx="3.5" ry="4" fill="#1c1917" />
+  <ellipse cx="113" cy="83" rx="3.5" ry="4" fill="#1c1917" />
+  <circle cx="86" cy="81.5" r="1.2" fill="#ffffff" />
+  <circle cx="112" cy="81.5" r="1.2" fill="#ffffff" />
+
+  <!-- Nose -->
+  <path d="M100 83 v12 q-3 3 0 5 h4" stroke="#a76e43" stroke-width="2" stroke-linecap="round" fill="none" />
+
+  <!-- Moustache -->
+  <path d="M86 103 q14 -3 14 3 q0 -6 14 -3 c-4 4 -9 5 -14 3 c-5 2 -10 1 -14 -3 z" fill="#1c1917" />
+
+  <!-- Smile -->
+  <path d="M92 110 q8 5 16 0" stroke="#874720" stroke-width="2" stroke-linecap="round" fill="none" />
+</svg>

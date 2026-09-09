@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/index.js';
-import { Button, Input } from '../../components/ui/index.js';
+import { Button, Input, CheckCircleIcon, CloseIcon, CameraIcon } from '../../components/ui/index.js';
 
 export default function TasksView() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -116,7 +116,7 @@ export default function TasksView() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-            Field Task & Work Management (Prompt 5)
+            Field Task & Work Management
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             {isWorker
@@ -137,7 +137,7 @@ export default function TasksView() {
           <button
             key={st}
             onClick={() => setFilterStatus(st)}
-            className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition ${
+            className={`px-3 py-1.5 rounded text-xs font-semibold transition ${
               filterStatus === st
                 ? 'bg-emerald-700 text-white shadow-sm'
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
@@ -153,13 +153,13 @@ export default function TasksView() {
         {filteredTasks.map((task) => (
           <div
             key={task.id}
-            className="bg-white p-5 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between space-y-3"
+            className="bg-white p-5 rounded-md border border-slate-200 shadow-sm flex flex-col justify-between space-y-3"
           >
             <div className="space-y-2">
               <div className="flex items-start justify-between gap-2">
                 <h3 className="text-sm font-bold text-slate-800 leading-snug">{task.title}</h3>
                 <span
-                  className={`text-[9px] font-bold px-2 py-0.5 rounded-full uppercase shrink-0 ${
+                  className={`text-[9px] font-bold px-2 py-0.5 rounded uppercase shrink-0 ${
                     task.priority === 'HIGH'
                       ? 'bg-red-100 text-red-800 border border-red-200'
                       : 'bg-slate-100 text-slate-700'
@@ -192,9 +192,10 @@ export default function TasksView() {
 
               {/* Completion Evidence if present */}
               {task.evidencePhotoUrl && (
-                <div className="p-2.5 bg-emerald-50/60 rounded-xl border border-emerald-200 text-xs space-y-1">
+                <div className="p-2.5 bg-emerald-50/60 rounded-md border border-emerald-200 text-xs space-y-1">
                   <span className="font-bold text-emerald-900 flex items-center gap-1">
-                    ✓ Verified Completion Proof
+                    <CheckCircleIcon className="w-3.5 h-3.5 text-emerald-700" />
+                    Verified Completion Proof
                   </span>
                   {task.completionNotes && (
                     <p className="text-[11px] text-emerald-800 italic">"{task.completionNotes}"</p>
@@ -206,7 +207,7 @@ export default function TasksView() {
             {/* Actions */}
             <div className="pt-2 border-t border-slate-100 flex items-center justify-between">
               <span
-                className={`text-[10px] font-bold px-2.5 py-1 rounded-full uppercase ${
+                className={`text-[10px] font-bold px-2.5 py-1 rounded uppercase ${
                   task.status === 'COMPLETED'
                     ? 'bg-emerald-100 text-emerald-800'
                     : task.status === 'IN_PROGRESS'
@@ -245,10 +246,12 @@ export default function TasksView() {
       {/* Create Task Modal */}
       {showCreateModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">Assign Field Task</h3>
-              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setShowCreateModal(false)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleCreateTask} className="space-y-3">
               <Input label="Task Title" value={title} onChange={(e) => setTitle(e.target.value)} required placeholder="e.g. Cluster thinning on Plot A" id="title" />
@@ -256,7 +259,7 @@ export default function TasksView() {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Priority</label>
-                  <select value={priority} onChange={(e) => setPriority(e.target.value)} className="w-full text-xs px-3 py-2 border rounded-lg">
+                  <select value={priority} onChange={(e) => setPriority(e.target.value)} className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md">
                     <option value="NORMAL">Normal</option>
                     <option value="HIGH">High Priority</option>
                     <option value="URGENT">Urgent</option>
@@ -278,17 +281,20 @@ export default function TasksView() {
       {/* Evidence & Complete Modal */}
       {showEvidenceModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">Complete Task: {showEvidenceModal.title}</h3>
-              <button onClick={() => setShowEvidenceModal(null)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setShowEvidenceModal(null)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleSubmitEvidence} className="space-y-3">
-              <div className="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600 space-y-1">
+              <div className="p-3 bg-slate-50 rounded-md border border-slate-200 text-xs text-slate-600 space-y-1">
                 <p className="font-semibold text-slate-800">Worker Evidence Attachment:</p>
                 <p className="text-[11px] text-slate-500">Camera / Photo verification will be attached to the task record for farm manager review.</p>
-                <div className="mt-2 h-20 bg-white border border-dashed border-slate-300 rounded-lg flex items-center justify-center text-xs text-emerald-700 font-semibold cursor-pointer">
-                  📸 Photo proof: sample-field-work.jpg (Ready)
+                <div className="mt-2 h-20 bg-white border border-dashed border-slate-300 rounded flex items-center justify-center text-xs text-emerald-700 font-semibold cursor-pointer gap-2">
+                  <CameraIcon className="w-4 h-4" />
+                  <span>Photo proof: sample-field-work.jpg (Ready)</span>
                 </div>
               </div>
 

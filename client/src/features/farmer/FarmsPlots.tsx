@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input } from '../../components/ui/index.js';
+import { Button, Input, CloseIcon } from '../../components/ui/index.js';
 
 export default function FarmsPlots() {
   const [farms, setFarms] = useState<any[]>([]);
@@ -103,7 +103,7 @@ export default function FarmsPlots() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-            Farms & Plots Management (Prompt 3)
+            Farms & Plots Management
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Every crop cycle, task, and cultivation expense traces back to a specific Plot.
@@ -127,7 +127,7 @@ export default function FarmsPlots() {
               <div
                 key={farm.id}
                 onClick={() => setSelectedFarm(farm)}
-                className={`p-4 rounded-xl border cursor-pointer transition-all duration-150 ${
+                className={`p-4 rounded-md border cursor-pointer transition-all duration-150 ${
                   isSelected
                     ? 'bg-emerald-50/80 border-emerald-500 shadow-sm ring-1 ring-emerald-500/30'
                     : 'bg-white border-slate-200 hover:border-slate-300'
@@ -153,7 +153,7 @@ export default function FarmsPlots() {
         {/* Selected Farm Detail & Plot List */}
         <div className="lg:col-span-2 space-y-4">
           {selectedFarm ? (
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-5">
+            <div className="bg-white p-6 rounded-md border border-slate-200 shadow-sm space-y-5">
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
                 <div>
                   <div className="flex items-center gap-2">
@@ -189,7 +189,7 @@ export default function FarmsPlots() {
                     {selectedFarm.plots.map((plot: any) => (
                       <div
                         key={plot.id}
-                        className="p-4 rounded-xl border border-slate-200 bg-slate-50/60 hover:bg-slate-50 transition space-y-2"
+                        className="p-4 rounded-md border border-slate-200 bg-slate-50/60 hover:bg-slate-50 transition space-y-2"
                       >
                         <div className="flex items-center justify-between">
                           <h4 className="text-sm font-bold text-slate-800">{plot.name}</h4>
@@ -216,7 +216,7 @@ export default function FarmsPlots() {
                     ))}
                   </div>
                 ) : (
-                  <div className="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-slate-300">
+                  <div className="p-8 text-center bg-slate-50 rounded-md border border-dashed border-slate-300">
                     <p className="text-xs text-slate-500">No cultivable plots defined for this farm yet.</p>
                     <button
                       onClick={() => setShowAddPlotModal(true)}
@@ -229,7 +229,7 @@ export default function FarmsPlots() {
               </div>
             </div>
           ) : (
-            <div className="p-8 text-center bg-white rounded-2xl border border-slate-200">
+            <div className="p-8 text-center bg-white rounded-md border border-slate-200">
               <p className="text-sm text-slate-500">Select a farm on the left to view its cultivable plots.</p>
             </div>
           )}
@@ -239,10 +239,12 @@ export default function FarmsPlots() {
       {/* Add Farm Modal */}
       {showAddFarmModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">Add New Farm</h3>
-              <button onClick={() => setShowAddFarmModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setShowAddFarmModal(false)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleCreateFarm} className="space-y-3">
               <Input label="Farm Name" value={farmName} onChange={(e) => setFarmName(e.target.value)} required placeholder="e.g. Krishna Riverbed Farm" id="farmName" />
@@ -251,7 +253,7 @@ export default function FarmsPlots() {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Soil Type</label>
-                  <select value={soilType} onChange={(e) => setSoilType(e.target.value)} className="w-full text-xs px-3 py-2 border rounded-lg">
+                  <select value={soilType} onChange={(e) => setSoilType(e.target.value)} className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md">
                     <option value="Black Loamy">Black Loamy</option>
                     <option value="Sandy Loam">Sandy Loam</option>
                     <option value="Alluvial">Alluvial</option>
@@ -260,7 +262,7 @@ export default function FarmsPlots() {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Ownership</label>
-                  <select value={ownershipType} onChange={(e) => setOwnershipType(e.target.value)} className="w-full text-xs px-3 py-2 border rounded-lg">
+                  <select value={ownershipType} onChange={(e) => setOwnershipType(e.target.value)} className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md">
                     <option value="Owned">Owned</option>
                     <option value="Leased">Leased</option>
                   </select>
@@ -279,10 +281,12 @@ export default function FarmsPlots() {
       {/* Add Plot Modal */}
       {showAddPlotModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">Add Plot to {selectedFarm?.name}</h3>
-              <button onClick={() => setShowAddPlotModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setShowAddPlotModal(false)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleCreatePlot} className="space-y-3">
               <Input label="Plot Name / Identifier" value={plotName} onChange={(e) => setPlotName(e.target.value)} required placeholder="e.g. Plot D - Guava Grove" id="plotName" />
@@ -290,7 +294,7 @@ export default function FarmsPlots() {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Soil Type</label>
-                  <select value={plotSoil} onChange={(e) => setPlotSoil(e.target.value)} className="w-full text-xs px-3 py-2 border rounded-lg">
+                  <select value={plotSoil} onChange={(e) => setPlotSoil(e.target.value)} className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md">
                     <option value="Black Loamy">Black Loamy</option>
                     <option value="Sandy Loam">Sandy Loam</option>
                     <option value="Alluvial">Alluvial</option>
@@ -299,7 +303,7 @@ export default function FarmsPlots() {
                 </div>
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Water Source</label>
-                  <select value={plotWater} onChange={(e) => setPlotWater(e.target.value)} className="w-full text-xs px-3 py-2 border rounded-lg">
+                  <select value={plotWater} onChange={(e) => setPlotWater(e.target.value)} className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md">
                     <option value="Drip Irrigation">Drip Irrigation</option>
                     <option value="Borewell Sprinkler">Borewell Sprinkler</option>
                     <option value="Canal Flood">Canal Flood</option>
@@ -310,7 +314,7 @@ export default function FarmsPlots() {
               <div className="grid grid-cols-2 gap-2">
                 <div>
                   <label className="block text-xs font-semibold text-slate-700 mb-1">Plot Ownership</label>
-                  <select value={plotOwnership} onChange={(e) => setPlotOwnership(e.target.value)} className="w-full text-xs px-3 py-2 border rounded-lg">
+                  <select value={plotOwnership} onChange={(e) => setPlotOwnership(e.target.value)} className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md">
                     <option value="Owned">Owned</option>
                     <option value="Leased">Leased</option>
                   </select>

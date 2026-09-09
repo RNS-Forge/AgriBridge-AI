@@ -69,11 +69,11 @@ export function Toast({ message, type = 'info', onClose }: ToastProps) {
 
   return (
     <div
-      className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3.5 rounded-xl bg-white border border-gray-200 shadow-md transition-all duration-200 ${
+      className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-3 px-5 py-3.5 rounded-md bg-white border border-gray-200 shadow-md transition-all duration-200 ${
         visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-3 pointer-events-none'
       }`}
     >
-      <div className={`w-8 h-8 rounded-lg ${config.bgColor} border ${config.borderColor} flex items-center justify-center shrink-0`}>
+      <div className={`w-8 h-8 rounded ${config.bgColor} border ${config.borderColor} flex items-center justify-center shrink-0`}>
         <span className={config.iconColor}>{config.icon}</span>
       </div>
       <div>

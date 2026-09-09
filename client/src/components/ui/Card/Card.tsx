@@ -17,12 +17,12 @@ const variantStyles: Record<CardVariant, string> = {
   default: `
     bg-white
     border border-gray-200
-    rounded-xl
+    rounded-md
   `,
   elevated: `
     bg-white
     border border-gray-200
-    rounded-xl
+    rounded-md
     shadow-sm
     hover:shadow-md
     transition-all duration-200
@@ -30,7 +30,7 @@ const variantStyles: Record<CardVariant, string> = {
   outlined: `
     bg-white
     border-2 border-gray-300
-    rounded-xl
+    rounded-md
   `,
 };
 

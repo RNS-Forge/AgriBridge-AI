@@ -1,75 +1,155 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
+import {
+  EnterpriseDataTable,
+  DataTableColumn,
+  DataTableTab,
+} from '../../components/ui/index.js';
 
 export default function AdminAuditLogsView() {
   const [logs, setLogs] = useState<any[]>([]);
+  const [activeTabId, setActiveTabId] = useState<'ALL' | 'AUTH' | 'MODERATION'>('ALL');
+  const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const loadLogs = () => {
+    setLoading(true);
     fetch('http://localhost:8000/api/v1/admin/audit-logs')
       .then((r) => r.json())
       .then((d) => {
-        if (d.success) setLogs(d.data);
+        if (d.success) setLogs(d.data || []);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  };
+
+  useEffect(() => {
+    loadLogs();
   }, []);
 
+  const authLogs = useMemo(
+    () =>
+      logs.filter(
+        (l) =>
+          l.action?.includes('APPROVE') ||
+          l.action?.includes('REJECT') ||
+          l.action?.includes('USER') ||
+          l.action?.includes('CREATE')
+      ),
+    [logs]
+  );
+
+  const moderationLogs = useMemo(
+    () => logs.filter((l) => l.action?.includes('MODERATE') || l.action?.includes('LISTING') || l.action?.includes('DISPUTE')),
+    [logs]
+  );
+
+  const filteredData = useMemo(() => {
+    if (activeTabId === 'AUTH') return authLogs;
+    if (activeTabId === 'MODERATION') return moderationLogs;
+    return logs;
+  }, [activeTabId, authLogs, moderationLogs, logs]);
+
+  const tabs: DataTableTab[] = [
+    {
+      id: 'ALL',
+      label: 'All Security Events',
+      count: logs.length,
+      badgeColor: 'bg-slate-100 text-slate-800 border border-slate-300',
+    },
+    {
+      id: 'AUTH',
+      label: 'Role & User Approvals',
+      count: authLogs.length,
+      badgeColor: 'bg-emerald-100 text-emerald-900 border border-emerald-300',
+    },
+    {
+      id: 'MODERATION',
+      label: 'Moderation & Disputes',
+      count: moderationLogs.length,
+      badgeColor: 'bg-indigo-100 text-indigo-900 border border-indigo-300',
+    },
+  ];
+
+  const columns: DataTableColumn[] = [
+    {
+      key: 'timestamp',
+      header: 'Event Timestamp',
+      sortable: true,
+      searchable: true,
+      searchPlaceholder: 'Timestamp...',
+      render: (log) => (
+        <span className="text-slate-500 font-mono text-[10.5px] whitespace-nowrap">
+          {log.timestamp ? new Date(log.timestamp).toLocaleString() : '—'}
+        </span>
+      ),
+    },
+    {
+      key: 'action',
+      header: 'Security Action',
+      sortable: true,
+      searchable: true,
+      searchPlaceholder: 'Action...',
+      render: (log) => (
+        <span className="px-1.5 py-0.2 rounded bg-slate-100 text-slate-800 border border-slate-200 text-[9.5px] uppercase font-bold font-mono tracking-wide whitespace-nowrap">
+          {log.action}
+        </span>
+      ),
+    },
+    {
+      key: 'entityName',
+      header: 'Target Entity',
+      sortable: true,
+      searchable: true,
+      searchPlaceholder: 'Entity...',
+      render: (log) => (
+        <span className="font-semibold text-slate-800 text-[11px] whitespace-nowrap">
+          {log.entityName || log.targetEntity || 'System'}
+        </span>
+      ),
+    },
+    {
+      key: 'userName',
+      header: 'Actor / User',
+      sortable: true,
+      searchable: true,
+      searchPlaceholder: 'Actor name...',
+      render: (log) => (
+        <span className="text-slate-700 font-medium text-[11px] whitespace-nowrap">
+          {log.userName || log.actorEmail || 'Admin'}
+        </span>
+      ),
+    },
+    {
+      key: 'newValue',
+      header: 'Audit Trail Details',
+      searchable: true,
+      searchPlaceholder: 'Details...',
+      render: (log) => (
+        <span
+          className="text-slate-600 text-[11px] max-w-md truncate block"
+          title={log.newValue || JSON.stringify(log.details || '')}
+        >
+          {log.newValue || JSON.stringify(log.details || '') || '—'}
+        </span>
+      ),
+    },
+  ];
+
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div>
-        <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-          System Audit Logs (Prompt 14)
-        </h1>
-        <p className="text-xs text-slate-500 mt-0.5">
-          Immutable audit record of all security-sensitive actions: role approvals, permission grants, user status toggles, and moderations.
-        </p>
-      </div>
-
-      {/* Audit Logs Table */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="px-6 py-4 border-b border-slate-200 flex items-center justify-between">
-          <h3 className="text-sm font-bold text-slate-800">
-            Audit Trail ({logs.length} Events)
-          </h3>
-          <span className="text-xs text-slate-400">Append-only compliance log</span>
-        </div>
-
-        <div className="overflow-x-auto">
-          <table className="w-full text-xs text-left text-slate-600">
-            <thead className="text-[10px] font-bold text-slate-400 uppercase bg-slate-50 border-b border-slate-200">
-              <tr>
-                <th className="px-6 py-3">Timestamp</th>
-                <th className="px-6 py-3">Action</th>
-                <th className="px-6 py-3">Target Entity</th>
-                <th className="px-6 py-3">Actor</th>
-                <th className="px-6 py-3">Audit Details</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-slate-100 font-mono text-[11px]">
-              {logs.map((log) => (
-                <tr key={log.id} className="hover:bg-slate-50 transition">
-                  <td className="px-6 py-3.5 text-slate-500 whitespace-nowrap">
-                    {new Date(log.timestamp).toLocaleString()}
-                  </td>
-                  <td className="px-6 py-3.5 font-bold text-slate-800">
-                    <span className="px-2 py-0.5 rounded bg-slate-100 text-slate-700 text-[10px] uppercase font-bold">
-                      {log.action}
-                    </span>
-                  </td>
-                  <td className="px-6 py-3.5 text-slate-700">
-                    {log.targetEntity}
-                  </td>
-                  <td className="px-6 py-3.5 text-slate-600">
-                    {log.actorEmail}
-                  </td>
-                  <td className="px-6 py-3.5 text-slate-500 font-sans text-xs max-w-sm truncate">
-                    {JSON.stringify(log.details)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <div className="space-y-4 w-full max-w-full min-w-0">
+      <EnterpriseDataTable
+        title="System Compliance Audit Logs"
+        subtitle="Immutable audit record of all security-sensitive actions: role approvals, user status changes, and market moderations."
+        data={filteredData}
+        columns={columns}
+        keyExtractor={(item) => item.id || `aud-${Math.random()}`}
+        tabs={tabs}
+        activeTab={activeTabId}
+        onTabChange={(id) => setActiveTabId(id as any)}
+        onRefresh={loadLogs}
+        exportFilename="AgriBridge_Security_Audit_Logs"
+        loading={loading}
+        selectable={false}
+      />
     </div>
   );
 }

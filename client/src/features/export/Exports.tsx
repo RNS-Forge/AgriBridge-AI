@@ -162,7 +162,7 @@ export default function Exports() {
   return (
     <div className="p-6 md:p-8 space-y-8">
       {/* Header */}
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white rounded-md border border-gray-200 p-6">
         <div className="flex justify-between items-center mb-6">
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
@@ -186,7 +186,7 @@ export default function Exports() {
           {exportFiles.map((file) => (
             <div
               key={file.id}
-              className="bg-white rounded-xl border border-gray-200 p-6 space-y-4 hover:shadow-sm transition-all duration-200"
+              className="bg-white rounded-md border border-gray-200 p-6 space-y-4 hover:shadow-sm transition-all duration-200"
             >
               <div className="flex justify-between items-start">
                 <div>
@@ -217,7 +217,7 @@ export default function Exports() {
                 </div>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-500 bg-gray-50 p-4 rounded-lg border border-gray-200">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 text-sm text-gray-500 bg-gray-50 p-4 rounded-md border border-gray-200">
                 <div>
                   <span className="block text-gray-600 font-medium mb-1">Port of Loading</span>
                   <span>{file.portOfLoading || 'N/A'}</span>
@@ -246,7 +246,7 @@ export default function Exports() {
               <div className="flex space-x-3 pt-2">
                 <Button
                   onClick={() => handleRunEligibility(file.id)}
-                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md transition-colors duration-200"
                 >
                   Run Eligibility Audit
                 </Button>
@@ -254,7 +254,7 @@ export default function Exports() {
                 {file.eligibilityStatus === 'eligible' && file.customsStatus !== 'approved' && (
                   <Button
                     onClick={() => setActiveExportId(file.id)}
-                    className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                    className="px-4 py-2 bg-white border border-gray-200 text-gray-700 text-sm font-semibold rounded-md hover:bg-gray-50 transition-colors duration-200"
                   >
                     Provide Customs Invoices
                   </Button>
@@ -263,7 +263,7 @@ export default function Exports() {
                 {file.customsStatus === 'approved' && (
                   <Button
                     onClick={() => setShippingExportId(file.id)}
-                    className="px-4 py-2 bg-white border border-gray-200 text-emerald-600 text-sm font-semibold rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                    className="px-4 py-2 bg-white border border-gray-200 text-emerald-600 text-sm font-semibold rounded-md hover:bg-gray-50 transition-colors duration-200"
                   >
                     Track Lading Shipment
                   </Button>
@@ -272,7 +272,7 @@ export default function Exports() {
 
               {/* Eligibility Reports */}
               {reports[file.id] && (
-                <div className="bg-gray-50 border border-gray-200 p-4 rounded-lg text-sm space-y-3">
+                <div className="bg-gray-50 border border-gray-200 p-4 rounded-md text-sm space-y-3">
                   <h4 className="font-semibold text-gray-900">Regulatory Eligibility Audit Results:</h4>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div className="flex justify-between border-b border-gray-200 pb-1.5">
@@ -310,14 +310,14 @@ export default function Exports() {
       {/* Customs Invoice Modal */}
       {activeExportId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="w-full max-w-md bg-white border border-gray-200 rounded-md overflow-hidden shadow-sm">
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <h3 className="text-lg font-semibold text-gray-900">Update Customs Declarations</h3>
               </div>
               <button
                 onClick={() => setActiveExportId(null)}
-                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-lg"
+                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-md"
                 aria-label="Close modal"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -333,7 +333,7 @@ export default function Exports() {
                   required
                   value={invoiceNum}
                   onChange={e => setInvoiceNum(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="INV-2026-992"
                 />
               </div>
@@ -344,7 +344,7 @@ export default function Exports() {
                   required
                   value={invoiceUrl}
                   onChange={e => setInvoiceUrl(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="https://storage.googleapis.com/..."
                 />
               </div>
@@ -355,7 +355,7 @@ export default function Exports() {
                   required
                   value={packingUrl}
                   onChange={e => setPackingUrl(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="https://storage.googleapis.com/..."
                 />
               </div>
@@ -366,13 +366,13 @@ export default function Exports() {
                   required
                   value={declNum}
                   onChange={e => setDeclNum(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="DEC-1092-2026"
                 />
               </div>
               <Button
                 type="submit"
-                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md transition-colors duration-200"
               >
                 Submit & Approve Customs
               </Button>
@@ -384,14 +384,14 @@ export default function Exports() {
       {/* Shipment Registration Modal */}
       {shippingExportId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-900/50 backdrop-blur-sm p-4">
-          <div className="w-full max-w-md bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
+          <div className="w-full max-w-md bg-white border border-gray-200 rounded-md overflow-hidden shadow-sm">
             <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
               <div className="flex items-center gap-3">
                 <h3 className="text-lg font-semibold text-gray-900">Register Ocean Shipment</h3>
               </div>
               <button
                 onClick={() => setShippingExportId(null)}
-                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-lg"
+                className="text-gray-400 hover:text-gray-600 transition-colors p-1 hover:bg-gray-100 rounded-md"
                 aria-label="Close modal"
               >
                 <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -407,7 +407,7 @@ export default function Exports() {
                   required
                   value={carrierName}
                   onChange={e => setCarrierName(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="e.g. Maersk Shipping Lines"
                 />
               </div>
@@ -418,7 +418,7 @@ export default function Exports() {
                   required
                   value={containerNumber}
                   onChange={e => setContainerNumber(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="e.g. MSKU-9988-10"
                 />
               </div>
@@ -429,13 +429,13 @@ export default function Exports() {
                   required
                   value={ladingNumber}
                   onChange={e => setLadingNumber(e.target.value)}
-                  className="w-full bg-white border border-gray-300 rounded-lg px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
+                  className="w-full bg-white border border-gray-300 rounded-md px-3 py-2 text-gray-900 focus:border-blue-500 focus:ring-blue-500"
                   placeholder="e.g. BL-10920-NHAVA"
                 />
               </div>
               <Button
                 type="submit"
-                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-lg transition-colors duration-200"
+                className="w-full px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-semibold rounded-md transition-colors duration-200"
               >
                 Confirm Lading Shipment
               </Button>

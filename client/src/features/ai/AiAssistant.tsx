@@ -166,7 +166,7 @@ export default function AiAssistant() {
       <div className="flex-shrink-0 border-b border-gray-200 bg-white px-6 py-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-4">
-            <div className="flex items-center justify-center w-10 h-10 rounded-xl bg-gray-200 text-gray-700">
+            <div className="flex items-center justify-center w-10 h-10 rounded-md bg-gray-200 text-gray-700">
               {currentMode.icon}
             </div>
             <div>
@@ -178,7 +178,7 @@ export default function AiAssistant() {
             {messages.length > 0 && (
               <Button
                 onClick={handleClear}
-                className="px-3.5 py-2 bg-white border border-gray-200 text-gray-700 text-xs font-medium rounded-lg hover:bg-gray-50 transition-colors duration-200"
+                className="px-3.5 py-2 bg-white border border-gray-200 text-gray-700 text-xs font-medium rounded hover:bg-gray-50 transition-colors duration-200"
               >
                 <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" />
@@ -210,7 +210,7 @@ export default function AiAssistant() {
                 <button
                   key={key}
                   onClick={() => setMode(key as any)}
-                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-all ${
+                  className={`w-full flex items-center gap-3 px-3 py-2.5 rounded text-left transition-all ${
                     mode === key
                       ? 'bg-gray-100 text-gray-900 border border-gray-200'
                       : 'text-gray-600 hover:text-gray-900 hover:bg-gray-50 border border-transparent'
@@ -232,7 +232,7 @@ export default function AiAssistant() {
               <select
                 value={provider}
                 onChange={(e) => setProvider(e.target.value as any)}
-                className="w-full bg-white border border-gray-300 focus:border-blue-500 rounded-lg px-3 py-2.5 text-sm text-gray-900 focus:outline-none transition-colors appearance-none cursor-pointer"
+                className="w-full bg-white border border-gray-300 focus:border-blue-500 rounded-md px-3 py-2.5 text-sm text-gray-900 focus:outline-none transition-colors appearance-none cursor-pointer"
               >
                 <option value="groq">Groq</option>
                 <option value="gemini">Gemini</option>
@@ -249,7 +249,7 @@ export default function AiAssistant() {
                   type="password"
                   value={customKey}
                   onChange={(e) => setCustomKey(e.target.value)}
-                  className="w-full bg-white border border-gray-300 focus:border-blue-500 rounded-lg px-3 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:outline-none transition-colors pr-9"
+                  className="w-full bg-white border border-gray-300 focus:border-blue-500 rounded-md px-3 py-2.5 text-sm text-gray-900 placeholder-gray-500 focus:outline-none transition-colors pr-9"
                   placeholder="Optional"
                 />
                 {customKey && (
@@ -286,7 +286,7 @@ export default function AiAssistant() {
           <div className="flex-1 overflow-y-auto px-6 py-4">
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center">
-                <div className="w-14 h-14 rounded-2xl bg-gray-100 border border-gray-200 flex items-center justify-center mb-5">
+                <div className="w-14 h-14 rounded-md bg-gray-100 border border-gray-200 flex items-center justify-center mb-5">
                   <svg className="w-6 h-6 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M8.625 12a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H8.25m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0H12m4.125 0a.375.375 0 11-.75 0 .375.375 0 01.75 0zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 01-2.555-.337A5.972 5.972 0 015.41 20.97a5.969 5.969 0 01-.474-.065 4.48 4.48 0 00.978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25z" />
                   </svg>
@@ -301,7 +301,7 @@ export default function AiAssistant() {
                 {messages.map((msg, idx) => (
                   <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
                     {msg.role !== 'user' && (
-                      <div className="flex-shrink-0 w-7 h-7 rounded-lg bg-gray-100 border border-gray-200 flex items-center justify-center mr-3 mt-0.5">
+                      <div className="flex-shrink-0 w-7 h-7 rounded bg-gray-100 border border-gray-200 flex items-center justify-center mr-3 mt-0.5">
                         {msg.role === 'system' ? (
                           <svg className="w-3.5 h-3.5 text-red-400/70" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v3.75m-9.303 3.376c-.866 1.5.217 3.374 1.948 3.374h14.71c1.73 0 2.813-1.874 1.948-3.374L13.949 3.378c-.866-1.5-3.032-1.5-3.898 0L2.697 16.126zM12 15.75h.007v.008H12v-.008z" />
@@ -314,12 +314,12 @@ export default function AiAssistant() {
                       </div>
                     )}
                     <div
-                      className={`max-w-[80%] rounded-2xl px-4 py-3 text-sm leading-[1.7] ${
+                      className={`max-w-[80%] rounded-md px-4 py-3 text-sm leading-[1.7] ${
                         msg.role === 'user'
-                          ? 'bg-blue-600 text-white border border-blue-700 rounded-br-md'
+                          ? 'bg-blue-600 text-white border border-blue-700'
                           : msg.role === 'system'
-                          ? 'bg-red-600/10 text-red-600 border border-red-600/20 rounded-bl-md rounded-br-md'
-                          : 'bg-gray-100 text-gray-900 border border-gray-200 rounded-bl-md'
+                          ? 'bg-red-600/10 text-red-600 border border-red-600/20'
+                          : 'bg-gray-100 text-gray-900 border border-gray-200'
                       }`}
                     >
                       <p className="whitespace-pre-wrap">{msg.content}</p>
@@ -349,7 +349,7 @@ export default function AiAssistant() {
                     }
                   }}
                   rows={1}
-                  className="w-full bg-white border border-gray-300 focus:border-blue-500 rounded-xl px-4 py-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none disabled:opacity-40 resize-none transition-colors"
+                  className="w-full bg-white border border-gray-300 focus:border-blue-500 rounded-md px-4 py-3 text-sm text-gray-900 placeholder-gray-500 focus:outline-none disabled:opacity-40 resize-none transition-colors"
                   placeholder="Type your message..."
                   style={{ minHeight: '44px', maxHeight: '120px' }}
                   onInput={(e) => {
@@ -362,7 +362,7 @@ export default function AiAssistant() {
               <Button
                 type="submit"
                 disabled={loading || !input.trim()}
-                className="h-[44px] px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors duration-200 disabled:opacity-50"
+                className="h-[44px] px-5 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200 disabled:opacity-50"
               >
                 {loading ? (
                   <>

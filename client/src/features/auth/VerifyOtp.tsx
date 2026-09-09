@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Button } from '../../components/ui/Button/index.js';
 import { ErrorBanner } from '../../components/ui/ErrorBanner/index.js';
+import { Logo } from '../../components/ui/index.js';
 
 export default function VerifyOtp() {
   const [otp, setOtp] = useState('');
@@ -80,18 +81,13 @@ export default function VerifyOtp() {
         <div className="relative z-10 flex flex-col justify-between p-10 xl:p-12 w-full">
           {/* Logo */}
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-white/20 border border-white/30 flex items-center justify-center">
-              <svg className="w-5 h-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 007.92 12.446A9 9 0 1112 2.992z" />
-              </svg>
-            </div>
-            <span className="text-lg font-bold text-white tracking-tight">AgriBridge<span className="text-emerald-200">AI</span></span>
+            <Logo variant="option3" size="md" light showText={true} />
           </div>
 
           {/* Center messaging */}
           <div className="space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/15 border border-white/25 text-white text-xs font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded bg-white/15 border border-white/25 text-white text-xs font-medium">
+              <span className="w-1.5 h-1.5 rounded bg-white animate-pulse" />
               Email Verification
             </div>
 
@@ -113,7 +109,7 @@ export default function VerifyOtp() {
               {['Secure Verification', 'Instant Access', 'Email Security', 'Quick Setup'].map((tag) => (
                 <span
                   key={tag}
-                  className="px-3 py-1.5 rounded-lg bg-white/15 border border-white/25 text-xs text-white font-medium"
+                  className="px-3 py-1.5 rounded bg-white/15 border border-white/25 text-xs text-white font-medium"
                 >
                   {tag}
                 </span>
@@ -122,9 +118,9 @@ export default function VerifyOtp() {
           </div>
 
           {/* Bottom info */}
-          <div className="rounded-xl bg-white/15 backdrop-blur-sm border border-white/25 p-5">
+          <div className="rounded-md bg-white/15 backdrop-blur-sm border border-white/25 p-5">
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg bg-white/20 border border-white/30 flex items-center justify-center">
+              <div className="w-9 h-9 rounded bg-white/20 border border-white/30 flex items-center justify-center">
                 <svg className="w-4 h-4 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M21.75 9v.906a2.25 2.25 0 01-1.183 1.981l-6.478 3.488M2.25 9v.906a2.25 2.25 0 001.183 1.981l6.478 3.488m8.839 2.51l-4.66-2.51m0 0l-1.023 3.488a2.25 2.25 0 01-2.183 1.981L2.25 9v.906m0 0l6.478 3.488M2.25 9l6.478-3.488m0 0l1.023-3.488a2.25 2.25 0 012.183-1.981l6.478 3.488" />
                 </svg>
@@ -146,12 +142,7 @@ export default function VerifyOtp() {
         <div className="relative z-10 w-full max-w-md my-auto max-h-[calc(100vh-80px)] overflow-y-auto scrollbar-hide">
           {/* Mobile logo */}
           <div className="lg:hidden flex items-center justify-center gap-2 mb-8">
-            <div className="w-9 h-9 rounded-lg bg-emerald-600/20 border border-emerald-500/30 flex items-center justify-center">
-              <svg className="w-4 h-4 text-emerald-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 007.92 12.446A9 9 0 1112 2.992z" />
-              </svg>
-            </div>
-            <span className="text-base font-bold text-slate-800">AgriBridge<span className="text-emerald-600">AI</span></span>
+            <Logo variant="option3" size="md" showText={true} />
           </div>
 
           {/* Header */}
@@ -173,7 +164,7 @@ export default function VerifyOtp() {
               <label className="block text-xs font-semibold tracking-wide mb-1.5 text-slate-600">
                 6-Digit OTP Code
               </label>
-              <div className="relative flex items-center rounded-xl border border-slate-300 bg-white transition-all duration-300 focus-within:border-emerald-500/60 focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]">
+              <div className="relative flex items-center rounded-md border border-slate-300 bg-white transition-all duration-300 focus-within:border-emerald-500/60 focus-within:bg-white focus-within:shadow-[0_0_0_3px_rgba(16,185,129,0.1)]">
                 <span className="pl-3.5 text-slate-500">
                   <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.8}>
                     <path strokeLinecap="round" strokeLinejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 10-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 002.25-2.25v-6.75a2.25 2.25 0 00-2.25-2.25H6.75a2.25 2.25 0 00-2.25 2.25v6.75a2.25 2.25 0 002.25 2.25z" />

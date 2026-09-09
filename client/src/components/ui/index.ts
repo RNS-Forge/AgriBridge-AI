@@ -17,5 +17,54 @@ export { Pagination } from './Pagination/Pagination.js';
 export { ErrorBanner } from './ErrorBanner/ErrorBanner.js';
 export { Toast } from './Toast/Toast.js';
 export { SocialButton } from './SocialButton/SocialButton.js';
-export { MailIcon, LockIcon, UserIcon } from './icons/index.js';
+export {
+  MailIcon,
+  LockIcon,
+  UserIcon,
+  ShieldIcon,
+  PlantIcon,
+  TractorIcon,
+  PackageIcon,
+  CartIcon,
+  ScaleIcon,
+  UsersIcon,
+  AlertTriangleIcon,
+  CheckCircleIcon,
+  CheckIcon,
+  FileTextIcon,
+  CameraIcon,
+  BuildingIcon,
+  PlusIcon,
+  ClipboardIcon,
+  CloseIcon,
+  SparklesIcon,
+  FlaskIcon,
+} from './icons/index.js';
 export { Sidebar } from './Sidebar/Sidebar.js';
+export {
+  Logo,
+  LogoImage,
+  LogoIcon,
+  LogoSelectorModal,
+  LOGO_DETAILS,
+  setGlobalLogoChoice,
+} from './Logo/index.js';
+export {
+  EnterpriseDataTable,
+  EnterpriseCheckbox,
+  type EnterpriseCheckboxProps,
+  type DataTableColumn,
+  type DataTableTab,
+  type BulkAction,
+} from './DataTable/EnterpriseDataTable.js';
+export {
+  BulkUploadModal,
+  type ColumnDefinition,
+} from './DataTable/BulkUploadModal.js';
+export {
+  exportToCsv,
+  downloadSampleTemplate,
+  type ExportColumn,
+} from './DataTable/exportUtils.js';
+export { Switch, type SwitchProps } from './Switch/Switch.js';
+

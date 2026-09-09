@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Input } from '../../components/ui/index.js';
+import { Button, Input, PlantIcon, CheckCircleIcon, CloseIcon } from '../../components/ui/index.js';
 
 const STAGES = [
   'SOWING',
@@ -121,7 +121,7 @@ export default function CropCycles() {
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <h1 className="text-xl font-bold text-slate-800 tracking-tight">
-            Crop Lifecycle & Harvest Tracking (Prompt 4)
+            Crop Lifecycle & Harvest Tracking
           </h1>
           <p className="text-xs text-slate-500 mt-0.5">
             Stage progression and harvest records feed directly into real-time cost-per-kg calculations.
@@ -145,7 +145,7 @@ export default function CropCycles() {
               <div
                 key={c.id}
                 onClick={() => setSelectedCycle(c)}
-                className={`p-4 rounded-xl border cursor-pointer transition ${
+                className={`p-4 rounded-md border cursor-pointer transition ${
                   isSelected
                     ? 'bg-emerald-50/80 border-emerald-500 shadow-sm ring-1 ring-emerald-500/30'
                     : 'bg-white border-slate-200 hover:border-slate-300'
@@ -154,7 +154,7 @@ export default function CropCycles() {
                 <div className="flex items-center justify-between">
                   <h3 className="text-sm font-bold text-slate-800">{c.cropName}</h3>
                   <span
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-full uppercase ${
+                    className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${
                       c.status === 'HARVESTED'
                         ? 'bg-emerald-100 text-emerald-800'
                         : 'bg-blue-100 text-blue-800'
@@ -184,7 +184,7 @@ export default function CropCycles() {
         {/* Selected Cycle Detail */}
         <div className="lg:col-span-2 space-y-4">
           {selectedCycle ? (
-            <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm space-y-6">
+            <div className="bg-white p-6 rounded-md border border-slate-200 shadow-sm space-y-6">
               {/* Header */}
               <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
                 <div>
@@ -199,20 +199,21 @@ export default function CropCycles() {
                 {selectedCycle.status !== 'HARVESTED' && (
                   <Button
                     onClick={() => setShowHarvestModal(true)}
-                    className="text-xs bg-emerald-700 hover:bg-emerald-800 self-start"
+                    className="text-xs bg-emerald-700 hover:bg-emerald-800 self-start inline-flex items-center gap-1.5"
                   >
-                    🌾 Record Actual Harvest
+                    <PlantIcon className="w-3.5 h-3.5" />
+                    Record Actual Harvest
                   </Button>
                 )}
               </div>
 
               {/* Visual Stage Progression Stepper */}
-              <div className="space-y-3 bg-slate-50 p-4 rounded-xl border border-slate-200">
+              <div className="space-y-3 bg-slate-50 p-4 rounded-md border border-slate-200">
                 <div className="flex items-center justify-between">
                   <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700">
                     Growth Stage Stepper (Manual Timestamp Progression)
                   </h3>
-                  <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+                  <span className="text-xs font-bold text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded">
                     Current: {selectedCycle.currentStage}
                   </span>
                 </div>
@@ -226,15 +227,15 @@ export default function CropCycles() {
                     return (
                       <div key={stg} className="flex flex-col items-center space-y-1">
                         <div
-                          className={`w-7 h-7 rounded-full text-[11px] font-bold flex items-center justify-center transition-all ${
+                          className={`w-7 h-7 rounded text-[11px] font-bold flex items-center justify-center transition-all ${
                             isCurrent
-                              ? 'bg-emerald-700 text-white ring-4 ring-emerald-100 scale-110'
+                              ? 'bg-emerald-700 text-white ring-2 ring-emerald-200 scale-105'
                               : isPassed
                               ? 'bg-emerald-500 text-white'
                               : 'bg-slate-200 text-slate-500'
                           }`}
                         >
-                          {isPassed && !isCurrent ? '✓' : idx + 1}
+                          {isPassed && !isCurrent ? <CheckCircleIcon className="w-3.5 h-3.5" /> : idx + 1}
                         </div>
                         <span
                           className={`text-[9px] uppercase font-semibold leading-tight line-clamp-2 ${
@@ -273,7 +274,7 @@ export default function CropCycles() {
 
               {/* Harvest Record & Cost Differentiator Summary */}
               {selectedCycle.status === 'HARVESTED' ? (
-                <div className="p-4 rounded-xl bg-emerald-50/60 border border-emerald-300 space-y-3">
+                <div className="p-4 rounded-md bg-emerald-50/60 border border-emerald-300 space-y-3">
                   <div className="flex items-center justify-between">
                     <h4 className="text-xs font-bold text-emerald-900 uppercase tracking-wider">
                       Verified Harvest Record & Cost Basis
@@ -284,17 +285,17 @@ export default function CropCycles() {
                   </div>
 
                   <div className="grid grid-cols-3 gap-3 text-center">
-                    <div className="bg-white p-3 rounded-lg border border-slate-200">
+                    <div className="bg-white p-3 rounded border border-slate-200">
                       <span className="text-[10px] text-slate-400 uppercase font-bold">Total Harvest Yield</span>
                       <p className="text-lg font-bold text-slate-800">
                         {selectedCycle.harvestedQuantityKg?.toLocaleString()} kg
                       </p>
                     </div>
-                    <div className="bg-white p-3 rounded-lg border border-slate-200">
+                    <div className="bg-white p-3 rounded border border-slate-200">
                       <span className="text-[10px] text-slate-400 uppercase font-bold">Quality Grade</span>
                       <p className="text-sm font-bold text-emerald-800 mt-1">{selectedCycle.harvestGrade}</p>
                     </div>
-                    <div className="bg-white p-3 rounded-lg border border-emerald-400 bg-emerald-50">
+                    <div className="bg-white p-3 rounded border border-emerald-400 bg-emerald-50">
                       <span className="text-[10px] text-emerald-700 uppercase font-bold">Derived Cost Per Kg</span>
                       <p className="text-lg font-bold text-emerald-900">
                         ₹{selectedCycle.costSummary?.costPerKg}
@@ -309,7 +310,7 @@ export default function CropCycles() {
                   )}
                 </div>
               ) : (
-                <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
+                <div className="p-4 rounded-md bg-slate-50 border border-slate-200 text-xs text-slate-600 flex items-center justify-between">
                   <span>
                     Running expenses to-date:{' '}
                     <strong>₹{selectedCycle.costSummary?.totalExpense?.toLocaleString()}</strong>
@@ -319,7 +320,7 @@ export default function CropCycles() {
               )}
             </div>
           ) : (
-            <div className="p-8 text-center bg-white rounded-2xl border border-slate-200">
+            <div className="p-8 text-center bg-white rounded-md border border-slate-200">
               <p className="text-sm text-slate-500">Select a crop cycle to view its growth stages and harvest data.</p>
             </div>
           )}
@@ -329,10 +330,12 @@ export default function CropCycles() {
       {/* Start New Cycle Modal */}
       {showStartModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">Start New Crop Cycle</h3>
-              <button onClick={() => setShowStartModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setShowStartModal(false)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleStartCycle} className="space-y-3">
               <Input label="Crop Name" value={cropName} onChange={(e) => setCropName(e.target.value)} required placeholder="e.g. Thompson Grapes, Soyabean" id="cropName" />
@@ -354,17 +357,19 @@ export default function CropCycles() {
       {/* Record Harvest Modal */}
       {showHarvestModal && (
         <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl max-w-md w-full p-6 space-y-4 shadow-xl">
+          <div className="bg-white rounded-md max-w-md w-full p-6 space-y-4 shadow-xl border border-slate-200">
             <div className="flex justify-between items-center border-b pb-3">
               <h3 className="text-base font-bold text-slate-800">Record Harvest for {selectedCycle?.cropName}</h3>
-              <button onClick={() => setShowHarvestModal(false)} className="text-slate-400 hover:text-slate-600">✕</button>
+              <button onClick={() => setShowHarvestModal(false)} className="text-slate-400 hover:text-slate-600">
+                <CloseIcon className="w-4 h-4" />
+              </button>
             </div>
             <form onSubmit={handleRecordHarvest} className="space-y-3">
               <Input label="Harvest Date" type="date" value={harvestDate} onChange={(e) => setHarvestDate(e.target.value)} required id="harvestDate" />
               <Input label="Total Actual Quantity Harvested (kg)" type="number" step="1" value={quantityKg} onChange={(e) => setQuantityKg(e.target.value)} required placeholder="e.g. 12500" id="quantityKg" />
               <div>
                 <label className="block text-xs font-semibold text-slate-700 mb-1">Quality Grade</label>
-                <select value={harvestGrade} onChange={(e) => setHarvestGrade(e.target.value)} className="w-full text-xs px-3 py-2 border rounded-lg">
+                <select value={harvestGrade} onChange={(e) => setHarvestGrade(e.target.value)} className="w-full text-xs px-3 py-2 border border-slate-300 rounded-md">
                   <option value="Grade A+ (Export Ready)">Grade A+ (Export Ready)</option>
                   <option value="Grade A (Domestic Premium)">Grade A (Domestic Premium)</option>
                   <option value="Grade B (Local Mandi)">Grade B (Local Mandi)</option>

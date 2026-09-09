@@ -42,7 +42,7 @@ export function FormField({
         {label}
       </label>
       <div
-        className={`relative flex items-center rounded-xl border transition-all duration-300 ${
+        className={`relative flex items-center rounded-md border transition-all duration-300 ${
           focused
             ? 'border-emerald-500/60 bg-white shadow-[0_0_0_3px_rgba(16,185,129,0.1)]'
             : isFilled
